@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edicion de Cliente</title>
+    <link rel="stylesheet" href="editarCliente.css" />
+</head>
+
+<body>
+        <div class="container-titulo">
+                <button id="btnCruz"><img src="../imagenes/cruz.png" class="cruz"></button>    
+                <h1 class="tituloCentro" id="tituloCentro">Edicion de Cliente</h1>
+            </div>
+    <form id="formGrande">
+        <div class="datos-cliente">
+            <h1>Datos del Cliente</h1>
+            <p><span style="font-weight: 800;">Primer Nombre:</span> <input required type="text"
+                    class="input-primernombre" id="input-primernombre"></p>
+            <p><span style="font-weight: 800;">Nombre de pila:<span style="font-weight: 800;"></span> <input required
+                        type="text" class="input-nombrepila" id="input-nombrepila"></p>
+            <p><span style="font-weight: 800;">Apellido:</span> <input required type="text" class="input-apellido"
+                    id="input-apellido"></p>
+            <p><span style="font-weight: 800;">Direccion(Calle):</span> <input required type="text" class="input-calle"
+                    id="input-calle"> <span style="font-weight: 800;">Nro:</span> <input required type="number"
+                    class="input-numero" id="input-numero"></p>
+            <p><span style="font-weight: 800;">Telefono:</span> <input required type="number" class="input-telefono"
+                    id="input-telefono"></p>
+        </div>
+
+        <div class="datos-mascota">
+            <h2>Datos de Mascotas</h2>
+            <div class="seleccion-mascota" id="seleccion-mascota">
+            </div>
+            <div class="mostrar-datos">
+                <form>
+                    <label for="selectmascota"><span style="font-weight: 800;">Mostrando datos de:</span></label>
+                    <select name="selectmascota" class="select-mascota" id="select-mascota">
+                    </select>
+                </form>
+            </div>
+            <div class="mostrando-datos" id="mostrando-datos">
+                <p><span style="font-weight: 800;">Nombre:</span> <input required type="text"
+                        class="input-nombremascota" id="input-nombremascota"></p>
+                <p><span style="font-weight: 800;">Animal:</span> <input required type="text" class="input-animal"
+                        id="input-animal"><span style="font-weight: 800;">Raza:</span> <input required type="text"
+                        class="input-raza" id="input-raza"></p>
+                <p><span style="font-weight: 800;">Peso:</span> <input required type="number" class="input-peso"
+                        id="input-peso"><span style="margin-right: 30px; font-weight: 800; ">Kg</span><span
+                        style="font-weight: 800;">Edad:</span> <input required type="number" class="input-edad"
+                        id="input-edad"></p>
+                <p><span style="font-weight: 800;">Actividad:</span> <input required type="text" class="input-actividad"
+                        id="input-actividad"></p>
+                <p><span style="font-weight: 800;">Afecciones:</span> <input required type="text"
+                        class="input-afecciones" id="input-afecciones"></p>
+                <p><span style="font-weight: 800;">Cumpleaños: <input required type="number" class="input-diacumple"
+                            id="input-diacumple">/<input required type="number" class="input-mescumple"
+                            id="input-mescumple">/<input required type="number" class="input-aniocumple"
+                            id="input-aniocumple"></span></p>
+                <div id="boton-eliminar"></div>
+                <div id="boton-guardarmascota"></div>
+            </div>
+        </div>
+        <button class="btn-editar" type="submit" id="btnGuardar">Guardar</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./editarCliente.js"></script>
+</body>
+
+</html>

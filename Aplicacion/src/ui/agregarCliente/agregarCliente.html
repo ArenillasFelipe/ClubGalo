@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Cliente</title>
+    <link rel="stylesheet" href="agregarCliente.css" />
+</head>
+
+<body>
+    <div class="container-titulo">
+        <button id="btnCruz"><img src="../imagenes/cruz.png" class="cruz"></button>
+        <h1 class="tituloCentro">Agregar Cliente</h1>
+    </div>
+
+    <form id="formGrande">
+        <div class="datos-cliente">
+            <h1>Datos del Cliente</h1>
+            <p><span style="font-weight: 800;">Primer Nombre:</span> <input required type="text"
+                    class="input-primernombre" id="input-primernombre"></p>
+            <p><span style="font-weight: 800;">Nombre de pila:<span style="font-weight: 800;"></span> <input required
+                        type="text" class="input-nombrepila" id="input-nombrepila"></p>
+            <p><span style="font-weight: 800;">Apellido:</span> <input required type="text" class="input-apellido"
+                    id="input-apellido"></p>
+            <p><span style="font-weight: 800;">Direccion(Calle):</span> <input required type="text" class="input-calle"
+                    id="input-calle"> <span style="font-weight: 800;">Nro:</span> <input required type="number"
+                    class="input-numero" id="input-numero"></p>
+            <p><span style="font-weight: 800;">Telefono:</span> <input required type="number" class="input-telefono"
+                    id="input-telefono"></p>
+            <div id="divbtnGuardarCliente">
+                <button class="btn-editar" type="submit" id="btnGuardarCliente">Guardar</button>
+            </div>
+        </div>
+
+        <div id="divdatos-mascota">
+
+        </div>
+
+
+
+        <div id="divbtnbtnGuardarGrande">
+
+        </div>
+
+        <div id="divbtnCancelar">
+            
+        </div>
+
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./agregarCliente.js"></script>
+</body>
+
+</html>

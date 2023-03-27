@@ -1,0 +1,82 @@
+Date : 2023-03-25 03:18:42
+Directory : c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion
+Total : 38 files,  80599 codes, 303 comments, 17081 blanks, all 97983 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| HTML       |         11 |     71,780 |          0 |     15,180 |     86,960 |
+| JavaScript |         13 |      3,244 |        285 |      1,255 |      4,784 |
+| CSS        |         11 |      3,117 |         18 |        644 |      3,779 |
+| JSON       |          3 |      2,458 |          0 |          2 |      2,460 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                          | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                             |         38 |     80,599 |        303 |     17,081 |     97,983 |
+| . (Files)                                                                                                     |          2 |      2,457 |          0 |          2 |      2,459 |
+| release-builds                                                                                                |          2 |     71,305 |          0 |     15,053 |     86,358 |
+| release-builds\Seguimiento-win32-ia32                                                                         |          2 |     71,305 |          0 |     15,053 |     86,358 |
+| src                                                                                                           |         34 |      6,837 |        303 |      2,026 |      9,166 |
+| src (Files)                                                                                                   |          3 |        689 |         11 |        224 |        924 |
+| src\ui                                                                                                        |         31 |      6,148 |        292 |      1,802 |      8,242 |
+| src\ui (Files)                                                                                                |          1 |          3 |          9 |          0 |         12 |
+| src\ui\Bolsas                                                                                                 |          3 |        643 |          4 |        151 |        798 |
+| src\ui\Clientes                                                                                               |          3 |        564 |         50 |        191 |        805 |
+| src\ui\Datos                                                                                                  |          3 |        646 |          6 |        154 |        806 |
+| src\ui\Historial                                                                                              |          3 |        417 |          8 |         99 |        524 |
+| src\ui\Seguimiento                                                                                            |          3 |        543 |          0 |        113 |        656 |
+| src\ui\Venta                                                                                                  |          3 |      1,052 |         20 |        419 |      1,491 |
+| src\ui\agregarCliente                                                                                         |          3 |        650 |          7 |        166 |        823 |
+| src\ui\editarBolsa                                                                                            |          3 |        441 |          3 |        167 |        611 |
+| src\ui\editarCliente                                                                                          |          3 |        507 |          4 |        116 |        627 |
+| src\ui\historialPersona                                                                                       |          3 |        682 |        181 |        226 |      1,089 |
++---------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                      | language   | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\package-lock.json                                             | JSON       |      2,434 |          0 |          1 |      2,435 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\package.json                                                  | JSON       |         23 |          0 |          1 |         24 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\release-builds\Seguimiento-win32-ia32\LICENSES.chromium.html  | HTML       |     71,304 |          0 |     15,053 |     86,357 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\release-builds\Seguimiento-win32-ia32\vk_swiftshader_icd.json | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\database.js                                               | JavaScript |         11 |          1 |          5 |         17 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\index.js                                                  | JavaScript |          6 |          0 |          3 |          9 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\main.js                                                   | JavaScript |        672 |         10 |        216 |        898 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Bolsas\appBolsas.js                                    | JavaScript |        113 |          3 |         63 |        179 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Bolsas\bolsas.html                                     | HTML       |         41 |          0 |         10 |         51 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Bolsas\estilosBolsas.css                               | CSS        |        489 |          1 |         78 |        568 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Clientes\Estilosclientes.css                           | CSS        |        354 |          0 |        125 |        479 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Clientes\appClientes.js                                | JavaScript |        173 |         50 |         60 |        283 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Clientes\clientes.html                                 | HTML       |         37 |          0 |          6 |         43 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Datos\Estilosdatos.css                                 | CSS        |        421 |          0 |         71 |        492 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Datos\appDatos.js                                      | JavaScript |        147 |          6 |         59 |        212 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Datos\datos.html                                       | HTML       |         78 |          0 |         24 |        102 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Historial\Estiloshistorial.css                         | CSS        |        261 |          4 |         52 |        317 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Historial\appHistorial.js                              | JavaScript |        116 |          4 |         39 |        159 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Historial\historial.html                               | HTML       |         40 |          0 |          8 |         48 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Seguimiento\Estilosseguimiento.css                     | CSS        |        187 |          0 |         30 |        217 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Seguimiento\appSeguimiento.js                          | JavaScript |        325 |          0 |         75 |        400 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Seguimiento\seguimiento.html                           | HTML       |         31 |          0 |          8 |         39 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Venta\Estilosventa.css                                 | CSS        |        496 |          4 |        130 |        630 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Venta\appVenta.js                                      | JavaScript |        509 |         16 |        271 |        796 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\Venta\venta.html                                       | HTML       |         47 |          0 |         18 |         65 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\agregarCliente\agregarCliente.css                      | CSS        |        214 |          0 |         32 |        246 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\agregarCliente\agregarCliente.html                     | HTML       |         43 |          0 |         13 |         56 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\agregarCliente\agregarCliente.js                       | JavaScript |        393 |          7 |        121 |        521 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\bootstrap.min.css                                      | CSS        |          3 |          9 |          0 |         12 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\editarBolsa\editarBolsa.css                            | CSS        |        164 |          0 |         33 |        197 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\editarBolsa\editarBolsa.html                           | HTML       |         47 |          0 |         18 |         65 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\editarBolsa\editarBolsa.js                             | JavaScript |        230 |          3 |        116 |        349 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\editarCliente\editarCliente.css                        | CSS        |        187 |          0 |         29 |        216 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\editarCliente\editarCliente.html                       | HTML       |         68 |          0 |          4 |         72 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\editarCliente\editarCliente.js                         | JavaScript |        252 |          4 |         83 |        339 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\historialPersona\EstiloshistorialPersona.css           | CSS        |        341 |          0 |         64 |        405 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\historialPersona\appHistorialPersona.js                | JavaScript |        297 |        181 |        144 |        622 |
+| c:\Users\Felipe\Desktop\PROGRAMA FER\Aplicacion\src\ui\historialPersona\historialPersona.html                 | HTML       |         44 |          0 |         18 |         62 |
+| Total                                                                                                         |            |     80,599 |        303 |     17,081 |     97,983 |
++---------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

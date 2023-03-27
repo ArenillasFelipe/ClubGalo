@@ -1,0 +1,492 @@
+body{
+    margin: 0;
+    background-color: lightslategrey;
+    font-family: arial;
+
+}
+
+header{
+    display: flex; /*muestra los elementos de manera horizontal (la imagen con los links al lado); */
+    justify-content: space-between; /*separa la imagen de los links a cada lado de la pantalla*/
+    height: 60px;
+    background-color: white;
+    align-items: center;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0px 1px 10px;
+}
+
+.logo{
+    animation:
+    bounce 300ms
+    alternate 6
+    cubic-bezier(.2, .65, .6, 1);
+}
+
+@keyframes bounce {
+    from {
+      transform: translateY(0px);
+    }
+    to {
+      transform: translateY(-20px);
+    }
+  }
+
+header{
+    animation: slide-in 1.5s;
+}
+
+
+@keyframes slide-in {
+    from {
+      transform: translateY(-150%);
+    }
+    to {
+      transform: translateY(0%);
+    }
+  }
+
+@keyframes slide {
+    from {
+        transform: translateX(-100%);
+      }
+      to {
+        transform: translateX(0%);
+      }
+  }
+
+a{
+    text-decoration: none; /*para sacar subrayado de links*/
+    color: black;
+    font-weight: 600; /*negrita*/
+    padding-right: 10px;
+}
+
+nav a:hover{
+    color: #404198;
+}
+
+.nav-link6{
+    color: #404198;
+    font-weight: 800;
+}
+
+.busqueda{
+  position: absolute;
+  right: 400px;
+  top: 25px;
+}
+
+#barra-busqueda{
+  width: 350px;
+  right: 50px;
+  position: relative;
+  border-color: #404198;
+  border-radius: 10px;
+  padding: 10px;
+  outline: none;
+}
+
+#boton-lupa{
+    top: 5px;
+    right: 50px;
+    position: relative;
+    outline: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 0;
+    background-color: #404198;
+}
+
+
+.proto-venta{
+    height: 110px;
+    width: 1000px;
+    background-color: white;
+    box-shadow: 3px 3px 10px;
+    border-radius: 10px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    animation: slide 1.5s;
+}
+
+
+
+@keyframes slide {
+    from {
+      transform: translateY(200%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+  }
+
+
+
+.total{
+    position: absolute;
+    right: 10px;
+    top: 60px;
+}
+
+.fecha{
+    position: absolute;
+    bottom: 60px;
+    left: 6px;
+}
+
+.datos-persona{
+    position: absolute;
+    left: 200px;
+    top: 8px;
+    line-height: 0.5em;
+}
+.datos-venta{
+    position: absolute;
+    left: 550px;
+    top: 8px;
+    line-height: 0.5em;
+}
+
+.imagen-persona{
+    position: absolute;
+    left: 135px;
+    top: 20px;
+}
+
+.explicacion{
+  padding: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 1px;
+}
+
+
+.divHistorialPersona{
+  text-align: center;
+  background-color: lightgray;
+  border-color: black;
+  width: 192px;
+  height: 25px;
+  position: absolute;
+  font-size: larger;
+  top: 90px;
+  left: 870px;
+  box-shadow: 2px 3px 5px;
+  animation-name: animacion;
+  animation-duration: 2s;
+  border: 1px solid black;
+}
+
+@keyframes animacion {
+  from {
+    transform: translateY(-400%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+.containter-mejores10bolsas{
+  top: 0px;
+  left: 10px;
+  position: relative;
+  width: 440px;
+  height: 240px;
+  text-align: center;
+}
+
+#selecttiempobolsasimporte{
+  height: 26px;
+  position: absolute;
+  left: 250px;
+  top: -1px;
+}
+
+#form1{
+  position: relative;
+  left: 360px;
+  top: -241px;
+  width: 250px;
+}
+
+h1{
+  position: relative;
+  top: 35px;
+  font-size: large;
+  font-weight: 800;
+}
+
+.h1importe{
+  position: relative;
+  left: -25px;
+  font-size: large;
+  font-weight: 800;
+}
+
+.lista10mejoresbolsas{
+  position: relative;
+  background-color: lightgray;
+  height: 150px;
+  width: 380px;
+  left: 30px;
+  top: 34px;
+  overflow-y: auto;
+  border: 1px solid #1d1d1d;
+}
+
+.lista10mejoresimporte{
+  position: relative;
+  background-color: lightgray;
+  height: 150px;
+  width: 330px;
+  left: 30px;
+  top: 34px;
+  overflow-y: auto;
+  border: 1px solid #1d1d1d;
+}
+
+li{
+  height: 20px;
+  margin: 10px;
+  background-color: white;
+}
+
+.container-mejores10importe{
+  top: 0px;
+  left: 480px;
+  position: absolute;
+  width: 440px;
+  height: 240px;
+  text-align: center;
+}
+
+.container-mejores10{
+  top: 20px;
+  left: 100px;
+  position: relative;
+  background-color: white;
+  border-radius: 10px;
+  width: 870px;
+  height: 240px;
+  text-align: center;
+  border: 3px solid #404198;
+  animation: agrandar 1s;
+}
+
+#selecttiempoimporte{
+  position: absolute;
+  left: 30px;
+  top: 50px;
+}
+
+#form2{
+  position: relative;
+  left: 60px;
+}
+
+.container-totalbolsas{
+  top: 50px;
+  position: relative;
+  border-radius: 10px;
+  width: 390px;
+  height: 90px;
+  text-align: center;
+}
+
+.container-grande{
+  top: 60px;
+  left: 120px;
+  position: relative;
+  background-color: white;
+  border-radius: 10px;
+  width: 830px;
+  height: 150px;
+  text-align: center;
+  border: 3px solid #404198;
+  animation: agrandar 1s;
+}
+
+.container-totalganancias{
+  top: 50px;
+  left: 440px;
+  position: absolute;
+  border-radius: 10px;
+  width: 390px;
+  height: 90px;
+  text-align: center;
+}
+
+#selecttiempototalbolsasganancias{
+  height: 26px;
+  top: -50px;
+  height: 25px;
+  position: absolute;
+  left: 260px;
+}
+
+.h1mod{
+  top: -5px;
+}
+
+.container-mesmasganancia{
+  top: 585px;
+  left: 350px;
+  position: absolute;
+  background-color: white;
+  border-radius: 10px;
+  width: 390px;
+  height: 150px;
+  text-align: center;
+  border: 3px solid #404198;
+  animation: agrandar 1s;
+}
+
+.lista10bolsasmasvendidas{
+  position: relative;
+  background-color: lightgray;
+  height: 150px;
+  width: 330px;
+  left: 30px;
+  top: 15px;
+  overflow-y: auto;
+  border: 1px solid #1d1d1d;
+}
+
+#selecttiempo1{
+  width: 170px;
+}
+
+h2{
+  position: absolute;
+  font-size: 40px;
+  top: -30px;
+  left: 40px;
+}
+
+.h2numero2{
+  position: absolute;
+  font-size: 40px;
+  top: -30px;
+  left: 30px;
+}
+
+.h2mes{
+  position: absolute;
+  font-size: 40px;
+  top: -30px;
+  left: 25px;
+}
+
+.mes{
+  position: relative;
+  background-color: lightgray;
+  width: 250px;
+  height: 50px;
+  left: 70px;
+  top: 20px;
+}
+
+.numero{
+  position: relative;
+  background-color: lightgray;
+  width: 170px;
+  height: 50px;
+  left: 110px;
+  top: -10px;
+}
+
+#h2totalbolsas{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#selecttiempototalbolsas{
+  position: absolute;
+  left: 30px;
+  top: 50px;
+}
+
+#form3{
+  top: 12px;
+  left: 380px;
+  position: absolute;
+  width: 250px;
+  z-index: 100;
+}
+
+.numero2{
+  position: relative;
+  background-color: lightgray;
+  width: 220px;
+  height: 50px;
+  left: 85px;
+  top: -10px;
+}
+
+
+.inputmonth{
+  width: 200px;
+}
+
+
+
+#h2totalganancias{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#h2mes{
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#selecttiempototalganancias{
+  position: absolute;
+  left: 30px;
+  top: 50px;
+}
+
+#form4{
+  position: relative;
+  left: 60px;
+}
+
+
+@keyframes agrandar{
+  from{
+      transform: scale(0);
+  }
+  to{
+      transform: scale(1);
+  }
+}
+
+.selects{
+  position: relative;
+  left: 150px;
+  top: -18px;
+  height: 23px;
+  border-color: #404198;
+  padding: 3px;
+  outline: none;
+}
+
+.inputmonth{
+  border-color: #6162BD;
+  padding: 1px;
+  outline: none;
+}
+
+.h1mesmasganancias{
+  top: 0px;
+}

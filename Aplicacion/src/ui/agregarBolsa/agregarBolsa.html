@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Bolsa</title>
+    <link rel="stylesheet" href="agregarBolsa.css" />
+</head>
+
+<body>
+
+    <div class="container-titulo">
+        <button id="btnCruz"><img src="../../imagenes/cruz.png" class="cruz"></button>
+        <h1 class="tituloCentro">Agregar Bolsa</h1>
+    </div>
+
+
+    <div class="container-bolsa">
+
+        <form id="form">
+
+            <div class="container-marca">
+                <label>Marca:</label> <input type="text" id="inputMarca">
+            </div>
+
+            <div class="container-calidad">
+                <label>Calidad:</label>
+                <select name="selectCalidad" id="selectCalidad">
+                    <option value="BAJA">BAJA</option>
+                    <option value="INTERMEDIA">INTERMEDIA</option>
+                    <option value="PREMIUM">PREMIUM</option>
+                    <option value="SUPER PREMIUM">SUPER PREMIUM</option>
+                </select>
+            </div>
+
+            <div class="container-kilos">
+            </div>
+
+            <div id="container-inputTamanio">
+
+            </div>
+
+            <div id="container-btnAgregar">
+            </div>
+    </div>
+
+
+    <div id="container-btnCancelar">
+
+    </div>
+
+    <div id="container-btnGuardar">
+        <button id="btnGuardar">Guardar</button>
+    </div>
+
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./agregarBolsa.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,195 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+body {
+    margin: 0;
+    background-color: rgb(56, 94, 94);
+    font-family: arial;
+    overflow: hidden;
+    text-align: center;
+}
+
+.container-titulo{
+    background-color: #404198;
+    width: 100%;
+    height: 60px;
+    top: -10px;
+    position: absolute;
+    box-shadow: 0px 1px 10px;
+}
+
+.tituloCentro{
+    position: absolute;
+    color: white;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -5px;
+}
+
+.cruz{
+    position: relative;
+    width: 20px;
+    top: 1px;
+}
+
+#btnCruz{
+    cursor: pointer;
+    top: 15px;
+    left: 92%;
+    position: absolute;
+    border: none;
+    background-color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    outline: none;
+}
+
+#btnCruz:hover{
+    box-shadow: 0px 1px 10px;
+}
+
+
+b{
+    font-weight: 800;
+}
+
+input {
+    width: 100px;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+}
+
+label{
+    font-weight: 800;
+}
+
+
+.container-bolsa{
+    height: 240px;
+    width: 400px;
+    position: absolute;
+    background-color: white;
+    border: 5px solid #404198;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.container-marca{
+    position: relative;
+    top: 20px;
+}
+
+.container-marca input{
+    width: 300px;
+}
+
+.container-calidad{
+    position: relative;
+    top: 40px;
+}
+
+.container-calidad select{
+    width: 140px;
+}
+
+.container-kilos{
+    position: relative;
+    left: 60px;
+    top: 40px;
+    width: 285px;
+    height: 60px;
+}
+
+#btnAgregar{
+    top: 160px;
+    left: 160px;
+    position: absolute;
+    border: 2px solid black;
+    height: 25px;
+    width: 90px;
+    background: #2f9b05;
+    color: white;
+    font-family: Arial;
+    font-weight: 500;
+    font-size: medium;
+    cursor: pointer;
+    transition: .2s ease all;
+    outline: none;
+    font-weight: 600;
+}
+
+
+#container-inputTamanio {
+    position: relative;
+    left: 85px;
+    top: 30px;
+    width: 230px;
+    height: 25px;
+}
+
+#container-inputTamanio input{
+    width: 30px;
+}
+
+
+#container-btnGuardar {
+    position: absolute;
+    left: 350px;
+    top: 310px;
+    width: 120px;
+    height: 30px;
+}
+
+#container-btnCancelar {
+    position: relative;
+    left: 10px;
+    top: 310px;
+}
+
+#btnCancelar{
+    border: 2px solid black;
+    height: 30px;
+    width: 120px;
+    background-color: green;
+    background: #9b0505;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: medium;
+    cursor: pointer;
+    transition: .2s ease all;
+    outline: none;
+    font-weight: 800;
+}
+
+
+#container-btnGuardar button{
+    border: 2px solid black;
+    height: 30px;
+    width: 120px;
+    background: #2f9b05;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: medium;
+    background-color: green;
+    cursor: pointer;
+    transition: .2s ease all;
+    outline: none;
+    font-weight: 800;
+}
+
+
+
+.spanKiloBolsa:hover {
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+  }

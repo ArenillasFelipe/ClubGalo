@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos</title>
+    <link rel="stylesheet" href="Estilosdatos.css" />
+</head>
+
+<body>
+    <header>
+        <div class="logo slide">
+            <img src="../../imagenes/logo-galo.png" width="150" class="img-logo">
+        </div>
+        <nav>
+            <a href="../Seguimiento/seguimiento.html" class="nav-link1">Seguimiento</a>
+            <a href="../Venta/venta.html" class="nav-link2">Venta</a>
+            <a href="../Historial/historial.html" class="nav-link3">Historial</a>
+            <a href="../Clientes/clientes.html" class="nav-link4">Clientes</a>
+            <a href="../Bolsas/bolsas.html" class="nav-link5">Bolsas</a>
+            <a href="../Datos/datos.html" class="nav-link6">Datos</a>
+        </nav>
+    </header>
+
+    <div class="container-mejores10">
+        <div class="containter-mejores10bolsas">
+            <h1>Mejores 10 clientes por cantidad de bolsas</h1>
+            <select name="selecttiempobolsas" id="selecttiempobolsasimporte" class="selects">
+                <option value="total">En total</option>
+                <option value="anioatras">1 año atras</option>
+                <option value="anio">En este año</option>
+                <option value="elegir">Elegir mes:</option>
+            </select>
+            <div class="lista10mejoresbolsas">
+                <ol id="ol10mejoresporbolsas">
+
+
+
+                </ol>
+            </div>
+        </div>
+
+        <div class="container-mejores10importe">
+            <h1 class="h1importe">Mejores 10 clientes por importe total</h1>
+            <div class="lista10mejoresimporte">
+                <ol id="ol10mejoresporimporte">
+
+
+                </ol>
+            </div>
+        </div>
+        <div id="divForm1">
+        </div>
+    </div>
+
+    <div class="container-grande">
+
+        <div class="container-totalganancias">
+            <h1 class="h1mod">Total de ganancias</h1>
+            <div class="numero2">
+                <h2 class="h2totalganancias" id="h2totalganancias"></h2>
+            </div>
+
+        </div>
+
+        <div class="container-totalbolsas">
+            <h1 class="h1mod">Total de bolsas vendidas</h1>
+
+            <select name="selecttiempoimporte" id="selecttiempototalbolsasganancias" class="selects">
+                <option value="total">En total</option>
+                <option value="anioatras">1 año atras</option>
+                <option value="anio">En este año</option>
+                <option value="elegir">Elegir mes:</option>
+            </select>
+            <div class="numero">
+                <h2 id="h2totalbolsas"></h2>
+            </div>
+        </div>
+        <div id="divForm2">
+        </div>
+    </div>
+
+
+    <div class="container-mesmasganancia">
+
+        <h1 class="h1mesmasganancias">Mes con mas ganacias de este año</h1>
+
+        <div class="mes">
+            <h2 class="h2mes" id="h2mes"></h2>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="./appDatos.js"></script>
+</body>
+
+</html>

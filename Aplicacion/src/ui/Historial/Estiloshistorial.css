@@ -1,0 +1,317 @@
+body {
+  margin: 0;
+  background-color: lightslategray;
+  font-family: arial;
+}
+
+body::-webkit-scrollbar {
+  width: 10px;
+  background-color: lightslategray;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #404198;
+  border-right: 2px solid lightslategray;
+}
+
+header {
+  display: flex;
+  /*muestra los elementos de manera horizontal (la imagen con los links al lado); */
+  justify-content: space-between;
+  /*separa la imagen de los links a cada lado de la pantalla*/
+  height: 60px;
+  background-color: white;
+  align-items: center;
+  padding: 15px;
+  background-color: white;
+  box-shadow: 0px 1px 10px;
+}
+
+.logo {
+  animation:
+    bounce 300ms alternate 6 cubic-bezier(.2, .65, .6, 1);
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0px);
+  }
+
+  to {
+    transform: translateY(-20px);
+  }
+}
+
+header {
+  animation: slide-in 1.5s;
+}
+
+
+@keyframes slide-in {
+  from {
+    transform: translateY(-150%);
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+a {
+  text-decoration: none;
+  /*para sacar subrayado de links*/
+  color: black;
+  font-weight: 600;
+  /*negrita*/
+  padding-right: 10px;
+}
+
+nav a:hover {
+  color: #404198;
+}
+
+.nav-link3 {
+  color: #404198;
+  font-weight: 800;
+}
+
+.busqueda{
+  position: absolute;
+  right: 435px;
+  top: 25px;
+}
+
+#barra-busqueda{
+  width: 320px;
+  right: 50px;
+  position: relative;
+  border-color: #404198;
+  border-radius: 10px;
+  padding: 10px;
+  outline: none;
+}
+
+#boton-lupa {
+  top: 5px;
+  right: 50px;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background-color: #404198;
+}
+
+
+.proto-venta {
+  height: 130px;
+  width: 1000px;
+  background-color: white;
+  box-shadow: 3px 3px 10px;
+  border-radius: 10px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  font-weight: normal;
+}
+
+
+
+
+
+.total {
+  position: absolute;
+  right: 10px;
+  top: 75px;
+}
+
+.fecha {
+  position: absolute;
+  bottom: 75px;
+  left: 6px;
+}
+
+.datos-persona {
+  position: absolute;
+  left: 200px;
+  top: 1px;
+  line-height: 0.5em;
+}
+
+.datos-venta {
+  position: absolute;
+  left: 610px;
+  top: 8px;
+  line-height: 0.5em;
+}
+
+.imagen-persona {
+  position: absolute;
+  left: 135px;
+  top: 20px;
+}
+
+.explicacion {
+  padding: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 1px;
+}
+
+
+.divHistorialPersona {
+  text-align: center;
+  background-color: #404198;
+  border-color: black;
+  width: 192px;
+  height: 25px;
+  position: absolute;
+  font-size: larger;
+  top: 90px;
+  left: 870px;
+  box-shadow: 2px 3px 5px;
+  animation-name: animacion;
+  animation-duration: 2s;
+  border: 1px solid black;
+}
+
+.ahistorialPersona{
+  position: relative;
+  font-weight: normal;
+  left: 5px;
+  color: white;
+}
+
+@keyframes animacion {
+  from {
+    transform: translateY(-400%);
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
+.h3persona {
+  position: relative;
+  top: -20px;
+}
+
+
+p {
+  font-size: larger;
+  position: relative;
+  top: -20px;
+}
+
+.h3Bolsa{
+  position: relative;
+  top: -10px;
+  line-height: 1em;
+  width: 340px;
+}
+
+.h3Cantidad{
+  position: absolute;
+  top: 34px;
+  width: 360px;
+}
+
+.h3PrecioU{
+  position: absolute;
+  top: 57px;
+  width: 340px;
+}
+
+.btn-nombre {
+  background-color: white;
+  border: none;
+  height: 5px;
+  font-size: medium;
+  left: -5px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-nombre:hover {
+  color: #404198;
+}
+
+b {
+  font-weight: 800;
+}
+
+#imgFlechaArriba {
+  position: relative;
+  top: 1px;
+  left: 6px;
+  width: 35px;
+  height: 35px;
+}
+
+#flechaArriba {
+  background-color: #404198;
+  width: 70px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  cursor: pointer;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  animation: deslizarDesdeIzquierda 1s;
+}
+
+.divFlechaArriba {
+  position: fixed;
+  top: 90%;
+  right: 1010px;
+}
+
+@keyframes deslizarDesdeIzquierda {
+  from {
+    transform: translateX(-150%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+
+.cruz{
+  position: relative;
+  width: 20px;
+  top: 1px;
+}
+
+.btnCruz{
+  cursor: pointer;
+  top: 5px;
+  left: 960px;
+  position: absolute;
+  border: none;
+  background-color: lightgray;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  outline: none;
+}
+
+.btnCruz:hover{
+  box-shadow: 0px 1px 10px;
+}
