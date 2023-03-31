@@ -203,7 +203,7 @@ nav a:hover{
   text-align: center;
 }
 
-#selecttiempobolsasimporte{
+#selecttiempobolsaspuntos{
   height: 26px;
   position: absolute;
   left: 250px;
@@ -224,7 +224,7 @@ h1{
   font-weight: 800;
 }
 
-.h1importe{
+.h1puntos{
   position: relative;
   left: -25px;
   font-size: large;
@@ -242,7 +242,7 @@ h1{
   border: 1px solid #1d1d1d;
 }
 
-.lista10mejoresimporte{
+.lista10mejorespuntos{
   position: relative;
   background-color: lightgray;
   height: 150px;
@@ -259,7 +259,7 @@ li{
   background-color: white;
 }
 
-.container-mejores10importe{
+.container-mejores10puntos{
   top: 0px;
   left: 480px;
   position: absolute;
@@ -314,7 +314,7 @@ li{
   animation: agrandar 1s;
 }
 
-.container-totalganancias{
+.container-totalpuntos{
   top: 50px;
   left: 440px;
   position: absolute;
@@ -324,7 +324,7 @@ li{
   text-align: center;
 }
 
-#selecttiempototalbolsasganancias{
+#selecttiempototalbolsaspuntos{
   height: 26px;
   top: -50px;
   height: 25px;
@@ -439,7 +439,7 @@ h2{
 
 
 
-#h2totalganancias{
+#h2totalpuntos{
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -450,7 +450,7 @@ h2{
   transform: translateX(-50%);
 }
 
-#selecttiempototalganancias{
+#selecttiempototalpuntos{
   position: absolute;
   left: 30px;
   top: 50px;
@@ -487,6 +487,6 @@ h2{
   outline: none;
 }
 
-.h1mesmasganancias{
+.h1mesmaspuntos{
   top: 0px;
 }

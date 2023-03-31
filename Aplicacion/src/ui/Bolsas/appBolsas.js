@@ -176,6 +176,7 @@ async function sweetAlert_confirmar_borrado() {
 
 
 function botonAgregarBolsa() {
+  localStorage.setItem("EstadoBolsa",  "NoCreado");
   main.createWindowAgregarBolsa();
 }
 

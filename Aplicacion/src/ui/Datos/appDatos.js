@@ -1,10 +1,10 @@
 const { remote, app } = require('electron');
-const { get10mejoresclientesbolsas, get10mejoresclientesimporte, gettotalbolsas, gettotalganacias, getmesmasganancias } = require('../../main');
+const { get10mejoresclientesbolsas, get10mejoresclientespuntos, gettotalbolsas, gettotalpuntos, getmesmaspuntos } = require('../../main');
 const main = remote.require('./main')
 
 let algo = "";
 //////////////////////////////////////////////////////////////////mejores 10 por cantidad de bolsas
-select1 = document.getElementById("selecttiempobolsasimporte");
+select1 = document.getElementById("selecttiempobolsaspuntos");
 divForm1 = document.getElementById("divForm1");
 
 
@@ -15,7 +15,7 @@ select1.addEventListener('change', (e) => {
     if (select1.value != "elegir") {
         divForm1.innerHTML = "";
         get10mejoresclientesbolsasapp(select1.value);
-        get10mejoresclientesimporteapp(select1.value);
+        get10mejoresclientespuntosapp(select1.value);
     }else{
         divForm1.innerHTML = `            <form id="form1">
         <input type="month" class="inputmonth" id="inputmonth1">
@@ -25,11 +25,11 @@ select1.addEventListener('change', (e) => {
     form1 = document.getElementById("form1");
     form1.addEventListener('submit', (e) => {
         e.preventDefault();
-        select1 = document.getElementById("selecttiempobolsasimporte");
+        select1 = document.getElementById("selecttiempobolsaspuntos");
         input1 = document.getElementById("inputmonth1");
     
         get10mejoresclientesbolsasapp(select1.value, input1.value);
-        get10mejoresclientesimporteapp(select1.value, input1.value);
+        get10mejoresclientespuntosapp(select1.value, input1.value);
     });
 
 
@@ -39,7 +39,7 @@ select1.addEventListener('change', (e) => {
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////total bolsas vendidas
-select3 = document.getElementById("selecttiempototalbolsasganancias");
+select3 = document.getElementById("selecttiempototalbolsaspuntos");
 divForm2 = document.getElementById("divForm2");
 
 
@@ -49,7 +49,7 @@ select3.addEventListener('change', (e) => {
     if (select3.value != "elegir") {
         divForm2.innerHTML = "";
         gettotalbolsasapp(select3.value);
-        gettotalgananciasapp(select3.value);
+        gettotalpuntosapp(select3.value);
     }else{
         divForm2.innerHTML = `<form id="form3">
         <input type="month" class="inputmonth" id="inputmonth3">
@@ -59,11 +59,11 @@ select3.addEventListener('change', (e) => {
         form3 = document.getElementById("form3");
         form3.addEventListener('submit', (e) => {
             e.preventDefault();
-            select3 = document.getElementById("selecttiempototalbolsasganancias");
+            select3 = document.getElementById("selecttiempototalbolsaspuntos");
             input3 = document.getElementById("inputmonth3");
         
             gettotalbolsasapp(select3.value, input3.value);
-            gettotalgananciasapp(select3.value, input3.value);
+            gettotalpuntosapp(select3.value, input3.value);
         });
 
     }
@@ -73,10 +73,10 @@ select3.addEventListener('change', (e) => {
 /////////////////////////////////////////////////////////////////////////////////////////
 
 get10mejoresclientesbolsasapp(select1.value, algo);
-get10mejoresclientesimporteapp(select1.value, algo);
+get10mejoresclientespuntosapp(select1.value, algo);
 gettotalbolsasapp(select3.value, algo);
-gettotalgananciasapp(select3.value, algo)
-getmesmasgananciasapp();
+gettotalpuntosapp(select3.value, algo)
+getmesmaspuntosapp();
 
 async function get10mejoresclientesbolsasapp(filtro, filtro2) {
 
@@ -86,11 +86,11 @@ async function get10mejoresclientesbolsasapp(filtro, filtro2) {
 
 }
 
-async function get10mejoresclientesimporteapp(filtro, filtro2) {
+async function get10mejoresclientespuntosapp(filtro, filtro2) {
 
-    let clientes = await get10mejoresclientesimporte(filtro, filtro2);
+    let clientes = await get10mejoresclientespuntos(filtro, filtro2);
 
-    inner10mejoresporimporte(clientes);
+    inner10mejoresporpuntos(clientes);
 
 }
 
@@ -102,19 +102,19 @@ async function gettotalbolsasapp(filtro, filtro2) {
 
 }
 
-async function gettotalgananciasapp(filtro, filtro2) {
+async function gettotalpuntosapp(filtro, filtro2) {
 
-    let total = await gettotalganacias(filtro, filtro2);
+    let total = await gettotalpuntos(filtro, filtro2);
 
-    innertotalganancias(total);
+    innertotalpuntos(total);
 
 }
 
-async function getmesmasgananciasapp() {
+async function getmesmaspuntosapp() {
 
-    let mes = await getmesmasganancias();
+    let mes = await getmesmaspuntos();
 
-    innermesmasganancias(mes);
+    innermesmaspuntos(mes);
 
 }
 
@@ -133,14 +133,14 @@ function inner10mejoresporbolsas(clientes) {
 
 }
 
-function inner10mejoresporimporte(clientes) {
-    ol = document.getElementById("ol10mejoresporimporte");
+function inner10mejoresporpuntos(clientes) {
+    ol = document.getElementById("ol10mejoresporpuntos");
 
     ol.innerHTML = ""
 
 
     clientes.forEach(element => {
-        ol.innerHTML += `<li>${element.primernombre} ${element.nombrepila} ${element.apellido} ($${element.totalventa})</li>`
+        ol.innerHTML += `<li>${element.primernombre} ${element.nombrepila} ${element.apellido} (${element.puntos_obtenidos_total})</li>`
     });
 
 
@@ -155,14 +155,14 @@ function innertotalbolsas(total) {
     h2.innerHTML += total[0].totalbolsas;
 }
 
-function innertotalganancias(total) {
-    h2 = document.getElementById("h2totalganancias");
+function innertotalpuntos(total) {
+    h2 = document.getElementById("h2totalpuntos");
     console.log(total);
     h2.innerHTML = ""
-    h2.innerHTML += "$" + total[0].totalganancias;
+    h2.innerHTML += total[0].puntos_obtenidos_total;
 }
 
-function innermesmasganancias(mes) {
+function innermesmaspuntos(mes) {
     h2 = document.getElementById("h2mes");
     mes = mes[0].mes;
     h2.innerHTML = "";

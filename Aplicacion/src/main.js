@@ -71,7 +71,7 @@ async function get10mejoresclientesbolsas(filtro, filtro2) {
 
 
 }
-async function get10mejoresclientesimporte(filtro, filtro2) {
+async function get10mejoresclientespuntos(filtro, filtro2) {
     const conn = await getConnection();
 
     console.log(filtro, filtro2);
@@ -79,16 +79,16 @@ async function get10mejoresclientesimporte(filtro, filtro2) {
     if (filtro == "anio") {
         anio = new Date();
         anio = anio.getFullYear();
-        const resultado = await conn.query('select clientes.*, sum(venta.totalventa) as totalventa from clientes inner join venta on venta.id_cliente = clientes.id_cliente where YEAR(venta.fecha) = ? group by clientes.id_cliente order by totalventa DESC LIMIT 10;', anio);
+        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente where YEAR(venta.fecha) = ? group by clientes.id_cliente order by puntos_obtenidos DESC LIMIT 10;', anio);
         return resultado;
     } else if (filtro == "total") {
-        const resultado = await conn.query('select clientes.*, sum(venta.totalventa) as totalventa from clientes inner join venta on venta.id_cliente = clientes.id_cliente group by clientes.id_cliente order by totalventa DESC LIMIT 10;');
+        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente group by clientes.id_cliente order by puntos_obtenidos DESC LIMIT 10;');
         return resultado;
     } else if (filtro == "elegir" && filtro2 != "") {
         anio = filtro2[0] + filtro2[1] + filtro2[2] + filtro2[3];
         mes = filtro2[5] + filtro2[6];
         console.log("anio:", anio, "Mes:", mes);
-        const resultado = await conn.query('select clientes.*, sum(venta.totalventa) as totalventa from clientes inner join venta on venta.id_cliente = clientes.id_cliente where YEAR(venta.fecha) = ? and MONTH(venta.fecha) = ? group by clientes.id_cliente order by totalventa DESC LIMIT 10;', [anio, mes]);
+        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente where YEAR(venta.fecha) = ? and MONTH(venta.fecha) = ? group by clientes.id_cliente order by puntos_obtenidos DESC LIMIT 10;', [anio, mes]);
         console.log("resultado:", resultado);
         return resultado;
     } else if (filtro == "anioatras") {
@@ -97,7 +97,7 @@ async function get10mejoresclientesimporte(filtro, filtro2) {
         let mes = fechaActual.getMonth() + 1;
         console.log("mes que queremos ver:", mes);
         let dia = fechaActual.getDate();
-        const resultado = await conn.query('select clientes.*, sum(venta.totalventa) as totalventa from clientes inner join venta on venta.id_cliente = clientes.id_cliente where venta.fecha >= "?-?-?" group by clientes.id_cliente order by totalventa DESC LIMIT 10;', [aniomenos, mes, dia]);
+        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente where venta.fecha >= "?-?-?" group by clientes.id_cliente order by puntos_obtenidos DESC LIMIT 10;', [aniomenos, mes, dia]);
         console.log("resultado:", resultado);
         return resultado;
     }
@@ -137,7 +137,7 @@ async function gettotalbolsas(filtro, filtro2) {
 
 }
 
-async function gettotalganacias(filtro, filtro2) {
+async function gettotalpuntos(filtro, filtro2) {
     const conn = await getConnection();
 
     console.log(filtro, filtro2);
@@ -145,16 +145,16 @@ async function gettotalganacias(filtro, filtro2) {
     if (filtro == "anio") {
         anio = new Date();
         anio = anio.getFullYear();
-        const resultado = await conn.query('select sum(venta.totalventa) as totalganancias from venta where YEAR(venta.fecha) = 2023;', anio);
+        const resultado = await conn.query('select sum(venta.puntos_obtenidos) as puntos_obtenidos_total from venta where YEAR(venta.fecha) = 2023;', anio);
         return resultado;
     } else if (filtro == "total") {
-        const resultado = await conn.query('select sum(venta.totalventa) as totalganancias from venta;');
+        const resultado = await conn.query('select sum(venta.puntos_obtenidos) as puntos_obtenidos_total from venta;');
         return resultado;
     } else if (filtro == "elegir" && filtro2 != "") {
         anio = filtro2[0] + filtro2[1] + filtro2[2] + filtro2[3];
         mes = filtro2[5] + filtro2[6];
         console.log("anio:", anio, "Mes:", mes);
-        const resultado = await conn.query('select sum(venta.totalventa) as totalganancias from venta where YEAR(venta.fecha) = ? and MONTH(venta.fecha) = ?;', [anio, mes]);
+        const resultado = await conn.query('select sum(venta.puntos_obtenidos) as puntos_obtenidos_total from venta where YEAR(venta.fecha) = ? and MONTH(venta.fecha) = ?;', [anio, mes]);
         console.log("resultado:", resultado);
         return resultado;
     } else if (filtro == "anioatras") {
@@ -163,18 +163,18 @@ async function gettotalganacias(filtro, filtro2) {
         let mes = fechaActual.getMonth() + 1;
         console.log("mes que queremos ver:", mes);
         let dia = fechaActual.getDate();
-        const resultado = await conn.query('select sum(venta.totalventa) as totalganancias from venta where venta.fecha >= "?-?-?";', [aniomenos, mes, dia]);
+        const resultado = await conn.query('select sum(venta.puntos_obtenidos) as puntos_obtenidos_total from venta where venta.fecha >= "?-?-?";', [aniomenos, mes, dia]);
         console.log("resultado:", resultado);
         return resultado;
     }
 
 }
 
-async function getmesmasganancias() {
+async function getmesmaspuntos() {
     const conn = await getConnection();
     anio = new Date();
     anio = anio.getFullYear();
-    const resultado = await conn.query('select month(venta.fecha) as mes from venta where year(venta.fecha) = ? group by mes order by sum(venta.totalventa) DESC limit 1;', anio);
+    const resultado = await conn.query('select month(venta.fecha) as mes from venta where year(venta.fecha) = ? group by mes order by sum(venta.puntos_obtenidos) DESC limit 1;', anio);
     return resultado;
 }
 
@@ -502,12 +502,21 @@ async function get20VentasClientemain(busqueda, salto) {
 
     if (busqueda.includes('/')) {
         busqueda = busqueda.split("/");
-        const resultado = await conn.query(`select * from venta inner join clientes on clientes.id_cliente = venta.id_cliente where (day(venta.fecha) = ? and month(venta.fecha) = ? and year(venta.fecha) = ?) order by venta.fecha DESC LIMIT ?, 20;`, [busqueda[0], busqueda[1], busqueda[2], salto]);
-        return resultado;
+
+        if (busqueda.length == 3) {
+            const resultado = await conn.query(`select * from venta inner join clientes on clientes.id_cliente = venta.id_cliente inner join bolsas_kilos on bolsas_kilos.id_bolsa_kilo = venta.id_bolsa_kilo inner join bolsas on bolsas.id_bolsa = bolsas_kilos.id_bolsa where (day(venta.fecha) = ? and month(venta.fecha) = ? and year(venta.fecha) = ?) order by venta.fecha DESC LIMIT ?, 20;`, [busqueda[0], busqueda[1], busqueda[2], salto]);
+            return resultado;
+        }
+        if (busqueda.length == 2) {
+            const resultado = await conn.query(`select * from venta inner join clientes on clientes.id_cliente = venta.id_cliente inner join bolsas_kilos on bolsas_kilos.id_bolsa_kilo = venta.id_bolsa_kilo inner join bolsas on bolsas.id_bolsa = bolsas_kilos.id_bolsa where (month(venta.fecha) = ? and year(venta.fecha) = ?) order by venta.fecha DESC LIMIT ?, 20;`, [busqueda[0], busqueda[1], salto]);
+            return resultado;
+        }
+
+
     } else {
         let busquedaMod = "%" + busqueda + "%";
         console.log("entroo", busquedaMod);
-        const resultado = await conn.query(`select * from venta inner join clientes on clientes.id_cliente = venta.id_cliente where venta.precio = ? or venta.totalventa = ? or venta.marca like ? or venta.kilos = ? order by venta.fecha DESC LIMIT ?, 20;`, [busqueda, busqueda, busquedaMod, busqueda, salto]);
+        const resultado = await conn.query(`select * from venta inner join clientes on clientes.id_cliente = venta.id_cliente inner join bolsas_kilos on bolsas_kilos.id_bolsa_kilo = venta.id_bolsa_kilo inner join bolsas on bolsas.id_bolsa = bolsas_kilos.id_bolsa where venta.precio like ? or venta.totalventa like ? or bolsas.marca_bolsa like ? or bolsas_kilos.kilos_bolsa = ? order by venta.fecha DESC LIMIT ?, 20;`, [busquedaMod, busquedaMod, busquedaMod, parseFloat(busqueda), salto]);
         return resultado;
     }
 
@@ -606,7 +615,10 @@ async function getKgBolsaMain(nombreBolsa) {
 
 async function getBolsaByIdMain(idBolsa) {
     const conn = await getConnection();
-    let resultado = await conn.query('select * from bolsas_kilos inner join bolsas on bolsas.id_bolsa = bolsas_kilos.id_bolsa where bolsas.id_bolsa = ? order by bolsas_kilos.kilos_bolsa ASC', idBolsa);
+    let resultado = await conn.query('select kilos_bolsa from bolsas_kilos inner join bolsas on bolsas.id_bolsa = bolsas_kilos.id_bolsa where bolsas.id_bolsa = ? order by bolsas_kilos.kilos_bolsa ASC', idBolsa);
+
+    resultado = transformKilosBolsaToFloats(resultado);
+
     return resultado;
 }
 
@@ -659,12 +671,22 @@ async function getKilosBolsaPorId(id_bolsa) {
 
 
 
-async function actualizarDatosBolsaMain(newBolsa) {
+async function actualizarDatosBolsaMain(newBolsa, bolsaKilos) {
     const conn = await getConnection();
 
     newBolsa.marca_bolsa = (newBolsa.marca_bolsa).toUpperCase();
 
     await conn.query('UPDATE bolsas SET calidad_bolsa = ?, marca_bolsa = ? WHERE id_bolsa = ?;', [newBolsa.calidad_bolsa, newBolsa.marca_bolsa, newBolsa.id_bolsa]);
+
+    await conn.query('delete from bolsas_kilos where bolsas_kilos.id_bolsa = ?', newBolsa.id_bolsa);
+
+    for (let i = 0; i < bolsaKilos.length; i++) {
+        const element = bolsaKilos[i];
+        console.log("main:", element);
+        
+        await conn.query('insert into bolsas_kilos(kilos_bolsa, id_bolsa) values(?, ?)', [element, newBolsa.id_bolsa]);
+
+    }
 }
 
 
@@ -679,17 +701,43 @@ async function borrarBolsaByIdMain(id_bolsa) {
 }
 
 
-async function agregarBolsaMain(newBolsa) {
+async function crearNuevaBolsaMain(newBolsa, newBolsaKilos) {
     const conn = await getConnection();
     newBolsa.marca_bolsa = (newBolsa.marca_bolsa).toUpperCase();
     await conn.query('insert into bolsas(marca_bolsa, calidad_bolsa) values(?, ?); ', [newBolsa.marca_bolsa, newBolsa.calidad_bolsa]);
-    return resultado;
+
+    newBolsa = await conn.query('select * from bolsas where marca_bolsa = ?', newBolsa.marca_bolsa);
+
+    for (let i = 0; i < newBolsaKilos.length; i++) {
+        const element = newBolsaKilos[i];
+        console.log("main:", element);
+        
+        await conn.query('insert into bolsas_kilos(kilos_bolsa, id_bolsa) values(?, ?)', [element, newBolsa[0].id_bolsa]);
+
+    }
 }
 
 
 
 
-
+function transformKilosBolsaToFloats(rowData) {
+    console.log("aaa", rowData);
+    // Creamos un nuevo array donde guardaremos los datos convertidos a float
+    const floatsArray = [];
+  
+    // Recorremos cada objeto del array de row data
+    for (let i = 0; i < rowData.length; i++) {
+      // Obtenemos el valor del único atributo del objeto y lo convertimos a float
+      const floatValue = parseFloat(rowData[i].kilos_bolsa);
+  
+      // Agregamos el valor al array de floats
+      floatsArray.push(floatValue);
+    }
+  
+    // Devolvemos el array de floats
+    console.log("aaaaa",floatsArray);
+    return floatsArray;
+  }
 
 
 
@@ -795,7 +843,7 @@ function createWindowAgregarBolsa() {
         width: 550,
         height: 450,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: true,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -891,10 +939,10 @@ module.exports = {
     notificacionNoCliente,
     notificacionNoVenta,
     get10mejoresclientesbolsas,
-    get10mejoresclientesimporte,
+    get10mejoresclientespuntos,
     gettotalbolsas,
-    gettotalganacias,
-    getmesmasganancias,
+    gettotalpuntos,
+    getmesmaspuntos,
     getMascotasidCliente,
     createWindowEditarCliente,
     eliminarMascotaMain,
@@ -922,5 +970,5 @@ module.exports = {
     getSoloBolsaByIdMain,
     borrarBolsaByIdMain,
     createWindowAgregarBolsa,
-    agregarBolsaMain
+    crearNuevaBolsaMain
 }

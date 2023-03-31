@@ -2,7 +2,7 @@ const { remote, app } = require('electron');
 const { recargarPaginaPrincipal, getSoloBolsaByIdMain, actualizarDatosBolsaMain, borrarBolsaKilosByIdMain, cerrarVentanasEmergentes, getBolsaByIdMain, agregarBolsaKilosMain } = require('../../main');
 const main = remote.require('./main');
 
-let bolsaKilos;
+let bolsaKilos = [];
 let soloBolsa;
 
 mainFunctionEditarBolsa();
@@ -46,17 +46,19 @@ function setInputMarcaValorBolsa() {
 }
 
 function setTamaniosBolsa() {
-    pTamanios = document.getElementById("pTamanios");
+
+    spanTamanios = document.getElementById("spanTamanios");
+    spanTamanios.innerHTML = "";
 
     bolsaKilos.forEach(element => {
         // Crea el elemento <span> para cada bolsa
         const spanKiloBolsa = document.createElement("span");
         spanKiloBolsa.className = "spanKiloBolsa";
-        spanKiloBolsa.id = `spanKiloBolsa${element.id_bolsa_kilo}`;
-        spanKiloBolsa.textContent = ` ${element.kilos_bolsa}kg -`;
+        spanKiloBolsa.id = `spanKiloBolsa${element}`;
+        spanKiloBolsa.textContent = ` ${element}kg -`;
 
         // Agrega el <span> al <p> que contiene los tamaños de las bolsas
-        pTamanios.appendChild(spanKiloBolsa);
+        spanTamanios.appendChild(spanKiloBolsa);
 
         // Agrega los eventos "mouseover" y "mouseout" al <span>
         spanKiloBolsa.addEventListener("mouseover", () => {
@@ -65,7 +67,7 @@ function setTamaniosBolsa() {
         });
 
         spanKiloBolsa.addEventListener("mouseout", () => {
-            spanKiloBolsa.textContent = ` ${element.kilos_bolsa}kg -`;
+            spanKiloBolsa.textContent = ` ${element}kg -`;
             spanKiloBolsa.classList.remove("spanKiloBolsaHover");
         });
 
@@ -73,7 +75,7 @@ function setTamaniosBolsa() {
         spanKiloBolsa.addEventListener("click", (e) => {
             e.preventDefault();
 
-            borrarBolsaKilosByIdApp(element.id_bolsa_kilo, element.kilos_bolsa);
+            borrarTamanio(element);
 
         });
 
@@ -90,12 +92,7 @@ function listenerCruz() {
     btnCruz.addEventListener('click', (e) => {
         e.preventDefault();
 
-        if (bolsaKilos.length != 0) {
-            main.recargarPaginaPrincipal();
-            main.cerrarVentanasEmergentes();
-        } else {
-            sweetAlertAgregarTamanioBolsa();
-        }
+        main.cerrarVentanasEmergentes();
 
 
 
@@ -223,7 +220,51 @@ function setSelectCalidadEnCalidadActualSegunBolsa() {
 
 
 
+async function botonAgregarGrande() {
+
+
+    bolsaKilos.push(parseFloat(inputAgregarTamanio.value));
+
+    bolsaKilos = ordenarArrayDeFloats(bolsaKilos);
+
+    console.log("bolsaKilos:", bolsaKilos);
+
+    borrarInputTamanio();
+    cambiarBotonAgregarAGuardar();
+    agregarBotonAgregar();
+    borrarBotonCancelar();
+    listenerAgregarTamanio();
+    listenerGuardar();
+    setTamaniosBolsa();
+
+}
+
+
+
+async function borrarTamanio(tamanio) {
+
+    let confirma_borrado = await sweetAlert_confirmar_borrado_kilos_bolsa(tamanio);
+
+    if (confirma_borrado) {
+        let indice = bolsaKilos.indexOf(tamanio);
+
+        if (indice !== -1) {
+            bolsaKilos.splice(indice, 1);
+        }
+
+        setTamaniosBolsa();
+    }
+
+
+}
+
 async function actualizarDatosBolsaApp() {
+
+    if ((document.getElementById("inputMarca").value) === "") {
+        await sweetAlertAgregarMarcaBolsa();
+        return;
+    }
+
 
     newBolsa = {
         id_bolsa: soloBolsa[0].id_bolsa,
@@ -232,38 +273,12 @@ async function actualizarDatosBolsaApp() {
     }
 
 
-    await actualizarDatosBolsaMain(newBolsa);
-    location.reload();
-
-}
-
-
-async function botonAgregarGrande() {
-
-
-    let newBolsaKilos = {
-        id_bolsa: soloBolsa[0].id_bolsa,
-        marca_bolsa: soloBolsa[0].marca_bolsa,
-        kilos_bolsa: inputAgregarTamanio.value,
-        calidad_bolsa: soloBolsa[0].calidad_bolsa
-    }
-
-    console.log("newBOlsaKilos:", newBolsaKilos);
-
-    await agregarBolsaKilosMain(newBolsaKilos);
-    location.reload();
-
-}
-
-
-
-async function borrarBolsaKilosByIdApp(id_bolsa_kilo, bolsa_kilos) {
-
-    let confirma_borrado = await sweetAlert_confirmar_borrado_kilos_bolsa(bolsa_kilos);
-
-    if (confirma_borrado) {
-        await borrarBolsaKilosByIdMain(id_bolsa_kilo);
-        location.reload();
+    if (bolsaKilos.length != 0) {
+        await actualizarDatosBolsaMain(newBolsa, bolsaKilos);
+        main.recargarPaginaPrincipal();
+        main.cerrarVentanasEmergentes();
+    } else {
+        sweetAlertAgregarTamanioBolsa();
     }
 
 }
@@ -322,6 +337,20 @@ async function sweetAlertAgregarTamanioBolsa() {
     })
 }
 
+async function sweetAlertAgregarMarcaBolsa() {
+    await Swal.fire({
+        title: "Debes indicar la marca de la bolsa",
+        icon: "error",
+        showConfirmButton: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        toast: true,
+        stopKeydownPropagation: false,
+        position: "top",
+    })
+}
+
 
 
 async function sweetAlert_confirmar_borrado_kilos_bolsa(kilos_bolsa) {
@@ -346,3 +375,13 @@ async function sweetAlert_confirmar_borrado_kilos_bolsa(kilos_bolsa) {
     return resultado;
 }
 
+
+function ordenarArrayDeFloats(arrayDeFloats) {
+    // Utilizamos el método sort para ordenar el array de menor a mayor
+    arrayDeFloats.sort(function(a, b) {
+      return a - b;
+    });
+  
+    // Devolvemos el array ordenado
+    return arrayDeFloats;
+  }
