@@ -1,7 +1,10 @@
 const { remote, app } = require('electron');
-const { getCLientesmain, get20VentasClientemain, borrar_venta_main } = require('../../main');
+const { getCLientesmain, get20VentasClientemain, borrar_venta_main, restarPuntosClientePorBorradoDeVenta } = require('../../main');
 const main = remote.require('./main');
 
+
+let barra_busqueda = document.getElementById('barra-busqueda');
+barra_busqueda.focus();
 
 
 let salto = 0;
@@ -67,7 +70,7 @@ function renderVentas(ventas) {
         </div>
     
         <div class="datos-persona">
-        <p><b>Nombre: </b><button class="btn-nombre" onclick="botonPersona(${venta.id_cliente})"><h3>${venta.primernombre} ${venta.nombrepila} ${venta.apellido} (id:${venta.id_cliente})</h3></button></p>
+        <p><b>Nombre: </b><button class="btn-nombre" onclick="botonPersona(${venta.id_cliente})"><h3>${venta.primernombre} ${venta.nombrepila} ${venta.apellido} (Nº:${venta.id_cliente})</h3></button></p>
           <h3 class="h3persona"><b>Tel:</b> ${venta.telefono}</h3>
           <h3 class="h3persona"><b>Direccion:</b> ${venta.calle} ${venta.calle_numero}</h3>
         </div>
@@ -125,8 +128,14 @@ function botonPersona(idCliente){
 
 
 async function borrar_venta(idVenta) {
-  let confirma_borrado = await sweetAlert_confirmar_borrado()
-  if (confirma_borrado) {
+  let resultados = await sweetAlert_confirmar_borrado();
+  console.log("confirma borrado:", resultados.confirma_borrado);
+  console.log("confirma borrado de puntos:", resultados.confirma_borrar_puntos);
+  if (resultados.confirma_borrado) {
+
+    if (resultados.confirma_borrar_puntos) {
+      await restarPuntosClientePorBorradoDeVenta(idVenta, ventas[0].id_cliente);
+    }
     await borrar_venta_main(idVenta);
     location.reload();
   }
@@ -136,23 +145,40 @@ async function borrar_venta(idVenta) {
 
 async function sweetAlert_confirmar_borrado(){
   let resultado;
+  let checkBorrarPuntos;
+
   await Swal.fire({
     title: '¿Seguro que desea borrar la venta?',
-    text: "Se perderan todos los datos de la venta y no se realizara seguimiento",
-    footer: "No se podran revertir los cambios",
+    text: "Se perderán todos los datos de la venta y no se realizará seguimiento.",
+    footer: "No se podrán revertir los cambios.",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonText: "Cancelar",
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, borrar'
+    confirmButtonText: 'Si, borrar',
+    html:
+      '<div class="form-check">' +
+      '  <input class="form-check-input" type="checkbox" id="borrar-puntos-checkbox" style="transform: scale(1.5);" checked>' +
+      '  <label class="form-check-label" for="borrar-puntos-checkbox">' +
+      '    Borrar puntos otorgados por la venta' +
+      '  </label>' +
+      '</div>'
   }).then((result) => {
     if (result.isConfirmed) {
       resultado = true;
-    }else{
+      checkBorrarPuntos = document.getElementById('borrar-puntos-checkbox').checked;
+    } else {
       resultado = false;
     }
-  })
+  });
 
-  return resultado;
+  let resultados = {
+    confirma_borrado: resultado,
+    confirma_borrar_puntos: checkBorrarPuntos
+  }
+
+  console.log(resultados);
+
+  return resultados;
 }

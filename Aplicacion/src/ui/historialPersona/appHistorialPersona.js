@@ -1,9 +1,13 @@
 const { remote, app } = require('electron');
-const { getCLientesmain, borrar_venta_main, getVentasClientemain, getClientefullnamemain, getsoloClientefullnamemain, notificacionNoVenta, notificacionNoCliente } = require('../../main');
+const { getCLientesmain, borrar_venta_main, getVentasClientemain, getClientefullnamemain, getsoloClientefullnamemain, notificacionNoVenta, notificacionNoCliente, restarPuntosClientePorBorradoDeVenta } = require('../../main');
 const main = remote.require('./main')
 
 let salto = 0;
 let newBusqueda;
+let cliente;
+
+let barra_busqueda = document.getElementById('barra-busqueda');
+barra_busqueda.focus();
 
 PreguntarClickNombreDesdeHistorialGeneralOBuscador();
 function PreguntarClickNombreDesdeHistorialGeneralOBuscador() {
@@ -39,7 +43,7 @@ function crearListenerBuscador() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function mainFunctionHistorialPersona(newBusqueda) {
-  let cliente = await getClienteSegunBusqueda(newBusqueda)
+  cliente = await getClienteSegunBusqueda(newBusqueda)
   if (cliente.length > 1) {
     sweetAlertVariosClientes();
     return
@@ -323,225 +327,6 @@ function listenerScrollParaTopeDePagina() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-// Selecciona el objeto document.documentElement para acceder a las propiedades de la página
-
-
-
-
-// botonHistorial();
-
-// function botonHistorial() {
-//   let idCliente = sessionStorage.getItem("historialCliente");
-//   sessionStorage.setItem("historialCliente", undefined);
-//   if (idCliente != "undefined") {
-//     buscarCliente(idCliente);
-//   }
-// }
-
-// async function buscarCliente(newBusqueda) {
-//   console.log("newBusqueda:", newBusqueda)
-//   resultado = await getsoloClientefullnamemain(newBusqueda);
-//   console.log("length:", resultado.length);
-//   if (resultado.length > 1) {
-//     await sweetAlertVariosClientes();
-//     location.reload();
-//   } else if (resultado.length == 0) {
-//     sweetAlertNoCliente();
-//   } else {
-//     await actualizarSegunFiltros(newBusqueda);
-//   }
-
-// }
-
-// function innerDatosCliente(ventasCliente) {
-//   console.log(ventasCliente);
-//   divtabla1 = document.getElementById("divtabla1");
-
-//   divtabla1.innerHTML = "";
-//   divtabla1.innerHTML += `    <TABLE class="tabla1">
-//   <TR>
-//     <TH id="thnombre">Nombre:</TH>
-//     <TD id="tdnombre">${ventasCliente[0].primernombre} ${ventasCliente[0].nombrepila} ${ventasCliente[0].apellido}</TD>
-//   </TR>
-//   <TR>
-//     <TH id="thtelefono">Telefono:</TH>
-//     <TD id="tdtelefono">${ventasCliente[0].telefono}</TD>
-//   </TR>
-//   <TR>
-//     <TH id="thdireccion">Direccion:</TH>
-//     <TD id="tddireccion">${ventasCliente[0].calle} ${ventasCliente[0].calle_numero}</TD>
-//   </TR>
-//   <TR>
-//   <TH id="thdireccion">Puntos:</TH>
-//   <TD id="tddireccion">${ventasCliente[0].puntos}</TD>
-// </TR>
-// </TABLE>`;
-
-//   divtabla1.innerHTML += `<div id="filtrar">
-// <div class="container-filtrar">
-//   <label>Intervalo de tiempo:</label>
-//   <select name="selectfiltrado" id="selectfiltrado">
-//   <option value="total">En total</option>
-//   <option value="anioatras">1 año atras</option> 
-//   <option value="anio">En este año</option>
-//   <option value="elegir">Elegir mes:</option>
-//   </select>
-//   <div id="divForm1">
-// </div>
-// </div></div>`;
-//   selectFiltrado = document.getElementById("selectfiltrado");
-//   divForm1 = document.getElementById("divForm1");
-
-//   selectFiltrado.addEventListener('change', (e) => {
-//     e.preventDefault();
-//     tablaVentas = document.getElementById("tablaventas");
-//     tablaTotales = document.getElementById("tablaTotales");
-//     tablaVentas.innerHTML = "";
-//     tablaTotales.innerHTML = "";
-//     salto = 0;
-//     select = document.getElementById("selectfiltrado");
-//     input = document.getElementById("inputmonth1");
-
-//     if (select.value != "elegir") {
-//       divForm1.innerHTML = "";
-//       actualizarSegunFiltros(newBusqueda, select.value, algo);
-//     } else {
-//       divForm1.innerHTML = `<form id="form1">
-//       <input type="month" class="inputmonth" id="inputmonth1">
-//       <button type="submit"><img src="../../imagenes/lupanegra.png" width="10px" id="lupanegra"></button>
-//       </form>`
-
-//       form1 = document.getElementById("form1");
-
-//       form1.addEventListener('submit', (e) => {
-//         e.preventDefault();
-//         select = document.getElementById("selectfiltrado");
-//         input = document.getElementById("inputmonth1");
-
-//         actualizarSegunFiltros(newBusqueda, select.value, input.value);
-//       });
-//     }
-
-
-//   })
-
-
-
-
-
-
-
-//   innerTablaPrincipal(ventasCliente);
-
-
-
-// }
-
-// function innerTablaPrincipal(ventasCliente) {
-//   tablaVentas = document.getElementById("tablaventas");
-//   tablaVentas.innerHTML += ` <table id="tablaprincipal" class="tabla">
-// <tr>
-//   <th class="date">Fecha</th>
-//   <th class="producto">Producto</th>
-//   <th class="cantidad">Cantidad</th>
-//   <th class="importe">Importe</th>
-//   <th></th>
-// </tr>
-// </table>;`
-//   let total = 0;
-//   let cantidad = 0;
-
-//   tablaVentas = document.getElementById("tablaprincipal");
-//   tablaTotales = document.getElementById("tablaTotales");
-//   let contador = 1;
-//   ventasCliente.forEach(element => {
-//     contador += 1
-//     total += (element.totalventa);
-//     cantidad += element.cantidad;
-//     var dia = new Date();
-//     var mes = new Date();
-//     var anio = new Date();
-
-//     dia = element.fecha.getDate();
-//     mes = element.fecha.getMonth();
-//     mes = mes + 1;
-//     anio = element.fecha.getFullYear();
-
-//     if (contador % 2 == 0) {
-//       tablaVentas.innerHTML += `<tr class="trventas1">
-//   <td>${dia}/${mes}/${anio}</td>
-//   <td class="tdMarca">${element.marca_bolsa} ${element.kilos_bolsa}kg</td>
-//   <td>${element.cantidad}</td>
-//   <td>$${(element.totalventa).toFixed(2)}</td>
-//   <td><button class="btnCruz" onclick="borrar_venta(${element.id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button></td>
-// </tr>`;
-//     } else {
-//       tablaVentas.innerHTML += `<tr class="trventas2">
-//   <td>${dia}/${mes}/${anio}</td>
-//   <td class="tdMarca">${element.marca_bolsa} ${element.kilos_bolsa}kg</td>
-//   <td>${element.cantidad}</td>
-//   <td>$${(element.totalventa).toFixed(2)}</td>
-//   <td><button class="btnCruz" onclick="borrar_venta(${element.id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button></td>
-// </tr>`;
-//     }
-
-//   });
-
-//   salto += 20;
-
-//   tablaTotales.innerHTML = `<tr class="trtotal">
-//   <td colspan="2">Cantidad total: ${cantidad}</td>
-//   <td colspan="3">Importe total: $${total.toFixed(2)}</td>
-// </tr>`
-
-
-
-
-
-// }
-
-
-
-// const busqueda = document.getElementById('busqueda')
-
-// busqueda.addEventListener('submit', (e) => {
-//   e.preventDefault();
-//   barra_busqueda = document.getElementById('barra-busqueda')
-
-//   newBusqueda = barra_busqueda.value;
-
-//   buscarCliente(newBusqueda);
-
-// })
-
-
-
-// async function actualizarSegunFiltros(newBusqueda, filtrado, filtrado2) {
-//   console.log("filtrado y filtrado 2 en app:", filtrado, filtrado2);
-//   if (filtrado != "total" && filtrado != "elegir" && filtrado != "anio" && filtrado != "anioatras") {
-//     console.log("entro");
-//     let total = "total";
-//     resultado = await main.getClientefullnamemain(newBusqueda, total, algo, salto);
-//     console.log("termino llamada con total entre comillas");
-//     if (resultado.length != 0) {
-//       innerDatosCliente(resultado);
-//     } else {
-//       //sweetAlertNoVentas()
-//     }
-//   } else {
-//     resultado = await main.getClientefullnamemain(newBusqueda, filtrado, filtrado2, salto);
-//     if (resultado.length != 0) {
-//       innerTablaPrincipal(resultado);
-//     } else {
-//       //sweetAlertNoVentas();
-//       innerTablaPrincipal(resultado);
-//     }
-//   }
-
-// }
-
 async function sweetAlertNoCliente() {
   await Swal.fire({
     title: "No se ha detectado ese cliente",
@@ -588,35 +373,58 @@ async function sweetAlertVariosClientes() {
 }
 
 async function borrar_venta(idVenta) {
-  let confirma_borrado = await sweetAlert_confirmar_borrado()
-  if (confirma_borrado) {
+  let resultados = await sweetAlert_confirmar_borrado();
+  console.log("confirma borrado:", resultados.confirma_borrado);
+  console.log("confirma borrado de puntos:", resultados.confirma_borrar_puntos);
+  if (resultados.confirma_borrado) {
+
+    if (resultados.confirma_borrar_puntos) {
+      await restarPuntosClientePorBorradoDeVenta(idVenta, cliente[0].id_cliente);
+    }
     await borrar_venta_main(idVenta);
-    sessionStorage.setItem("historialCliente",  newBusqueda);
-    location.href="../historialPersona/historialPersona.html";
+    sessionStorage.setItem("historialCliente", cliente[0].id_cliente);
+    location.reload();
   }
 }
 
 
 
-async function sweetAlert_confirmar_borrado() {
+async function sweetAlert_confirmar_borrado(){
   let resultado;
+  let checkBorrarPuntos;
+
   await Swal.fire({
     title: '¿Seguro que desea borrar la venta?',
-    text: "Se perderan todos los datos de la venta y no se realizara seguimiento",
-    footer: "No se podran revertir los cambios",
+    text: "Se perderán todos los datos de la venta y no se realizará seguimiento.",
+    footer: "No se podrán revertir los cambios.",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonText: "Cancelar",
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, borrar'
+    confirmButtonText: 'Si, borrar',
+    html:
+      '<div class="form-check">' +
+      '  <input class="form-check-input" type="checkbox" id="borrar-puntos-checkbox" style="transform: scale(1.5);" checked>' +
+      '  <label class="form-check-label" for="borrar-puntos-checkbox">' +
+      '    Borrar puntos otorgados por la venta' +
+      '  </label>' +
+      '</div>'
   }).then((result) => {
     if (result.isConfirmed) {
       resultado = true;
+      checkBorrarPuntos = document.getElementById('borrar-puntos-checkbox').checked;
     } else {
       resultado = false;
     }
-  })
+  });
 
-  return resultado;
+  let resultados = {
+    confirma_borrado: resultado,
+    confirma_borrar_puntos: checkBorrarPuntos
+  }
+
+  console.log(resultados);
+
+  return resultados;
 }

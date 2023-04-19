@@ -2,6 +2,17 @@
     animation: aparecer 2s alternate 1
 }
 
+body::-webkit-scrollbar {
+    width: 10px;
+    background-color: lightslategray;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #404198;
+    border-right: 2px solid lightslategray;
+  }
+
 @keyframes aparecer {
     from {
         opacity: 0;
@@ -22,6 +33,15 @@
     background-color: #404198;
 }
 
+.historial::-webkit-scrollbar {
+    width: 10px;
+    background-color: lightslategray;
+}
+
+.historial::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #404198;
+}
 
 .container-input-marca {
     position: relative;
@@ -66,6 +86,7 @@ ul {
     background-color: lightgray;
     border: 2px solid #404198;
     border-radius: 0 0 5px 5px;
+    overflow-x: hidden;
 }
 
 .list-items {
@@ -75,6 +96,7 @@ ul {
     padding: 10px 5px;
     left: -40px;
     text-align: center;
+    overflow-x: hidden;
 }
 
 .list-items:hover {
@@ -89,7 +111,7 @@ ul {
     top: 80px;
 }
 
-.selectkilos{
+.selectkilos {
     top: -6px;
 }
 
@@ -116,7 +138,7 @@ body {
     background-color: gray;
     font-family: arial;
     font-weight: lighter;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 header {
@@ -239,7 +261,6 @@ nav a:hover {
 
 p {
     font-family: Arial;
-    font-weight: 600;
 }
 
 .p-apellido {
@@ -627,4 +648,267 @@ input::-webkit-inner-spin-button {
 
 b {
     font-weight: 800;
+}
+
+
+
+
+#btnRestarPuntos {
+    width: 20px;
+    height: 20px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #b10606;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+#divBotonRestarPuntos {
+    position: absolute;
+    left: 313px;
+    top: 127px;
+}
+
+#imgSignoMenos {
+    left: -1px;
+    width: 11px;
+    height: 14px;
+    position: relative;
+    top: -2px;
+}
+
+#divInputRestarPuntos {
+    position: absolute;
+    left: 313px;
+    top: 123px;
+}
+
+#inputRestarPuntos {
+    width: 70px;
+    border-color: #404198;
+    padding: 2px;
+    outline: none;
+}
+
+#confirmarRestarPuntos {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    left: 3px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #2f9b05;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+#imgTick {
+    position: relative;
+    left: -4px;
+    top: -2px;
+    width: 15px;
+    height: 15px;
+}
+
+#cancelarRestarPuntos {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    left: 10px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #b10606;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+#imgCruz_negra {
+    position: relative;
+    left: -3px;
+    top: -2px;
+    width: 15px;
+    height: 15px;
+}
+
+#btnSumarPuntos {
+    left: 7px;
+    width: 20px;
+    height: 20px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #2f9b05;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+
+#imgSignoMas {
+    left: -3px;
+    width: 14px;
+    height: 14px;
+    position: relative;
+    top: -2px;
+}
+
+#inputSumarPuntos {
+    width: 70px;
+    border-color: #404198;
+    padding: 2px;
+    outline: none;
+}
+
+
+#confirmarSumarPuntos {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    left: 3px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #2f9b05;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+#cancelarSumarPuntos {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    left: 10px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #b10606;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+
+#divInfoVentasActivas {
+    background-color: #2f9b05;
+    position: absolute;
+    top: 100px;
+}
+
+
+.container-ventaActiva {
+    position: relative;
+    background-color: #fff;
+    box-shadow: 3px 3px 10px;
+    width: 1000px;
+    height: 130px;
+    margin: 25px auto;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    font-weight: 500;
+}
+
+.container-datos-mascotas {
+    position: relative;
+    width: 820px;
+    height: 130px;
+    left: 180px;
+box-shadow: inset 30px 0px 30px -15px rgba(0,0,0,0.75);
+  -webkit-box-shadow: inset 30px 0px 30px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset 30px 0px 30px -15px rgba(0,0,0,0.75);
+}
+
+.fecha {
+    background-color: #404198;
+    color: white;
+    position: absolute;
+    font-size: medium;
+    width: 180px;
+    text-align: center;
+    height: 130px;
+    border-right: 5px solid black;
+}
+
+.fecha h2 {
+    position: relative;
+    top: 10px;
+}
+
+.datos-ventaActiva {
+    position: absolute;
+    height: 100px;
+    top: 20px;
+    left: 30px;
+    width: 400px;
+}
+
+.h3Bolsa {
+    position: absolute;
+    top: -5px;
+}
+
+.h3Cantidad {
+    position: absolute;
+    top: 50px;
+}
+
+.mascotas {
+    position: absolute;
+    width: 380px;
+    height: 60px;
+    left: 445px;
+    top: 40px;
+    font-size: large;
+}
+
+.estadoBolsa {
+    background-color: #404198;
+    text-align: center;
+    color: white;
+    width: 420px;
+    height: 30px;
+    font-size: large;
+    position: absolute;
+    left: 410px;
+    top: 110px;
+    -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
 }

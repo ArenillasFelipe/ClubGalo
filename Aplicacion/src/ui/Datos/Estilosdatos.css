@@ -490,3 +490,33 @@ h2{
 .h1mesmaspuntos{
   top: 0px;
 }
+
+
+
+.container-ventasBolsas{
+  top: 685px;
+  left: 850px;
+  position: absolute;
+  animation: agrandar 1s;
+}
+
+.container-ventasBolsas button {
+  position: absolute;
+  background-color: white;
+  border-radius: 10px;
+  width: 200px;
+  height: 60px;
+  text-align: center;
+  cursor: pointer;
+  border: 3px solid #404198;
+  font-size: larger;
+  font-weight: 800;
+  outline: none;
+}
+
+.container-ventasBolsas button:hover {
+  left: -2.5px;
+  top: -2.5px;
+  width: 205px;
+  height: 65px;
+}

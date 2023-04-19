@@ -231,9 +231,14 @@ async function botonGuardar() {
     }
 
     if (newBolsaKilos.length != 0) {
-        await crearNuevaBolsaMain(newBolsa, newBolsaKilos);
+        let bolsaRepetida = await crearNuevaBolsaMain(newBolsa, newBolsaKilos);
+
+        if (bolsaRepetida == "bolsaRepetida") {
+            await sweetAlertBolsaRepetida();
+        }else{
         main.recargarPaginaPrincipal();
         main.cerrarVentanasEmergentes();
+        }
     } else {
         sweetAlertAgregarTamanioBolsa();
     }
@@ -253,6 +258,20 @@ async function sweetAlertCompletarInputTamanio() {
         toast: true,
         stopKeydownPropagation: false,
         position: "top",
+    })
+}
+
+async function sweetAlertBolsaRepetida() {
+    await Swal.fire({
+        title: "Ya existe una bolsa con ese nombre",
+        icon: "error",
+        showConfirmButton: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        toast: true,
+        stopKeydownPropagation: false,
+        position: "center",
     })
 }
 

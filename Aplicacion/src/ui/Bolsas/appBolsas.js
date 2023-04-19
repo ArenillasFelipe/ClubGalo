@@ -6,6 +6,9 @@ const main = remote.require('./main');
 let salto = 0;
 let newBusqueda;
 
+let barra_busqueda = document.getElementById('barra-busqueda');
+barra_busqueda.focus();
+
 const doc = document.documentElement;
 let flechaArriba = document.getElementById("flechaArriba");
 flechaArriba.style.display = 'none';

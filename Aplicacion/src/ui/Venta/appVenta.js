@@ -1,5 +1,5 @@
 const { remote, app } = require('electron');
-const { getCLientemain, notificacionExito, getKgBolsaMain, getBolsasMain, getVentaspornombreTelmain, notificacionMascotas, getClientetelmain, insertVentamain, getVentasClientemain, getDatosmain, getVentaspornombremain, getDatostelmain, notificacion, getMascotaidmain } = require('../../main');
+const { getCLientemain, notificacionExito, getKgBolsaMain, getVentasActivasMascotaClienteById, getBolsasMain, sumarPuntosClienteById, restarPuntosClienteById, getVentaspornombreTelmain, notificacionMascotas, getClientetelmain, insertVentamain, getVentasClientemain, getDatosmain, getVentaspornombremain, getDatostelmain, notificacion, getMascotaidmain } = require('../../main');
 const main = remote.require('./main');
 
 let consultaCliente = {
@@ -16,13 +16,16 @@ let consultaClientetel = {
 let datosCliente
 let datosClientetel
 let select
+let ventasActivas;
+
+let inputPrimerNombre = document.getElementById("primer_nombre");
+inputPrimerNombre.focus();
 
 const getDatosapp = async () => {
     let historialVentas;
     datosCliente = await main.getDatosmain(consultaCliente);
     cliente = await main.getCLientemain(consultaCliente);
     divMensaje = document.getElementById("mensaje");
-
 
 
     if (datosCliente == "") {
@@ -38,6 +41,7 @@ const getDatosapp = async () => {
 
                 historialVentas = await main.getVentaspornombreTelmain(consultaCliente, telefono.value);
                 await innerClientetel();
+                await mainVentasActivasCliente(datosClientetel[0].id_cliente);
 
                 select = document.getElementById("select-mascota");
                 select.addEventListener('change', () => {
@@ -85,6 +89,8 @@ const getDatosapp = async () => {
                 ////////////////////////////ORIGINAL/////////////////////////////////////////////////////////////////////////////////////////////
                 historialVentas = await main.getVentaspornombremain(consultaCliente);
                 await innerCliente();
+                await mainVentasActivasCliente(datosCliente[0].id_cliente);
+
 
                 select = document.getElementById("select-mascota");
                 mostrarDatos()
@@ -104,9 +110,14 @@ const getDatosapp = async () => {
                 if (historialVentas != "") {
                     var divHistorial = document.getElementById("historial");
 
-                    historialVentas.forEach(element => {
-                        divHistorial.innerHTML += `<div><p>${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`
-                    });
+                    historialVentas.forEach((element, index) => {
+                        if(index % 2 !== 0) { // evalúa si el índice es impar
+                          divHistorial.innerHTML += `<div style="background-color: #f5f5f5"><p>${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`;
+                        } else {
+                          divHistorial.innerHTML += `<div><p>${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`;
+                        }
+                      });
+                      
 
                 }
 
@@ -125,7 +136,6 @@ const getDatosapp = async () => {
 
 
     }
-
 }
 
 
@@ -176,16 +186,18 @@ formCliente.addEventListener('reset', (e) => {
     e.preventDefault();
 
 
-    mascota = document.getElementById("mascota");
-    agregado = document.getElementById("agregado");
-    primer_nombre = document.getElementById("primer_nombre");
-    apellido = document.getElementById("apellido");
+    let mascota = document.getElementById("mascota");
+    let agregado = document.getElementById("agregado");
+    let primer_nombre = document.getElementById("primer_nombre");
+    let apellido = document.getElementById("apellido");
+    let divVentasActivas = document.getElementById("ventasActivas");
 
 
     mascota.innerHTML = "";
     agregado.innerHTML = "";
     primer_nombre.value = "";
     apellido.value = "";
+    divVentasActivas.innerHTML = "";
 
     try {
         x = telefono.value
@@ -390,7 +402,8 @@ async function innerCliente() {
 <p><b>Nombre:</b> ` + datosCliente[0].primernombre + ` ` + datosCliente[0].nombrepila + ` ` + datosCliente[0].apellido + `</p>
 <p><b>Telefono:</b> ` + datosCliente[0].telefono + `</p>
 <p><b>Direccion:</b> ` + datosCliente[0].calle + ` ` + datosCliente[0].calle_numero + `</p>
-<p><b>Puntos:</b> ` + datosCliente[0].puntos + `</p>
+<p><b>Puntos:</b><span id="spanPuntos"> ` + datosCliente[0].puntos + `<div id="divBotonRestarPuntos"><button id="btnRestarPuntos" onclick="botonRestarPuntos()"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button><button id="btnSumarPuntos" onclick="botonSumarPuntos()"><img src="../../imagenes/signo_mas.png" id="imgSignoMas"></button></div></span></p>
+<div id="divInputRestarPuntos"></div>
 <br>
 <h3>Historial de compras</h3>
 <div class="historial" id="historial">
@@ -443,18 +456,18 @@ async function innerCliente() {
 </div>`
 
 
-btn_borrar_venta = document.getElementById("btn-borrar-venta");
-btn_borrar_venta.addEventListener('click', (e) => {
+    btn_borrar_venta = document.getElementById("btn-borrar-venta");
+    btn_borrar_venta.addEventListener('click', (e) => {
 
         //clear all the item
         selectKG = document.getElementById("selectkilos");
         selectKG.innerHTML = "";
         let items = document.querySelectorAll(".list-items");
         items.forEach((item) => {
-          item.remove();
+            item.remove();
         });
 
-})
+    })
 
 
     rellenarDatos();
@@ -576,18 +589,18 @@ async function innerClientetel() {
 </div>`
 
 
-btn_borrar_venta = document.getElementById("btn-borrar-venta");
-btn_borrar_venta.addEventListener('click', (e) => {
+    btn_borrar_venta = document.getElementById("btn-borrar-venta");
+    btn_borrar_venta.addEventListener('click', (e) => {
 
         //clear all the item
         selectKG = document.getElementById("selectkilos");
         selectKG.innerHTML = "";
         let items = document.querySelectorAll(".list-items");
         items.forEach((item) => {
-          item.remove();
+            item.remove();
         });
 
-})
+    })
 
     rellenarDatostel();
 
@@ -619,7 +632,7 @@ function rellenarDatostel() {
 function rellenarDatos() {
 
     select = document.getElementById("select-mascota");
-    seleccionMascota = document.getElementById("seleccion-mascota")
+    seleccionMascota = document.getElementById("seleccion-mascota");
     datosCliente.forEach(element => {
         select.innerHTML += `<option value="` + element.id_mascota + `">` + element.nombremascota + `</option>`
         seleccionMascota.innerHTML += `<input type="checkbox" value="1" class="checkbox" id="` + element.nombremascota + `">` + element.nombremascota + `<br>`
@@ -735,54 +748,57 @@ async function Bolsas() {
     let names = await getBolsasMain();
     // let names = ['Felipe', 'Paula'];
     console.log(names);
-      //Sort names in ascending order
-      let sortedNames = names.sort();
-      //reference
-      let input = document.getElementById("input-marca");
-      //Execute function on keyup
-      input.addEventListener("keyup", (e) => {
+    //Sort names in ascending order
+    let sortedNames = names.sort();
+    //reference
+    let input = document.getElementById("input-marca");
+    //Execute function on keyup
+    input.addEventListener("keyup", (e) => {
         //loop through above array
         //Initially remove all elements ( so if user erases a letter or adds new letter then clean previous outputs)
         removeElements();
         for (let i of sortedNames) {
-          //convert input to lowercase and compare with each string
-          if (
-            i.toLowerCase().startsWith(input.value.toLowerCase()) &&
-            input.value != ""
-          ) {
-            //create li element
-            let listItem = document.createElement("li");
-            //One common class name
-            listItem.classList.add("list-items");
-            listItem.style.cursor = "pointer";
-            listItem.addEventListener("click", () => displayNames(i));
-            //Display matched part in bold
-            let word = "<b>" + i.substr(0, input.value.length) + "</b>";
-            word += i.substr(input.value.length);
-            //display the value in array
-            listItem.innerHTML = word;
-            document.querySelector(".list").appendChild(listItem);
-          }
+            //convert input to lowercase and compare with each string
+            if (
+                i.toLowerCase().startsWith(input.value.toLowerCase()) &&
+                input.value != ""
+            ) {
+                //create li element
+                let listItem = document.createElement("li");
+                //One common class name
+                listItem.classList.add("list-items");
+                listItem.style.cursor = "pointer";
+                listItem.addEventListener("click", () => displayNames(i));
+                //Display matched part in bold
+                let word = "<b>" + i.substr(0, input.value.length) + "</b>";
+                word += i.substr(input.value.length);
+                //display the value in array
+                listItem.innerHTML = word;
+                document.querySelector(".list").appendChild(listItem);
+            }
         }
-      });
-      function displayNames(value) {
+    });
+    function displayNames(value) {
         input.value = value;
         actualizarKgBolsa(value);
         removeElements();
-      }
-      function removeElements() {
+    }
+    function removeElements() {
         //clear all the item
         selectKG = document.getElementById("selectkilos");
         selectKG.innerHTML = "";
         let items = document.querySelectorAll(".list-items");
         items.forEach((item) => {
-          item.remove();
+            item.remove();
         });
-      }
+    }
 }
+  
+  
+  
 
 
-async function actualizarKgBolsa(bolsa){
+async function actualizarKgBolsa(bolsa) {
     let kgBolsa = await getKgBolsaMain(bolsa);
     console.log(kgBolsa);
     selectKG = document.getElementById("selectkilos");
@@ -794,3 +810,207 @@ async function actualizarKgBolsa(bolsa){
     });
 
 }
+
+
+
+function botonRestarPuntos() {
+
+    let divInputRestarPuntos = document.getElementById("divInputRestarPuntos");
+    let divBotonRestarPuntos = document.getElementById("divBotonRestarPuntos");
+
+    divBotonRestarPuntos.innerHTML = "";
+    divInputRestarPuntos.innerHTML = `<form id="formRestarPuntos"><input type="number" id="inputRestarPuntos" placeholder="Restar..." required><button type="submit" id="confirmarRestarPuntos"><img src="../../imagenes/tick.png" id="imgTick"></button><button type="reset" id="cancelarRestarPuntos"><img src="../../imagenes/cruz_negra.png" id="imgCruz_negra"></button></form>`;
+
+    listenerFormRestarPuntos();
+    listenerFormCancelarRestarPuntos();
+
+}
+
+function listenerFormRestarPuntos() {
+    
+    formRestarPuntos = document.getElementById("formRestarPuntos");
+    formRestarPuntos.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        confirmarRestarPuntos();
+
+    })
+
+}
+
+function listenerFormCancelarRestarPuntos() {
+    
+    formRestarPuntos = document.getElementById("formRestarPuntos");
+    formRestarPuntos.addEventListener('reset', (e) => {
+        e.preventDefault();
+
+        cancelarRestarPuntos();
+
+    })
+
+}
+
+async function confirmarRestarPuntos() {
+
+   let inputRestarPuntos = document.getElementById("inputRestarPuntos");
+   let divInputRestarPuntos = document.getElementById("divInputRestarPuntos");
+   let divBotonRestarPuntos = document.getElementById("divBotonRestarPuntos");
+   let spanPuntos = document.getElementById("spanPuntos");
+
+    let nuevosPuntos = await restarPuntosClienteById(datosCliente[0].id_cliente, inputRestarPuntos.value, datosCliente[0].puntos);
+
+    spanPuntos.innerHTML = ` ${nuevosPuntos}`;
+    datosCliente[0].puntos = nuevosPuntos;
+
+    divInputRestarPuntos.innerHTML = "";
+    divBotonRestarPuntos.innerHTML = `<button id="btnRestarPuntos" onclick="botonRestarPuntos()"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button><button id="btnSumarPuntos" onclick="botonSumarPuntos()"><img src="../../imagenes/signo_mas.png" id="imgSignoMas"></button>`;
+
+
+}
+
+function cancelarRestarPuntos() {
+
+    let divInputRestarPuntos = document.getElementById("divInputRestarPuntos");
+    let divBotonRestarPuntos = document.getElementById("divBotonRestarPuntos");
+    divInputRestarPuntos.innerHTML = "";
+    divBotonRestarPuntos.innerHTML = `<button id="btnRestarPuntos" onclick="botonRestarPuntos()"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button><button id="btnSumarPuntos" onclick="botonSumarPuntos()"><img src="../../imagenes/signo_mas.png" id="imgSignoMas"></button>`;
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+function botonSumarPuntos() {
+
+    let divInputSumarPuntos = document.getElementById("divInputRestarPuntos");
+    let divBotonSumarPuntos = document.getElementById("divBotonRestarPuntos");
+
+    divBotonSumarPuntos.innerHTML = "";
+    divInputSumarPuntos.innerHTML = `<form id="formSumarPuntos"><input type="number" id="inputSumarPuntos" placeholder="Sumar..." required><button type="submit" id="confirmarSumarPuntos"><img src="../../imagenes/tick.png" id="imgTick"></button><button type="reset" id="cancelarSumarPuntos"><img src="../../imagenes/cruz_negra.png" id="imgCruz_negra"></button></form>`;
+
+    listenerFormSumarPuntos();
+    listenerFormCancelarSumarPuntos();
+
+}
+
+function listenerFormSumarPuntos() {
+    
+    formSumarPuntos = document.getElementById("formSumarPuntos");
+    formSumarPuntos.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        confirmarSumarPuntos();
+
+    })
+
+}
+
+function listenerFormCancelarSumarPuntos() {
+    
+    formSumarPuntos = document.getElementById("formSumarPuntos");
+    formSumarPuntos.addEventListener('reset', (e) => {
+        e.preventDefault();
+
+        cancelarSumarPuntos();
+
+    })
+
+}
+
+async function confirmarSumarPuntos() {
+
+   let inputSumarPuntos = document.getElementById("inputSumarPuntos");
+   let divInputSumarPuntos = document.getElementById("divInputRestarPuntos");
+   let divBotonSumarPuntos = document.getElementById("divBotonRestarPuntos");
+   let spanPuntos = document.getElementById("spanPuntos");
+
+    let nuevosPuntos = await sumarPuntosClienteById(datosCliente[0].id_cliente, inputSumarPuntos.value, datosCliente[0].puntos);
+
+    spanPuntos.innerHTML = ` ${nuevosPuntos}`;
+    datosCliente[0].puntos = nuevosPuntos;
+
+    divInputSumarPuntos.innerHTML = "";
+    divBotonSumarPuntos.innerHTML = `<button id="btnRestarPuntos" onclick="botonRestarPuntos()"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button><button id="btnSumarPuntos" onclick="botonSumarPuntos()"><img src="../../imagenes/signo_mas.png" id="imgSignoMas"></button>`;
+
+
+}
+
+function cancelarSumarPuntos() {
+
+    let divInputSumarPuntos = document.getElementById("divInputRestarPuntos");
+    let divBotonSumarPuntos = document.getElementById("divBotonRestarPuntos");
+    divInputSumarPuntos.innerHTML = "";
+    divBotonSumarPuntos.innerHTML = `<button id="btnRestarPuntos" onclick="botonRestarPuntos()"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button><button id="btnSumarPuntos" onclick="botonSumarPuntos()"><img src="../../imagenes/signo_mas.png" id="imgSignoMas"></button>`;
+
+}
+
+
+async function mainVentasActivasCliente(idCliente) {
+    await getVentasActivasCliente(idCliente);
+    console.log("Ventas activas:", ventasActivas);
+    renderVentasActivas();
+}
+
+
+async function getVentasActivasCliente(idCliente) {
+    ventasActivas = await getVentasActivasMascotaClienteById(idCliente);
+}
+
+
+function renderVentasActivas() {
+    
+    let divVentasActivas = document.getElementById("ventasActivas");
+
+    divVentasActivas.innerHTML = "";
+
+    ventasActivas.forEach(element => {
+
+        let dias = calcularDiasEntreFechas(element.fecha);
+        
+        divVentasActivas.innerHTML += ` <div class="container-ventaActiva">
+        <div class="fecha">
+            <h2><b>Comprado hace ${dias} dias</b></h2>
+        </div>
+
+        <div class="container-datos-mascotas">
+
+            <div class="datos-ventaActiva">
+                <h3 class="h3Bolsa"><b>Bolsa: </b>${element.marca_bolsa}</h3>
+                <h3 class="h3Cantidad"><b>Cantidad: </b>${element.cantidad} bolsa/s de ${element.kilos_bolsa}kg</h3>
+            </div>
+
+            <div class="mascotas" id="divMascotasVentaActiva${element.id_venta}">
+                <b>Mascotas:</b>
+            </div>
+
+            <div class="estadoBolsa">
+                <b>Estado:</b> Quedan 20kg en total (Quedan 230 dias)
+            </div>
+
+        </div>
+
+    </div>`
+
+    let mascotasVentaActiva = element.mascotas;
+    divMascotasVentaActiva = "divMascotasVentaActiva" + element.id_venta;
+    divMascotasVentaActiva = document.getElementById(divMascotasVentaActiva);
+
+    mascotasVentaActiva.forEach(elemento => {
+        divMascotasVentaActiva.innerHTML += ` ${elemento.nombremascota} -`
+    });
+
+
+
+    });
+
+}
+
+
+function calcularDiasEntreFechas(fecha) {
+    const fechaActual = new Date();
+    const fechaSeleccionada = new Date(fecha);
+    const diferenciaEnTiempo = fechaActual.getTime() - fechaSeleccionada.getTime();
+    const diferenciaEnDias = Math.round(diferenciaEnTiempo / (1000 * 60 * 60 * 24));
+    return diferenciaEnDias;
+  }
+  

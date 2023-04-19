@@ -24,6 +24,8 @@ header{
     padding: 15px;
     background-color: white;
     box-shadow: 0px 1px 10px;
+    position: relative;
+    z-index: 1;
 }
 
 .spanBlanco{
@@ -43,19 +45,9 @@ header{
   top: 90px;
   left: 870px;
   box-shadow: 2px 3px 5px;
-  animation-name: animacion;
   animation-duration: 2s;
   border: 1px solid black;
   outline: none;
-}
-
-@keyframes animacion {
-  from {
-    transform: translateY(-400%);
-  }
-  to {
-    transform: translateY(0%);
-  }
 }
 
 .logo{

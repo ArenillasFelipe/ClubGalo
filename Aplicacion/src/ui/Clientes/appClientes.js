@@ -4,6 +4,9 @@ const main = remote.require('./main');
 
 
 
+let barra_busqueda = document.getElementById('barra-busqueda');
+barra_busqueda.focus();
+
 
 let salto = 0;
 // Selecciona el objeto document.documentElement para acceder a las propiedades de la página
@@ -103,7 +106,7 @@ async function renderClientes(clientes) {
           <p class="pnombre">${element.primernombre} ${element.nombrepila} ${element.apellido}</p>
         </div>
         <div class="container-id">
-          <p class="pid">ID: ${element.id_cliente}</p>
+          <p class="pid">Nº: ${element.id_cliente}</p>
         </div>
         <div class="puntos">
           <p class="ppuntos">Puntos: ${element.puntos}</p>

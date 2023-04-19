@@ -1,5 +1,5 @@
 const { remote, app } = require('electron');
-const { get10mejoresclientesbolsas, get10mejoresclientespuntos, gettotalbolsas, gettotalpuntos, getmesmaspuntos } = require('../../main');
+const { get10mejoresclientesbolsas, get10mejoresclientespuntos, gettotalbolsas, createWindowVentasBolsas, gettotalpuntos, getmesmaspuntos, get20VentasPorBolsaSegunFiltros } = require('../../main');
 const main = remote.require('./main')
 
 let algo = "";
@@ -77,6 +77,7 @@ get10mejoresclientespuntosapp(select1.value, algo);
 gettotalbolsasapp(select3.value, algo);
 gettotalpuntosapp(select3.value, algo)
 getmesmaspuntosapp();
+listenerBotonVentasBolsas();
 
 async function get10mejoresclientesbolsasapp(filtro, filtro2) {
 
@@ -149,21 +150,21 @@ function inner10mejoresporpuntos(clientes) {
 
 
 function innertotalbolsas(total) {
-    h2 = document.getElementById("h2totalbolsas");
+    let h2 = document.getElementById("h2totalbolsas");
     console.log(total);
     h2.innerHTML = ""
     h2.innerHTML += total[0].totalbolsas;
 }
 
 function innertotalpuntos(total) {
-    h2 = document.getElementById("h2totalpuntos");
+    let h2 = document.getElementById("h2totalpuntos");
     console.log(total);
     h2.innerHTML = ""
     h2.innerHTML += total[0].puntos_obtenidos_total;
 }
 
 function innermesmaspuntos(mes) {
-    h2 = document.getElementById("h2mes");
+    let h2 = document.getElementById("h2mes");
     mes = mes[0].mes;
     h2.innerHTML = "";
     console.log("mes:", mes)
@@ -209,4 +210,21 @@ function innermesmaspuntos(mes) {
             break;
     }
 
+}
+
+
+function listenerBotonVentasBolsas() {
+    botonVentasBolsas = document.getElementById("btn-ventasBolsas");
+
+    botonVentasBolsas.addEventListener('click', (e) => {
+        e.preventDefault();
+        btnVentasBolsas();
+    });
+}
+
+
+
+
+async function btnVentasBolsas() {
+    main.createWindowVentasBolsas();
 }
