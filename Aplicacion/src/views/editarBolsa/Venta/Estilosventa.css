@@ -1,0 +1,914 @@
+.datos-mascota {
+    animation: aparecer 2s alternate 1
+}
+
+body::-webkit-scrollbar {
+    width: 10px;
+    background-color: lightslategray;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #404198;
+    border-right: 2px solid lightslategray;
+  }
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.list::-webkit-scrollbar {
+    width: 10px;
+    background-color: lightslategray;
+}
+
+.list::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #404198;
+}
+
+.historial::-webkit-scrollbar {
+    width: 10px;
+    background-color: lightslategray;
+}
+
+.historial::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #404198;
+}
+
+.container-input-marca {
+    position: relative;
+    top: 60px;
+    left: 75px;
+}
+
+#form-venta {
+    width: 75vmin;
+    height: 100%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    padding: 40px 0;
+}
+
+#input-marca {
+    left: 50px;
+    width: 400px;
+    padding: 15px 10px;
+    border-bottom: 1px solid #645979;
+    outline: none;
+    border-radius: 5px 5px 0 0;
+    background-color: #ffffff;
+    border: 2px solid #404198;
+    font-size: 16px;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+}
+
+.list {
+    position: absolute;
+    z-index: 3;
+    top: 35px;
+    width: 380px;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: lightgray;
+    border: 2px solid #404198;
+    border-radius: 0 0 5px 5px;
+    overflow-x: hidden;
+}
+
+.list-items {
+    position: relative;
+    left: -61px;
+    width: 410px;
+    padding: 10px 5px;
+    left: -40px;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+.list-items:hover {
+    background-color: #404198;
+    color: white;
+}
+
+
+.container-selectkilos {
+    position: relative;
+    left: 400px;
+    top: 80px;
+}
+
+.selectkilos {
+    top: -6px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body {
+    margin: 0;
+    background-color: gray;
+    font-family: arial;
+    font-weight: lighter;
+    overflow-x: hidden;
+}
+
+header {
+    display: flex;
+    /*muestra los elementos de manera horizontal (la imagen con los links al lado); */
+    justify-content: space-between;
+    /*separa la imagen de los links a cada lado de la pantalla*/
+    height: 60px;
+    background-color: white;
+    align-items: center;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0px 1px 10px;
+}
+
+header {
+    animation: slide-in 1.5s;
+}
+
+.logo {
+    animation:
+        bounce 300ms alternate 6 cubic-bezier(.2, .65, .6, 1);
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0px);
+    }
+
+    to {
+        transform: translateY(-20px);
+    }
+}
+
+
+
+@keyframes slide-in {
+    from {
+        transform: translateY(-150%);
+    }
+
+    to {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+a {
+    text-decoration: none;
+    /*para sacar subrayado de links*/
+    color: black;
+    font-weight: 600;
+    /*negrita*/
+    padding-right: 10px;
+}
+
+nav a:hover {
+    color: #404198;
+}
+
+.nav-link2 {
+    color: #404198;
+    font-weight: 800;
+}
+
+.ingreso {
+    margin: auto;
+    margin-top: 10px;
+    border: 5px solid #404198;
+    width: 1050px;
+    height: 200px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    margin-right: none;
+    animation: slide 1s;
+}
+
+@keyframes slide {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+
+.ingreso-persona {
+    position: absolute;
+    display: flex;
+    height: 180px;
+    width: 400px;
+    left: 40px;
+}
+
+.imagen-persona {
+    position: relative;
+    top: 20px;
+}
+
+.form-ingreso {
+    position: relative;
+    top: 20px;
+}
+
+
+
+p {
+    font-family: Arial;
+}
+
+.p-apellido {
+    position: relative;
+    left: 25px;
+}
+
+.primer-nombre {
+    width: 150px;
+    position: relative;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+
+}
+
+.apellido {
+    position: relative;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+    left: 25px;
+    width: 150px;
+}
+
+.datos-mascota {
+    position: absolute;
+    display: flex;
+
+    height: 180px;
+    width: 460px;
+    left: 540px;
+
+}
+
+.imagen-perro {
+    position: relative;
+    top: 13px;
+}
+
+.mostrar-datos {
+    position: absolute;
+    left: 250px;
+    width: 260px;
+    font-weight: 600;
+}
+
+.seleccion-mascota {
+    position: relative;
+    top: 20px;
+    font-weight: 600;
+}
+
+.mostrando-datos {
+    position: absolute;
+    left: 250px;
+    top: 15px;
+    font-size: 14px;
+    line-height: 0.5em;
+
+}
+
+.container-cliente {
+    margin-top: 10px;
+    border: 5px solid #404198;
+    width: 505px;
+    height: 400px;
+    left: 12px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    animation: slide 0.5s;
+}
+
+.h2cliente {
+    font-weight: 700;
+    font-size: 30px;
+}
+
+.datos-cliente {
+    position: relative;
+    top: -10px;
+    margin: auto;
+    text-align: center;
+    line-height: 0.5em;
+
+}
+
+.css-button-shadow-border-sliding--green {
+    min-width: 100px;
+    left: 192px;
+    height: 30px;
+    color: #fff;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
+    background: #2f9b05;
+    z-index: 1;
+}
+
+.css-button-shadow-border-sliding--green:hover:after {
+    width: 100%;
+    left: 0;
+}
+
+.css-button-shadow-border-sliding--green:after {
+    border-radius: 5px;
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    top: 0;
+    z-index: -1;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
+    transition: all 0.3s ease;
+    background-color: #57cc99;
+    right: 0;
+}
+
+.css-button-shadow-border-sliding--green:active {
+    top: 2px;
+}
+
+
+.historial {
+    border: 2px solid gray;
+    width: 480px;
+    height: 170px;
+    overflow-y: auto;
+}
+
+.historial div {
+    background: lightgrey;
+    border: 2px;
+    margin: 1px;
+    padding: 2px;
+    width: 475px;
+    height: 20px;
+}
+
+.historial div p {
+    position: relative;
+    bottom: 7px;
+    font-size: small;
+}
+
+.datos-venta {
+    position: relative;
+    margin: auto;
+    line-height: 0.5em;
+}
+
+.h2venta {
+    font-weight: 700;
+    font-size: 30px;
+    text-align: center;
+}
+
+
+
+.pmarca {
+    position: relative;
+    width: 300px;
+    left: 142px;
+
+}
+
+.pbolsa {
+    position: relative;
+    left: 200px;
+    top: 65px;
+}
+
+.inputmarca {
+    position: relative;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+}
+
+
+
+.pcantidad {
+    position: relative;
+    left: 130px;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+    width: 300px;
+}
+
+.pprecio {
+    position: relative;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+    left: 157px;
+    top: 90px;
+    width: 300px;
+}
+
+.pcantbolsas {
+    position: relative;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+    left: 180px;
+    top: 90px;
+    width: 300px;
+}
+
+.inputcantidad {
+    width: 50px;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+}
+
+.inputprecio {
+    width: 100px;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+}
+
+.inputcantbolsas {
+    width: 30px;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+}
+
+select {
+    position: relative;
+    top: -1px;
+    border-color: #404198;
+    padding: 1px;
+    outline: none;
+    position: absolute;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.container-venta {
+    margin-top: 10px;
+    margin-right: none;
+    border: 5px solid #404198;
+    width: 505px;
+    height: 400px;
+    right: 12px;
+    top: 310px;
+    position: absolute;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    animation: slide 0.5s;
+}
+
+
+.btn-ejecutar {
+    position: relative;
+    left: 340px;
+    top: 125px;
+    height: 30px;
+    width: 90px;
+    background: #2f9b05;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: medium;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+}
+
+.btn-ejecutar:hover {
+    border: 2px solid black;
+}
+
+.btn-borrar {
+    position: relative;
+    left: 330px;
+    top: 125px;
+    height: 30px;
+    width: 90px;
+    background: #9b0505;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: medium;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+}
+
+.btn-borrar:hover {
+    border: 2px solid black;
+}
+
+
+
+.huellas {
+    position: relative;
+    left: 1005px;
+    top: 140px;
+}
+
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.mensaje {
+    top: 140px;
+    left: 260px;
+    position: absolute;
+    font-size: small;
+    color: #9b0505;
+}
+
+#borrar {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    height: 30px;
+    width: 90px;
+    background: #9b0505;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: medium;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+}
+
+#borrar:hover {
+    border: 2px solid black;
+}
+
+#mascota {
+    position: relative;
+    top: -65px;
+}
+
+.p-telefono {
+    position: relative;
+    bottom: 165px;
+    left: 25px;
+}
+
+#telefono {
+    width: 150px;
+    left: 24px;
+    position: relative;
+    border-color: #404198;
+    padding: 3px;
+    outline: none;
+}
+
+
+b {
+    font-weight: 800;
+}
+
+
+
+
+#btnRestarPuntos {
+    width: 20px;
+    height: 20px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #b10606;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+#divBotonRestarPuntos {
+    position: absolute;
+    left: 313px;
+    top: 127px;
+}
+
+#imgSignoMenos {
+    left: -1px;
+    width: 11px;
+    height: 14px;
+    position: relative;
+    top: -2px;
+}
+
+#divInputRestarPuntos {
+    position: absolute;
+    left: 313px;
+    top: 123px;
+}
+
+#inputRestarPuntos {
+    width: 70px;
+    border-color: #404198;
+    padding: 2px;
+    outline: none;
+}
+
+#confirmarRestarPuntos {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    left: 3px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #2f9b05;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+#imgTick {
+    position: relative;
+    left: -4px;
+    top: -2px;
+    width: 15px;
+    height: 15px;
+}
+
+#cancelarRestarPuntos {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    left: 10px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #b10606;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+#imgCruz_negra {
+    position: relative;
+    left: -3px;
+    top: -2px;
+    width: 15px;
+    height: 15px;
+}
+
+#btnSumarPuntos {
+    left: 7px;
+    width: 20px;
+    height: 20px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #2f9b05;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+
+#imgSignoMas {
+    left: -3px;
+    width: 14px;
+    height: 14px;
+    position: relative;
+    top: -2px;
+}
+
+#inputSumarPuntos {
+    width: 70px;
+    border-color: #404198;
+    padding: 2px;
+    outline: none;
+}
+
+
+#confirmarSumarPuntos {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    left: 3px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #2f9b05;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+#cancelarSumarPuntos {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    left: 10px;
+    font-size: medium;
+    font-weight: 800;
+    background-color: #b10606;
+    border: 1px solid black;
+    position: relative;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: .5s ease all;
+    outline: none;
+    border-radius: 4px;
+}
+
+
+#divInfoVentasActivas {
+    background-color: #2f9b05;
+    position: absolute;
+    top: 100px;
+}
+
+
+.container-ventaActiva {
+    position: relative;
+    background-color: #fff;
+    box-shadow: 3px 3px 10px;
+    width: 1000px;
+    height: 130px;
+    margin: 25px auto;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    font-weight: 500;
+}
+
+.container-datos-mascotas {
+    position: relative;
+    width: 820px;
+    height: 130px;
+    left: 180px;
+box-shadow: inset 30px 0px 30px -15px rgba(0,0,0,0.75);
+  -webkit-box-shadow: inset 30px 0px 30px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset 30px 0px 30px -15px rgba(0,0,0,0.75);
+}
+
+.fecha {
+    background-color: #404198;
+    color: white;
+    position: absolute;
+    font-size: medium;
+    width: 180px;
+    text-align: center;
+    height: 130px;
+    border-right: 5px solid black;
+}
+
+.fecha h2 {
+    position: relative;
+    top: 10px;
+}
+
+.datos-ventaActiva {
+    position: absolute;
+    height: 100px;
+    top: 20px;
+    left: 30px;
+    width: 400px;
+}
+
+.h3Bolsa {
+    position: absolute;
+    top: -5px;
+}
+
+.h3Cantidad {
+    position: absolute;
+    top: 50px;
+}
+
+.mascotas {
+    position: absolute;
+    width: 380px;
+    height: 60px;
+    left: 445px;
+    top: 40px;
+    font-size: large;
+}
+
+.estadoBolsa {
+    background-color: #404198;
+    text-align: center;
+    color: white;
+    width: 420px;
+    height: 30px;
+    font-size: large;
+    position: absolute;
+    left: 410px;
+    top: 110px;
+    -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+}

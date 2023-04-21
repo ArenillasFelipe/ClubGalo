@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial</title>
+  <link rel="stylesheet" href="EstiloshistorialPersona.css" />
+</head>
+
+<body>
+  <header>
+    <div class="logo slide">
+      <img src="../../imagenes/logo-galo.png" width="150" class="img-logo">
+    </div>
+    <nav>
+      <form class="busqueda" id="busqueda">
+        <input placeholder="Buscar por nombre o numero de cliente..." id="barra-busqueda">
+        <button type="submit" id="boton-lupa"><img src="../../imagenes/lupa.png" width="20px"></button>
+      </form>
+      <a href="../Seguimiento/seguimiento.html" class="nav-link1">Seguimiento</a>
+      <a href="../Venta/venta.html" class="nav-link2">Venta</a>
+      <a href="" class="nav-link3">Historial</a>
+      <a href="../Clientes/clientes.html" class="nav-link4">Clientes</a>
+      <a href="../Bolsas/bolsas.html" class="nav-link5">Bolsas</a>
+      <a href="../Datos/datos.html" class="nav-link6">Datos</a>
+    </nav>
+
+    <div class="divHistorialPersona">
+      <a href="../Historial/historial.html" class="ahistorialPersona">Historial General</a>
+    </div>
+
+  </header>
+
+
+  <div id="divTablaCliente">
+
+  </div>
+
+
+
+
+
+  <div id="tablaventas">
+
+   
+
+  </div>
+
+  <div id="tablaTotales">
+
+  </div>
+
+  <div class="divFlechaArriba">
+    <button id="flechaArriba" onclick="document.documentElement.scrollTop = 0;"><img src="../../imagenes/flechaArriba.png"
+        id="imgFlechaArriba"></button>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="./appHistorialPersona.js"></script>
+</body>
+
+</html>

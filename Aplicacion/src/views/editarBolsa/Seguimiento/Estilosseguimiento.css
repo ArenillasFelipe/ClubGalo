@@ -1,0 +1,217 @@
+body{
+    margin: 0;
+    background-color: lightslategrey;
+    font-family: arial;
+}
+
+body::-webkit-scrollbar {
+    width: 10px;
+    background-color: lightslategray;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #404198;
+    border-right: 2px solid lightslategray;
+  }
+
+header{
+    display: flex; /*muestra los elementos de manera horizontal (la imagen con los links al lado); */
+    justify-content: space-between; /*separa la imagen de los links a cada lado de la pantalla*/
+    height: 60px;
+    background-color: white;
+    align-items: center;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0px 1px 10px;
+}
+
+.logo{
+    animation:
+    bounce 300ms
+    alternate 6
+    cubic-bezier(.2, .65, .6, 1);
+}
+
+@keyframes bounce {
+    from {
+      transform: translateY(0px);
+    }
+    to {
+      transform: translateY(-20px);
+    }
+  }
+
+header{
+    animation: slide-in 1.5s;
+}
+
+
+@keyframes slide-in {
+    from {
+      transform: translateY(-150%);
+    }
+    to {
+      transform: translateY(0%);
+    }
+  }
+
+@keyframes slide {
+    from {
+        transform: translateX(-100%);
+      }
+      to {
+        transform: translateX(0%);
+      }
+  }
+
+a{
+    text-decoration: none; /*para sacar subrayado de links*/
+    color: black;
+    font-weight: 600; /*negrita*/
+    padding-right: 10px;
+}
+
+nav a:hover{
+    color: #404198;
+}
+
+.nav-link1{
+    color: #404198;
+    font-weight: 800;
+}
+
+.container-aviso{
+    height: 110px;
+    width: 1000px;
+    box-shadow: 3px 3px 10px;
+    border-radius: 10px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+#dia1{
+    background-color: #F1555A;
+    animation-name: slide1;
+    animation-duration:  0.5s;
+}
+
+#dia2{
+    background-color: #F0A203;
+    animation-name: slide1;
+    animation-duration:  0.5s;
+}
+
+#dia3{
+    background-color: #009900;
+    animation-name: slide1;
+    animation-duration:  0.5s;
+}
+
+@keyframes slide1 {
+    from {
+        transform: translateY(500%);
+      }
+      to {
+        transform: translateY(0%);
+      }
+  }
+
+h1{
+    position: absolute;
+    left: 10px;
+    bottom: 60px;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.img-perrogato{
+    position: relative;
+    width: 95px;
+    height: 95px;
+    left: 155px;
+    top: 18px;
+}
+
+.img-persona{
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    left: 550px;
+    top: 10px;
+}
+
+p{
+    font-weight: 800;
+    font-size: medium;
+}
+
+.panimal{
+    position: absolute;
+    left: 250px;
+    top: 45px;
+}
+
+.pcumple{
+    position: absolute;
+    left: 250px;
+    top: 60px;
+}
+
+.pnombre{
+font-size: medium;
+position: absolute;
+left: 620px;
+top: 5px;
+}
+
+.ptelefono{
+    font-size: medium;
+position: absolute;
+left: 620px;
+top: 25px;
+}
+
+.pdireccion{
+    font-size: medium;
+position: absolute;
+left: 620px;
+top: 43px;
+}
+
+.pbolsas{
+    font-size: medium;
+    position: absolute;
+    left: 620px;
+    top: 60px;
+}
+
+.container-mascotas{
+    width: 330px;
+    height: 40px;
+    position: absolute;
+    left: 250px;
+    top: 10px;
+}
+
+.btn-aviso{
+    position: relative;
+    right: 10px;
+    top: 70px;
+    height: 30px;
+    width: 90px;
+    background: white;
+    color: black;
+    font-family: Arial, Helvetica ,sans-serif;
+    font-weight: 500;
+    font-size: medium;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.btn-aviso:hover{
+    border: 2px solid black;
+}

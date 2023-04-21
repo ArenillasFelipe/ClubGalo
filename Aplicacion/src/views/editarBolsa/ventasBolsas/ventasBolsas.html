@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edicion de Bolsa</title>
+    <link rel="stylesheet" href="ventasBolsas.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+    <input type="button" id="btnExportar" value="Exportar a Excel">
+
+    <div class="container-titulo">
+        <button id="btnCruz"><img src="../../imagenes/cruz.png" class="cruz"></button>
+        <h1 class="tituloCentro">Ventas de Bolsas</h1>
+    </div>
+
+    <div id="filtrar">
+        <div class="container-filtrar">
+            <label>Intervalo de tiempo:</label>
+            <select name="selectfiltrado" id="selectfiltrado">
+                <option value="total">En total</option>
+                <option value="anioatras">1 año atras</option>
+                <option value="anio">En este año</option>
+                <option value="elegir">Elegir mes:</option>
+            </select>
+            <div id="divForm1">
+            </div>
+        </div>
+    </div>
+
+    <table id="tablaprincipal" class="tabla">
+        <tr>
+            <th>Bolsa</th>
+            <th>Ventas</th>
+        </tr>
+    </table>
+
+    <div class="divFlechaArriba">
+        <button id="flechaArriba" onclick="document.documentElement.scrollTop = 0;"><img src="../../imagenes/flechaArriba.png"
+            id="imgFlechaArriba"></button>
+      </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./ventasBolsas.js"></script>
+</body>
+
+</html>
