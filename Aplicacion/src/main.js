@@ -874,7 +874,7 @@ function createWindow() {
             nodeIntegration: true
         }
     })
-    window.loadFile('src/ui/Seguimiento/seguimiento.html'); //indica el archivo que se cargara en la ventana
+    window.loadFile('src/views/historial/historial.html'); //indica el archivo que se cargara en la ventana
 }
 
 function createWindowEditarCliente() {

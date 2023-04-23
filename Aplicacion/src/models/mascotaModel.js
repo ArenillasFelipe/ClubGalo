@@ -1,4 +1,4 @@
-const { getConnection } = require('./database');
+const { getConnection } = require('../database');
 const { capitalizarPalabras } = require('../utils/palabras');
 
 
@@ -18,11 +18,28 @@ class Mascota {
     }
   }
 
+async function getMascotasByIdCliente(id_cliente) {
+    const conn = await getConnection();
+    const result = await conn.query('SELECT * FROM mascotas where validoMascota = true and id_cliente = ?', id_cliente);
+    // conn.release();
+    return result.map(mascotaData => new Mascota(
+        mascotaData.nacimiento,
+        mascotaData.nombremascota,
+        mascotaData.raza,
+        mascotaData.edad,
+        mascotaData.peso,
+        mascotaData.afecciones,
+        mascotaData.animal,
+        mascotaData.actividad,
+        mascotaData.id_mascota,
+        mascotaData.id_cliente));
+}  
+
 
 async function getMascotas() {
     const conn = await getConnection();
     const result = await conn.query('SELECT * FROM mascotas where validoMascota = true');
-    conn.release();
+    // conn.release();
     return result.map(mascotaData => new Mascota(
         mascotaData.nacimiento,
         mascotaData.nombremascota,
@@ -39,7 +56,7 @@ async function getMascotas() {
 async function getMascotaById(id_mascota) {
     const conn = await getConnection();
     const result = await conn.query('SELECT * FROM mascotas WHERE id_mascota = ? and validoMascota = true', id_mascota);
-    conn.release();
+    // conn.release();
     if (!result[0]) return null; // devuelve `null` si no se encuentra ninguna mascota
     const mascotaData = result[0];
     return new Mascota(
@@ -64,7 +81,7 @@ async function updateMascotaById(newMascota) {
 
     const conn = await getConnection();
     await conn.query('update mascotas set mascotas.animal = ?, mascotas.raza = ?, mascotas.peso = ?, mascotas.edad = ?, mascotas.actividad = ?, mascotas.afecciones = ?, mascotas.nacimiento = ?, mascotas.nombremascotamascota = ? where mascotas.id_mascota = ?;', [newMascota.animal, newMascota.raza, newMascota.peso, newMascota.edad, newMascota.actividad, newMascota.afecciones, newMascota.nacimiento, newMascota.nombremascotamascota, newMascota.idMascota]);
-    conn.release();
+    // conn.release();
 }
 
 async function insertMascota(newMascota) {
@@ -75,19 +92,19 @@ async function insertMascota(newMascota) {
 
     const conn = await getConnection();
     await conn.query('insert into mascotas(nacimiento, nombremascota, raza, edad, peso, afecciones, animal, actividad, id_cliente) values(?, ?, ?, ?, ?, ?, ?, ?, ?)', [newMascota.nacimiento,newMascota.nombremascota,newMascota.raza,newMascota.edad,newMascota.peso,newMascota.afecciones,newMascota.animal, newMascota.actividad,newMascota.id_cliente]);
-    conn.release();
+    // conn.release();
 }
 
 async function deleteMascotaById(id_mascota) {
     const conn = await getConnection();
     await conn.query('update mascotas set validoMascota = false where id_mascota = ?', id_mascota);
-    conn.release();
+    // conn.release();
 }
 
 async function deleteMascotasByIdCliente(id_cliente) {
     const conn = await getConnection();
     await conn.query('update mascotas set validoMascota = false where id_cliente = ?', id_cliente);
-    conn.release();
+    // conn.release();
 }
 
 
@@ -98,5 +115,6 @@ module.exports = {
     updateMascotaById,
     insertMascota,
     deleteMascotaById,
-    deleteMascotasByIdCliente
+    deleteMascotasByIdCliente,
+    getMascotasByIdCliente
     }

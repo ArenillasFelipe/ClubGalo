@@ -1,6 +1,6 @@
-const { remote, app } = require('electron');
-const { getCLientesmain, borrar_venta_main, getVentasClientemain, getClientefullnamemain, getsoloClientefullnamemain, notificacionNoVenta, notificacionNoCliente, restarPuntosClientePorBorradoDeVenta } = require('../../main');
-const main = remote.require('./main')
+const controller = require('../../controllers/historialPersona_controller');
+const sweetAlerts = require('../../utils/sweetAlerts');
+
 
 let salto = 0;
 let newBusqueda;
@@ -9,15 +9,16 @@ let cliente;
 let barra_busqueda = document.getElementById('barra-busqueda');
 barra_busqueda.focus();
 
-PreguntarClickNombreDesdeHistorialGeneralOBuscador();
-function PreguntarClickNombreDesdeHistorialGeneralOBuscador() {
+init();
+function init() {
+
   newBusqueda = sessionStorage.getItem("historialCliente");
-  sessionStorage.setItem("historialCliente", undefined);
+  sessionStorage.clear();
 
   crearListenerBuscador();
   listenerScrollParaTopeDePagina();
 
-  if (newBusqueda != "undefined") {
+  if (newBusqueda) {
     mainFunctionHistorialPersona(newBusqueda);
   }
 
@@ -29,51 +30,42 @@ function PreguntarClickNombreDesdeHistorialGeneralOBuscador() {
 
 ////////////////////////////////////////////////LISTENER BUSCADOR//////////////////////////////////////////////////////////////
 function crearListenerBuscador() {
-  const busqueda = document.getElementById('busqueda')
+  const busqueda = document.getElementById('busqueda');
   busqueda.addEventListener('submit', (e) => {
     e.preventDefault();
 
     barra_busqueda = document.getElementById('barra-busqueda')
     newBusqueda = barra_busqueda.value;
-    sessionStorage.setItem("historialCliente",  newBusqueda);
-    location.href="../historialPersona/historialPersona.html";
+    sessionStorage.setItem("historialCliente", newBusqueda);
+    location.href = "../historialPersona/historialPersona.html";
 
   })
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function mainFunctionHistorialPersona(newBusqueda) {
-  cliente = await getClienteSegunBusqueda(newBusqueda)
-  if (cliente.length > 1) {
-    sweetAlertVariosClientes();
+  try {
+    cliente = await controller.getClienteSegunBusqueda(newBusqueda);
+  } catch (error) {
+    console.log(error)
+    if (error.message == "variosClientes") {
+    await sweetAlerts.variosClientes();
     return
+    }
+    if (error.message == "noExisteCliente") {
+      await sweetAlerts.noSeDetectoCliente();
+      return
+    }
   }
-  if (cliente.length == 0) {
-    sweetAlertNoCliente();
-    return
-  }
-  renderTablaCliente(cliente[0]);
+  renderTablaCliente(cliente);
   renderSelectorFiltros();
   crearListenerFiltrado();
-  mainCrearTablaPrincipalSegunFiltros(newBusqueda, "total", "");
+  await mainCrearTablaPrincipalSegunFiltros(newBusqueda, "total", "");
 
 
 }
 
 
-async function getClienteSegunBusqueda(newBusqueda) {
-  console.log("newBusqueda en getSoloCLiente: ", newBusqueda)
-  resultado = await getsoloClientefullnamemain(newBusqueda);
-  return resultado;
-}
-
-
-async function getTotalVentasYClienteSegunBusquedaApp(newBusqueda) {
-
-  VentasYCliente = await main.getClientefullnamemain(newBusqueda, "total", "", salto);
-  return ventasCliente;
-
-}
 
 
 
@@ -124,7 +116,6 @@ function crearListenerFiltrado() {
   let selectFiltrado = document.getElementById("selectfiltrado");
   selectFiltrado.addEventListener('change', (e) => {
     e.preventDefault();
-
 
     /////RESETEO TABLA PRINCIPAL, SALTO Y TOTALES/////////////////////////////
     tablaVentas = document.getElementById("tablaventas");
@@ -210,34 +201,26 @@ async function CrearOAgregarContenidoDeTablaPrincipalSegunFiltros(ventasCliente)
   let contador_paraColorDeFondo = 1;
   ventasCliente.forEach(element => {
 
-    importeTotal += element.totalventa;
-    totalBolsas += element.cantidad;
+    importeTotal += element.venta.totalventa;
+    totalBolsas += element.venta.cantidad;
 
     contador_paraColorDeFondo += 1;
 
-    var dia = new Date();
-    var mes = new Date();
-    var anio = new Date();
-    dia = element.fecha.getDate();
-    mes = element.fecha.getMonth();
-    mes = mes + 1;
-    anio = element.fecha.getFullYear();
-
     if (contador_paraColorDeFondo % 2 == 0) {
       tablaPrincipal.innerHTML += `<tr class="trventas1">
-  <td>${dia}/${mes}/${anio}</td>
-  <td class="tdMarca">${element.marca_bolsa} ${element.kilos_bolsa}kg</td>
-  <td>${element.cantidad}</td>
-  <td>$${(element.totalventa).toFixed(2)}</td>
-  <td><button class="btnCruz" onclick="borrar_venta(${element.id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button></td>
+  <td>${element.venta.fecha}</td>
+  <td class="tdMarca">${element.bolsa.marca_bolsa} ${element.bolsaKilo.kilos_bolsa}kg</td>
+  <td>${(element.venta).cantidad}</td>
+  <td>$${((element.venta).totalventa).toFixed(2)}</td>
+  <td><button class="btnCruz" onclick="borrar_venta(${(element.venta).id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button></td>
 </tr>`
     } else {
       tablaPrincipal.innerHTML += `<tr class="trventas2">
-  <td>${dia}/${mes}/${anio}</td>
-  <td class="tdMarca">${element.marca_bolsa} ${element.kilos_bolsa}kg</td>
-  <td>${element.cantidad}</td>
-  <td>$${(element.totalventa).toFixed(2)}</td>
-  <td><button class="btnCruz" onclick="borrar_venta(${element.id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button></td>
+  <td>${element.venta.fecha}</td>
+  <td class="tdMarca">${element.bolsa.marca_bolsa} ${element.bolsaKilo.kilos_bolsa}kg</td>
+  <td>${(element.venta).cantidad}</td>
+  <td>$${((element.venta).totalventa).toFixed(2)}</td>
+  <td><button class="btnCruz" onclick="borrar_venta(${(element.venta).id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button></td>
 </tr>`
     }
 
@@ -247,17 +230,13 @@ async function CrearOAgregarContenidoDeTablaPrincipalSegunFiltros(ventasCliente)
 
 
 function CrearTablaTotales() {
-    divTablaTotales = document.getElementById("tablaprincipal");
-
-    try {
-      let trTotales = document.getElementById("trTotales");
-      trTotales.remove();
-    } catch (error) {
-      //no hace nada
-    }
+  divTablaTotales = document.getElementById("tablaprincipal");
 
 
-    divTablaTotales.innerHTML += `<tr class="trtotal" id="trTotales">
+  let trTotales = document.getElementById("trTotales");
+  if (trTotales) trTotales.remove();
+
+  divTablaTotales.innerHTML += `<tr class="trtotal" id="trTotales">
     <td colspan="2" id="tdCantTotal"><div class="container-totales">Cantidad total: ${totalBolsas}</div></td>
     <td colspan="3" id="tdImporteTotal"><div class="container-totales">Importe total: $${importeTotal.toFixed(2)}</div></td>
   </tr>`
@@ -267,19 +246,19 @@ function CrearTablaTotales() {
 
 async function mainCrearTablaPrincipalSegunFiltros(newBusqueda, filtradoPrincipal, filtradoMes) {
 
-  let VentasSegunFiltro = await getClientefullnamemain(newBusqueda, filtradoPrincipal, filtradoMes, salto);
-
+  let ventasConDatos = await controller.get20VentasByIdClienteByFiltersController(cliente.id_cliente, filtradoPrincipal, filtradoMes, salto);
+  console.log(ventasConDatos);
   if (salto == 0) {
     CrearTitulosTablaPrincipal();
   }
 
-  CrearOAgregarContenidoDeTablaPrincipalSegunFiltros(VentasSegunFiltro);
+  CrearOAgregarContenidoDeTablaPrincipalSegunFiltros(ventasConDatos);
 
-  if (VentasSegunFiltro.length === 0 || VentasSegunFiltro.length < 20) {
+  if (ventasConDatos.length === 0 || ventasConDatos.length < 20) {
     CrearTablaTotales();
   }
 
-  if (VentasSegunFiltro.length != 0) {
+  if (ventasConDatos.length != 0) {
     salto += 20;
   }
 
@@ -327,104 +306,18 @@ function listenerScrollParaTopeDePagina() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function sweetAlertNoCliente() {
-  await Swal.fire({
-    title: "No se ha detectado ese cliente",
-    icon: "error",
-    backdrop: true,
-    showConfirmButton: true,
-    allowOutsideClick: true,
-    allowEscapeKey: true,
-    allowEnterKey: true,
-    stopKeydownPropagation: false,
-    position: "center",
-  })
-}
-
-
-async function sweetAlertNoVentas() {
-  await Swal.fire({
-    title: "El cliente no tiene ventas en el filtro seleccionado",
-    icon: "error",
-    backdrop: true,
-    showConfirmButton: true,
-    allowOutsideClick: true,
-    allowEscapeKey: true,
-    allowEnterKey: true,
-    stopKeydownPropagation: false,
-    position: "center",
-  })
-}
-
-
-async function sweetAlertVariosClientes() {
-  await Swal.fire({
-    title: "Existen varios clientes con ese nombre",
-    text: "Ingrese el nombre completo o el id",
-    icon: "error",
-    backdrop: true,
-    showConfirmButton: true,
-    allowOutsideClick: true,
-    allowEscapeKey: true,
-    allowEnterKey: true,
-    stopKeydownPropagation: false,
-    position: "center",
-  })
-}
-
 async function borrar_venta(idVenta) {
-  let resultados = await sweetAlert_confirmar_borrado();
-  console.log("confirma borrado:", resultados.confirma_borrado);
-  console.log("confirma borrado de puntos:", resultados.confirma_borrar_puntos);
+  let resultados = await sweetAlerts.confirmar_borrado_venta();
   if (resultados.confirma_borrado) {
 
     if (resultados.confirma_borrar_puntos) {
-      await restarPuntosClientePorBorradoDeVenta(idVenta, cliente[0].id_cliente);
+      await controller.borrarVenta_RestarPuntos(idVenta, true);
+      sessionStorage.setItem("historialCliente", cliente.id_cliente);
+      location.reload();
+      return
     }
-    await borrar_venta_main(idVenta);
-    sessionStorage.setItem("historialCliente", cliente[0].id_cliente);
+    await controller.borrarVenta_RestarPuntos(idVenta, false);
+    sessionStorage.setItem("historialCliente", cliente.id_cliente);
     location.reload();
   }
-}
-
-
-
-async function sweetAlert_confirmar_borrado(){
-  let resultado;
-  let checkBorrarPuntos;
-
-  await Swal.fire({
-    title: '¿Seguro que desea borrar la venta?',
-    text: "Se perderán todos los datos de la venta y no se realizará seguimiento.",
-    footer: "No se podrán revertir los cambios.",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonText: "Cancelar",
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, borrar',
-    html:
-      '<div class="form-check">' +
-      '  <input class="form-check-input" type="checkbox" id="borrar-puntos-checkbox" style="transform: scale(1.5);" checked>' +
-      '  <label class="form-check-label" for="borrar-puntos-checkbox">' +
-      '    Borrar puntos otorgados por la venta' +
-      '  </label>' +
-      '</div>'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      resultado = true;
-      checkBorrarPuntos = document.getElementById('borrar-puntos-checkbox').checked;
-    } else {
-      resultado = false;
-    }
-  });
-
-  let resultados = {
-    confirma_borrado: resultado,
-    confirma_borrar_puntos: checkBorrarPuntos
-  }
-
-  console.log(resultados);
-
-  return resultados;
 }

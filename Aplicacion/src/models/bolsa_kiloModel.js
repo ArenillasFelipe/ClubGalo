@@ -1,4 +1,4 @@
-const { getConnection } = require('./database');
+const { getConnection } = require('../database');
 
 class Bolsa_Kilo {
     constructor(id_bolsa, id_bolsa_kilo, kilos_bolsa) {
@@ -11,7 +11,7 @@ class Bolsa_Kilo {
 async function getKilosBolsaByIdBolsa(id_bolsa) {
     const conn = await getConnection();
     const result = await conn.query('SELECT * FROM bolsas_kilos where id_bolsa = ? and validoBolsaKilo = true', id_bolsa);
-    conn.release();
+    // conn.release();
     return result.map(bolsaKiloData => new Bolsa_Kilo(
         bolsaKiloData.id_bolsa,
         bolsaKiloData.id_bolsa_kilo,
@@ -23,7 +23,7 @@ async function getKilosBolsaByIdBolsa(id_bolsa) {
 async function getBolsa_KiloById(id_bolsa_kilo) {
     const conn = await getConnection();
     const result = await conn.query('SELECT * FROM bolsas_kilos WHERE id_bolsa_kilo = ? and validoBolsaKilo = true', id_bolsa_kilo);
-    conn.release();
+    // conn.release();
     if (!result[0]) {
         return null;
     }
@@ -38,19 +38,19 @@ async function getBolsa_KiloById(id_bolsa_kilo) {
 async function insertBolsa_Kilo(id_bolsa, kilos_bolsa) {
     const conn = await getConnection();
     await conn.query('insert into bolsas_kilos(id_bolsa, kilos_bolsa) values(?, ?)', [id_bolsa, kilos_bolsa]);
-    conn.release();
+    // conn.release();
 }
 
 async function deleteBolsa_KiloById(id_bolsa_kilo) {
     const conn = await getConnection();
     await conn.query('update from bolsas_kilos set validoBolsaKilo = false where id_bolsa_kilo = ?', id_bolsa_kilo);
-    conn.release();
+    // conn.release();
 }
 
 async function deleteBolsas_KilosByIdBolsa(id_bolsa) {
     const conn = await getConnection();
     await conn.query('update from bolsas_kilos set validoBolsaKilo = false where id_bolsa = ?', id_bolsa);
-    conn.release();
+    // conn.release();
 }
 
 module.exports = {

@@ -254,7 +254,9 @@ nav a:hover {
 
 .form-ingreso {
     position: relative;
-    top: 20px;
+    left: -15px;
+    font-weight: 800;
+    top: 35px;
 }
 
 
@@ -268,22 +270,12 @@ p {
     left: 25px;
 }
 
-.primer-nombre {
-    width: 150px;
+.inputCliente {
+    width: 220px;
     position: relative;
     border-color: #404198;
     padding: 3px;
     outline: none;
-
-}
-
-.apellido {
-    position: relative;
-    border-color: #404198;
-    padding: 3px;
-    outline: none;
-    left: 25px;
-    width: 150px;
 }
 
 .datos-mascota {
