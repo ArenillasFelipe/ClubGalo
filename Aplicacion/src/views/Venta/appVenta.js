@@ -149,13 +149,12 @@ function mostrarDatos(mascotas) {
 
 async function venta(cliente, mascotas) {
 
-    id_bolsa_kilo = document.getElementById("selectkilos");
     precio = document.getElementById("inputprecio");
     cantbolsas = document.getElementById("inputcantbolsas");
     let mascotasVenta = [];
 
-
-    let newVenta = new Venta(new Date(), precio.value, cliente.id_cliente, cantbolsas.value, id_bolsa_kilo.value, true);
+    console.log("bolsaSeleccionada:", bolsaSeleccionada);
+    let newVenta = new Venta(new Date(), precio.value, cliente.id_cliente, cantbolsas.value, bolsaSeleccionada.id_bolsa_kilo, bolsaSeleccionada.marca_bolsa, bolsaSeleccionada.kilos_bolsa, bolsaSeleccionada.calidad_bolsa, true);
 
     mascotas.forEach(element => {
 
@@ -333,6 +332,8 @@ function rellenarDatos(mascotas, historialVentasConBolsas) {
 }
 
 
+let bolsaSeleccionada;
+
 async function inputBolsas() {
     let bolsas = await controller.getAllBolsasOrdenadas();
     console.log(bolsas);
@@ -366,7 +367,8 @@ async function inputBolsas() {
     });
     function displayNames(bolsa) {
         input.value = bolsa.marca_bolsa;
-        actualizarKgBolsa(bolsa.id_bolsa);
+        bolsaSeleccionada = bolsa;
+        actualizarKgBolsa();
         removeElements();
     }
     function removeElements() {
@@ -385,18 +387,27 @@ async function inputBolsas() {
 
 
 
-async function actualizarKgBolsa(id_bolsa) {
+async function actualizarKgBolsa() {
 
-    let kgBolsa = await controller.getKilosBolsaByIdBolsa(id_bolsa);
+    let kgBolsa = await controller.getKilosBolsaByIdBolsa(bolsaSeleccionada.id_bolsa);
     console.log(kgBolsa);
     selectKG = document.getElementById("selectkilos");
 
     selectKG.innerHTML = ""
 
     kgBolsa.forEach(element => {
-        selectKG.innerHTML += `<option value="` + element.id_bolsa_kilo + `">` + element.kilos_bolsa + `</option>`
+        selectKG.innerHTML += `<option value="` + element.kilos_bolsa + `">` + element.kilos_bolsa + `</option>`
     });
+    bolsaSeleccionada.kilos_bolsa = selectKG.value;
+    listenerSelectKilosBolsa();
 
+}
+
+function listenerSelectKilosBolsa() {
+    selectKG = document.getElementById("selectkilos");
+    selectKG.addEventListener('change', () => {
+        bolsaSeleccionada.kilos_bolsa = selectKG.value;
+    });
 }
 
 

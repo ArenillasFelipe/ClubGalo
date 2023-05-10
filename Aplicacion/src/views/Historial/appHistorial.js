@@ -1,5 +1,5 @@
-const controller = require('../../controllers/historial_controller');
 const sweetAlerts = require('../../utils/sweetAlerts');
+const venta_controller = require('../../controllers/venta_controller');
 
 
 let barra_busqueda = document.getElementById('barra-busqueda');
@@ -36,7 +36,7 @@ let newBusqueda = "";
 
 
 async function get20VentasClienteapp(newBusqueda) {
-  ventasConDatos = await controller.get20Ventas(newBusqueda, salto);
+  ventasConDatos = await venta_controller.get20Ventas(newBusqueda, salto);
   salto += 20;
   renderVentas(ventasConDatos);
 }
@@ -64,8 +64,8 @@ function renderVentas() {
           <h3 class="h3persona"><b>Direccion:</b> ${element.cliente.calle} ${element.cliente.calle_numero}</h3>
         </div>
         <div class="datos-venta">
-          <h3 class="h3Bolsa"><b>Bolsa:</b> ${element.bolsa.marca_bolsa}</h3>
-          <h3 class="h3Cantidad"><b>Cantidad:</b> ${element.venta.cantidad} bolsa/s de ${element.bolsaKilo.kilos_bolsa}kg</h3>
+          <h3 class="h3Bolsa"><b>Bolsa:</b> ${element.venta.marca_bolsa}</h3>
+          <h3 class="h3Cantidad"><b>Cantidad:</b> ${element.venta.cantidad} bolsa/s de ${element.venta.kilos_bolsa}kg</h3>
           <h3 class="h3PrecioU"><b>Precio unitario:</b> $${(element.venta.precio).toFixed(2)}</h3>
         </div>
     
@@ -108,11 +108,11 @@ async function borrar_venta(idVenta) {
   if (resultados.confirma_borrado) {
 
     if (resultados.confirma_borrar_puntos) {
-      await controller.borrarVenta_RestarPuntos(idVenta, true);
+      await venta_controller.borrarVenta_RestarPuntos(idVenta, true);
       location.reload();
       return
     }
-    await controller.borrarVenta_RestarPuntos(idVenta, false);
+    await venta_controller.borrarVenta_RestarPuntos(idVenta, false);
     location.reload();
   }
 }

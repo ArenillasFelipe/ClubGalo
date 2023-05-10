@@ -49,8 +49,7 @@ async function confirmar_borrado_venta(){
       allowOutsideClick: true,
       allowEscapeKey: true,
       allowEnterKey: true,
-      stopKeydownPropagation: false,
-      position: "center",
+      stopKeydownPropagation: false
     })
   }
 
@@ -65,6 +64,7 @@ async function confirmar_borrado_venta(){
       allowEnterKey: true,
       stopKeydownPropagation: false,
       position: "center",
+      zIndex: 9
     })
   }
 

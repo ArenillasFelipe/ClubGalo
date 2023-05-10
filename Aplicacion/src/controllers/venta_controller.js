@@ -1,77 +1,94 @@
 const clienteModel = require('../models/clienteModel');
 const ventaModel = require('../models/ventaModel');
-const bolsaModel = require('../models/bolsaModel');
-const bolsaKiloModel = require('../models/bolsa_kiloModel');
 const mascotaModel = require('../models/mascotaModel');
 const venta_mascotaModel = require('../models/venta_mascotaModel');
 
 
+async function get20VentasByIdClienteByFiltersController(id_cliente, filtro, filtroMes, salto) {
+    let ventas = await ventaModel.get20VentasByIdClienteByFilters(id_cliente, filtro, filtroMes, salto);
 
-
-async function get20UltimasVentasByIdCliente(id_cliente) {
-    let ventas = [];
-    ventas = await ventaModel.getUltimas20VentasByIdCliente(id_cliente);
-
-
-    let ventasConBolsas = [];
     for (let i = 0; i < ventas.length; i++) {
-        let bolsaKilo = await bolsaKiloModel.getBolsa_KiloById(ventas[i].id_bolsa_kilo);
-        let bolsa = await bolsaModel.getBolsaById(bolsaKilo.id_bolsa);
-
-        // Agregar la información del cliente a la venta correspondiente
-        ventasConBolsas.push({
-            venta: ventas[i],
-            bolsaKilo: bolsaKilo,
-            bolsa: bolsa
-        });
-    }
-
-
-    if (ventas.length == 0) {
-        throw new Error("sinVentas");
-    }
-    return ventasConBolsas;
-}
-
-async function get20ClientesBySearch(busqueda) {
-    let cliente = await clienteModel.get20ClientesBySearch(busqueda);
-    if (!cliente) {
-        throw new Error("noExisteCliente");
-    }
-    if (cliente.length > 1) {
-        throw new Error("variosClientes");
-    }
-    return cliente[0]
-}
-
-
-async function getMascotasByIdCliente(id_cliente){
-    let mascotas = await mascotaModel.getMascotasByIdCliente(id_cliente);
-
-    for (let i = 0; i < mascotas.length; i++) {
-        dia = mascotas[i].nacimiento;
-        mes = mascotas[i].nacimiento;
-        anio = mascotas[i].nacimiento;
-
+        dia = ventas[i].fecha;
+        mes = ventas[i].fecha;
+        anio = ventas[i].fecha;
         dia = dia.getDate();
         mes = mes.getMonth();
         mes = mes + 1;
         anio = anio.getFullYear();
-        
-        mascotas[i].nacimiento = `${dia}/${mes}/${anio}`;
+        ventas[i].fecha = `${dia}/${mes}/${anio}`;
     }
 
-    return mascotas;
+    return ventas;
 }
 
 
+
+
+async function get20Ventas(newBusqueda, salto) {
+
+    // Obtener todas las ventas desde el modelo de ventas
+    let ventas = [];
+    if (newBusqueda == "" || newBusqueda == undefined) {
+        ventas = await ventaModel.get20Ventas(salto);
+    } else {
+        ventas = await ventaModel.get20VentasBySearch(newBusqueda, salto);
+    }
+    // Crear un arreglo para almacenar los datos de todas las ventas con la información del cliente relacionado
+    let ventasConDatos = [];
+    // Iterar sobre cada venta
+    for (let i = 0; i < ventas.length; i++) {
+        let cliente = await clienteModel.getClienteById(ventas[i].id_cliente);
+
+        dia = ventas[i].fecha;
+        mes = ventas[i].fecha;
+        anio = ventas[i].fecha;
+        dia = dia.getDate();
+        mes = mes.getMonth();
+        mes = mes + 1;
+        anio = anio.getFullYear();
+        ventas[i].fecha = `${dia}/${mes}/${anio}`;
+
+
+
+        // Agregar la información del cliente a la venta correspondiente
+        ventasConDatos.push({
+            venta: ventas[i],
+            cliente: cliente,
+        });
+    }
+    console.log(ventasConDatos);
+    // Enviar el arreglo a la vista para que se muestre la información
+    return ventasConDatos;
+}
+
+
+async function borrarVenta_RestarPuntos(id_venta, confirmaRestarPuntos) {
+    if (confirmaRestarPuntos) {
+        let venta = await ventaModel.getVentaById(id_venta);
+        await clienteModel.restarPuntosClienteById(venta.puntos_obtenidos, venta.id_cliente);
+    }
+
+    await venta_mascotaModel.deleteVenta_MascotaByIdVenta(id_venta);
+    await ventaModel.deleteVentaById(id_venta);
+}
+
+
+
+async function get20UltimasVentasByIdCliente(id_cliente) {
+    let ventas = await ventaModel.getUltimas20VentasByIdCliente(id_cliente);
+
+    if (ventas.length == 0) {
+        throw new Error("sinVentas");
+    }
+    return ventas;
+}
 
 
 async function getVentasActivasByIdCliente(id_cliente) {
     let ventasActivas = await ventaModel.getVentasActivasByIdCliente(id_cliente);
 
 
-    let ventasActivasConDatos = [];
+    let ventasActivasConMascotas = [];
     for (let i = 0; i < ventasActivas.length; i++) {
         let idMascotasVenta = await venta_mascotaModel.getVenta_MascotasByIdVenta(ventasActivas[i].id_venta);
         let mascotas = [];
@@ -80,51 +97,21 @@ async function getVentasActivasByIdCliente(id_cliente) {
             mascotas.push(mascota);
         }
 
-
-
-        let bolsaKilo = await bolsaKiloModel.getBolsa_KiloById(ventasActivas[i].id_bolsa_kilo);
-        let bolsa = await bolsaModel.getBolsaById(bolsaKilo.id_bolsa);
-
         // Agregar la información del cliente a la venta correspondiente
-        ventasActivasConDatos.push({
+        ventasActivasConMascotas.push({
             venta: ventasActivas[i],
-            bolsaKilo: bolsaKilo,
-            bolsa: bolsa,
             mascotas: mascotas
         });
     }
 
 
-    return ventasActivasConDatos;
+    return ventasActivasConMascotas;
 }
 
 
 
-async function getAllBolsasOrdenadas() {
-    let bolsas = await bolsaModel.getAllBolsas();
-    bolsas.sort((bolsa1, bolsa2) => {
-        if (bolsa1.marca_bolsa < bolsa2.marca_bolsa) {
-          return -1;
-        } else if (bolsa1.marca_bolsa > bolsa2.marca_bolsa) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-    return bolsas;
-}
-
-
-async function getKilosBolsaByIdBolsa(id_bolsa) {
-    let kilos = await bolsaKiloModel.getKilosBolsaByIdBolsa(id_bolsa);
-    kilos.sort((a, b) => a.kilos_bolsa - b.kilos_bolsa);
-    return kilos;
-}
-
-
-async function ejecutarVenta(newVenta, idMascotasVenta) {
+async function insertarVenta(newVenta, idMascotasVenta) {
     console.log("Mascotas seleccionadas: ", idMascotasVenta);
-      
 
 
     for (let i = 0; i < idMascotasVenta.length; i++) {
@@ -147,14 +134,11 @@ async function ejecutarVenta(newVenta, idMascotasVenta) {
 }
 
 
-
-
 module.exports = {
-    get20ClientesBySearch,
+    get20VentasByIdClienteByFiltersController,
+    get20Ventas,
+    borrarVenta_RestarPuntos,
     get20UltimasVentasByIdCliente,
-    getMascotasByIdCliente,
     getVentasActivasByIdCliente,
-    getAllBolsasOrdenadas,
-    getKilosBolsaByIdBolsa,
-    ejecutarVenta
+    insertarVenta
 }

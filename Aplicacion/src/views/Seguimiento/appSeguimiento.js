@@ -1,8 +1,22 @@
 const { remote, app } = require('electron');
 const { getCLientesmain, getClientesTodos, getVentasActivasmain, getVentasClientemain } = require('../../main');
-const main = remote.require('./main')
+const main = remote.require('./main');
 180
-
+aa();
+async function aa() {
+  await Swal.fire({
+    title: "No se ha detectado ese cliente",
+    icon: "error",
+    backdrop: true,
+    showConfirmButton: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    allowEnterKey: true,
+    stopKeydownPropagation: false,
+    position: "center",
+    zIndex: 9
+  })
+}
 // let premiumValores = {
 //   P1_5: 0.072,
 //   P6_10: 0.150,

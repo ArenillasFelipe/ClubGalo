@@ -1,4 +1,5 @@
-const controller = require('../../controllers/historialPersona_controller');
+const venta_controller = require('../../controllers/venta_controller');
+const cliente_controller = require('../../controllers/cliente_controller');
 const sweetAlerts = require('../../utils/sweetAlerts');
 
 
@@ -45,7 +46,7 @@ function crearListenerBuscador() {
 
 async function mainFunctionHistorialPersona(newBusqueda) {
   try {
-    cliente = await controller.getClienteSegunBusqueda(newBusqueda);
+    cliente = await cliente_controller.getClienteSegunBusqueda(newBusqueda);
   } catch (error) {
     console.log(error)
     if (error.message == "variosClientes") {
@@ -201,26 +202,26 @@ async function CrearOAgregarContenidoDeTablaPrincipalSegunFiltros(ventasCliente)
   let contador_paraColorDeFondo = 1;
   ventasCliente.forEach(element => {
 
-    importeTotal += element.venta.totalventa;
-    totalBolsas += element.venta.cantidad;
+    importeTotal += element.totalventa;
+    totalBolsas += element.cantidad;
 
     contador_paraColorDeFondo += 1;
 
     if (contador_paraColorDeFondo % 2 == 0) {
       tablaPrincipal.innerHTML += `<tr class="trventas1">
-  <td>${element.venta.fecha}</td>
-  <td class="tdMarca">${element.bolsa.marca_bolsa} ${element.bolsaKilo.kilos_bolsa}kg</td>
-  <td>${(element.venta).cantidad}</td>
-  <td>$${((element.venta).totalventa).toFixed(2)}</td>
-  <td><button class="btnCruz" onclick="borrar_venta(${(element.venta).id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button></td>
+  <td>${element.fecha}</td>
+  <td class="tdMarca">${element.marca_bolsa} ${element.kilos_bolsa}kg</td>
+  <td>${element.cantidad}</td>
+  <td>$${(element.totalventa).toFixed(2)}</td>
+  <td><button class="btnCruz" onclick="borrar_venta(${element.id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button></td>
 </tr>`
     } else {
       tablaPrincipal.innerHTML += `<tr class="trventas2">
-  <td>${element.venta.fecha}</td>
-  <td class="tdMarca">${element.bolsa.marca_bolsa} ${element.bolsaKilo.kilos_bolsa}kg</td>
-  <td>${(element.venta).cantidad}</td>
-  <td>$${((element.venta).totalventa).toFixed(2)}</td>
-  <td><button class="btnCruz" onclick="borrar_venta(${(element.venta).id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button></td>
+  <td>${element.fecha}</td>
+  <td class="tdMarca">${element.marca_bolsa} ${element.kilos_bolsa}kg</td>
+  <td>${element.cantidad}</td>
+  <td>$${(element.totalventa).toFixed(2)}</td>
+  <td><button class="btnCruz" onclick="borrar_venta(${element.id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button></td>
 </tr>`
     }
 
@@ -246,19 +247,19 @@ function CrearTablaTotales() {
 
 async function mainCrearTablaPrincipalSegunFiltros(newBusqueda, filtradoPrincipal, filtradoMes) {
 
-  let ventasConDatos = await controller.get20VentasByIdClienteByFiltersController(cliente.id_cliente, filtradoPrincipal, filtradoMes, salto);
-  console.log(ventasConDatos);
+  let ventas = await venta_controller.get20VentasByIdClienteByFiltersController(cliente.id_cliente, filtradoPrincipal, filtradoMes, salto);
+  console.log(ventas);
   if (salto == 0) {
     CrearTitulosTablaPrincipal();
   }
 
-  CrearOAgregarContenidoDeTablaPrincipalSegunFiltros(ventasConDatos);
+  CrearOAgregarContenidoDeTablaPrincipalSegunFiltros(ventas);
 
-  if (ventasConDatos.length === 0 || ventasConDatos.length < 20) {
+  if (ventas.length === 0 || ventas.length < 20) {
     CrearTablaTotales();
   }
 
-  if (ventasConDatos.length != 0) {
+  if (ventas.length != 0) {
     salto += 20;
   }
 
@@ -311,12 +312,12 @@ async function borrar_venta(idVenta) {
   if (resultados.confirma_borrado) {
 
     if (resultados.confirma_borrar_puntos) {
-      await controller.borrarVenta_RestarPuntos(idVenta, true);
+      await venta_controller.borrarVenta_RestarPuntos(idVenta, true);
       sessionStorage.setItem("historialCliente", cliente.id_cliente);
       location.reload();
       return
     }
-    await controller.borrarVenta_RestarPuntos(idVenta, false);
+    await venta_controller.borrarVenta_RestarPuntos(idVenta, false);
     sessionStorage.setItem("historialCliente", cliente.id_cliente);
     location.reload();
   }
