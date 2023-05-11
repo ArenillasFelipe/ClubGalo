@@ -1,10 +1,10 @@
-const { remote, app } = require('electron');
-const { recargarPaginaPrincipal, getSoloBolsaByIdMain, actualizarDatosBolsaMain, borrarBolsaKilosByIdMain, cerrarVentanasEmergentes, getBolsaByIdMain, agregarBolsaKilosMain } = require('../../main');
+const bolsa_controller = require('../../controllers/bolsa_controller');
+const sweetAlerts = require('../../utils/sweetAlerts');
+const { remote } = require('electron');
 const main = remote.require('./main');
 
 
-let bolsaKilos = [];
-let soloBolsa;
+let bolsa;
 
 mainFunctionEditarBolsa();
 async function mainFunctionEditarBolsa() {
@@ -36,27 +36,27 @@ function listenerGuardar() {
 
 async function getBolsaAEditar() {
     let idBolsa = localStorage.getItem("idBolsaEditar");
-    bolsaKilos = await getBolsaByIdMain(idBolsa);
-    soloBolsa = await getSoloBolsaByIdMain(idBolsa);
-    console.log(bolsaKilos);
+    localStorage.clear();
+    bolsa = await bolsa_controller.getBolsaById(idBolsa);
+    console.log(bolsa);
 }
 
 function setInputMarcaValorBolsa() {
     let inputMarca = document.getElementById("inputMarca");
-    inputMarca.value = soloBolsa[0].marca_bolsa;
+    inputMarca.value = bolsa.bolsa.marca_bolsa;
 }
 
 function setTamaniosBolsa() {
 
     spanTamanios = document.getElementById("spanTamanios");
     spanTamanios.innerHTML = "";
-
-    bolsaKilos.forEach(element => {
+    let kilos_bolsa = bolsa.kilosBolsa;
+    kilos_bolsa.forEach(element => {
         // Crea el elemento <span> para cada bolsa
         const spanKiloBolsa = document.createElement("span");
         spanKiloBolsa.className = "spanKiloBolsa";
-        spanKiloBolsa.id = `spanKiloBolsa${element}`;
-        spanKiloBolsa.textContent = ` ${element}kg -`;
+        spanKiloBolsa.id = `spanKiloBolsa${element.kilos_bolsa}`;
+        spanKiloBolsa.textContent = ` ${element.kilos_bolsa}kg -`;
 
         // Agrega el <span> al <p> que contiene los tamaños de las bolsas
         spanTamanios.appendChild(spanKiloBolsa);
@@ -68,7 +68,7 @@ function setTamaniosBolsa() {
         });
 
         spanKiloBolsa.addEventListener("mouseout", () => {
-            spanKiloBolsa.textContent = ` ${element}kg -`;
+            spanKiloBolsa.textContent = ` ${element.kilos_bolsa}kg -`;
             spanKiloBolsa.classList.remove("spanKiloBolsaHover");
         });
 
@@ -76,7 +76,7 @@ function setTamaniosBolsa() {
         spanKiloBolsa.addEventListener("click", (e) => {
             e.preventDefault();
 
-            borrarTamanio(element);
+            borrarTamanio(element.kilos_bolsa);
 
         });
 
@@ -196,21 +196,21 @@ function agregarInputTamanio() {
 
 function setSelectCalidadEnCalidadActualSegunBolsa() {
 
-    switch (soloBolsa[0].calidad_bolsa) {
+    switch (bolsa.bolsa.calidad_bolsa) {
         case "BAJA":
-            document.getElementById("selectCalidad").value = soloBolsa[0].calidad_bolsa;
+            document.getElementById("selectCalidad").value = bolsa.bolsa.calidad_bolsa;
             document.getElementById("selectCalidad").options[0].selected = true;
             break;
         case "INTERMEDIA":
-            document.getElementById("selectCalidad").value = soloBolsa[0].calidad_bolsa;
+            document.getElementById("selectCalidad").value = bolsa.bolsa.calidad_bolsa;
             document.getElementById("selectCalidad").options[1].selected = true;
             break;
         case "PREMIUM":
-            document.getElementById("selectCalidad").value = soloBolsa[0].calidad_bolsa;
+            document.getElementById("selectCalidad").value = bolsa.bolsa.calidad_bolsa;
             document.getElementById("selectCalidad").options[2].selected = true;
             break;
         case "SUPER PREMIUM":
-            document.getElementById("selectCalidad").value = soloBolsa[0].calidad_bolsa;
+            document.getElementById("selectCalidad").value = bolsa.bolsa.calidad_bolsa;
             document.getElementById("selectCalidad").options[3].selected = true;
             break;
     }
@@ -244,15 +244,12 @@ async function botonAgregarGrande() {
 
 async function borrarTamanio(tamanio) {
 
-    let confirma_borrado = await sweetAlert_confirmar_borrado_kilos_bolsa(tamanio);
+    let confirma_borrado = await sweetAlerts.sweetAlert_confirmar_borrado_kilos_bolsa(tamanio);
 
     if (confirma_borrado) {
-        let indice = bolsaKilos.indexOf(tamanio);
 
-        if (indice !== -1) {
-            bolsaKilos.splice(indice, 1);
-        }
-
+        bolsa.kilosBolsa = bolsa.kilosBolsa.filter(bolsa => bolsa.kilos_bolsa !== tamanio);
+        console.log(bolsa);
         setTamaniosBolsa();
     }
 
@@ -262,19 +259,19 @@ async function borrarTamanio(tamanio) {
 async function actualizarDatosBolsaApp() {
 
     if ((document.getElementById("inputMarca").value) === "") {
-        await sweetAlertAgregarMarcaBolsa();
+        await sweetAlerts.sweetAlertAgregarMarcaBolsa();
         return;
     }
 
 
     newBolsa = {
-        id_bolsa: soloBolsa[0].id_bolsa,
+        id_bolsa: bolsa.bolsa.id_bolsa,
         marca_bolsa: document.getElementById("inputMarca").value,
         calidad_bolsa: document.getElementById("selectCalidad").value
     }
 
 
-    if (bolsaKilos.length != 0) {
+    if (bolsa.kilosBolsa.length != 0) {
         let bolsaRepetida = await actualizarDatosBolsaMain(newBolsa, bolsaKilos);
 
         if (bolsaRepetida == "bolsaRepetida") {
@@ -314,86 +311,6 @@ function crearListenerAgregarGrande() {
 }
 
 
-async function sweetAlertCompletarInputTamanio() {
-    await Swal.fire({
-        title: "Debes completar el campo de agregar tamaño",
-        icon: "error",
-        showConfirmButton: true,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false,
-        toast: true,
-        stopKeydownPropagation: false,
-        position: "top",
-    })
-}
-
-
-async function sweetAlertAgregarTamanioBolsa() {
-    await Swal.fire({
-        title: "Debes agregar al menos 1 tamaño de bolsa",
-        icon: "error",
-        showConfirmButton: true,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false,
-        toast: true,
-        stopKeydownPropagation: false,
-        position: "top",
-    })
-}
-
-async function sweetAlertAgregarMarcaBolsa() {
-    await Swal.fire({
-        title: "Debes indicar la marca de la bolsa",
-        icon: "error",
-        showConfirmButton: true,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false,
-        toast: true,
-        stopKeydownPropagation: false,
-        position: "top",
-    })
-}
-
-async function sweetAlertBolsaRepetida() {
-    await Swal.fire({
-        title: "Ya existe una bolsa con ese nombre",
-        icon: "error",
-        showConfirmButton: true,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false,
-        toast: true,
-        stopKeydownPropagation: false,
-        position: "center",
-    })
-}
-
-
-
-async function sweetAlert_confirmar_borrado_kilos_bolsa(kilos_bolsa) {
-    let resultado;
-    await Swal.fire({
-        title: '¿Seguro que desea borrar el tamaño: ' + kilos_bolsa + 'kg?',
-        icon: 'warning',
-        showCancelButton: true,
-        toast: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonText: "Cancelar",
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, borrar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            resultado = true;
-        } else {
-            resultado = false;
-        }
-    })
-
-    return resultado;
-}
 
 
 function ordenarArrayDeFloats(arrayDeFloats) {

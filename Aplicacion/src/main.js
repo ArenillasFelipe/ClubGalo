@@ -955,14 +955,14 @@ function createWindowEditarBolsa() {
         width: 550,
         height: 450,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
             nodeIntegration: true
         }
     })
-    windowEditarBolsa.loadFile('src/ui/editarBolsa/editarBolsa.html'); //indica el archivo que se cargara en la ventana
+    windowEditarBolsa.loadFile('src/views/editarBolsa/editarBolsa.html'); //indica el archivo que se cargara en la ventana
 }
 
 

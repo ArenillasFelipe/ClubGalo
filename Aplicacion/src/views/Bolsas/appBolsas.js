@@ -1,5 +1,5 @@
-const { remote, app } = require('electron');
-const { get18BolsasSegunBusquedaMain, getKilosBolsaPorId, createWindowEditarBolsa, borrarBolsaByIdMain, createWindowAgregarBolsa } = require('../../main');
+const bolsa_controller = require('../../controllers/bolsa_controller');
+const { remote } = require('electron');
 const main = remote.require('./main');
 
 
@@ -38,7 +38,7 @@ window.addEventListener('scroll', () => {
 mainFunctionBolsasApp();
 function mainFunctionBolsasApp() {
 
-  mainGetYRenderBolsasSegunBusquedaApp("");
+  mainGetYRenderBolsasSegunBusquedaApp();
   crearListenerBuscador();
 
 
@@ -47,7 +47,7 @@ function mainFunctionBolsasApp() {
 
 async function mainGetYRenderBolsasSegunBusquedaApp(newBusqueda) {
 
-  let bolsas18 = await get18BolsasSegunBusquedaMain(newBusqueda, salto);
+  let bolsas18 = await bolsa_controller.get18BolsasSegunBusqueda(newBusqueda, salto);
 
   for (let indiceBolsa = 0; indiceBolsa < bolsas18.length; indiceBolsa++) {
     const element = bolsas18[indiceBolsa];
@@ -63,7 +63,7 @@ async function mainGetYRenderBolsasSegunBusquedaApp(newBusqueda) {
 function renderBolsaApp(bolsa) {
   let divBolsas = document.getElementById("bolsas");
 
-  let calidadBolsaParaCSS = bolsa.calidad_bolsa;
+  let calidadBolsaParaCSS = bolsa.bolsa.calidad_bolsa;
 
   if (calidadBolsaParaCSS == "SUPER PREMIUM") {
     calidadBolsaParaCSS = "SUPERPREMIUM";
@@ -73,29 +73,30 @@ function renderBolsaApp(bolsa) {
     <img src="../../imagenes/favicon.png" class="imgBolsa">
     <div class="datos-bolsa">
       <div class="marca-bolsa">
-        <p>${bolsa.marca_bolsa}</p>
+        <p>${bolsa.bolsa.marca_bolsa}</p>
       </div>
       <div class="calidad-bolsa${calidadBolsaParaCSS}">
-        <p>-${bolsa.calidad_bolsa}-</p>
+        <p>-${bolsa.bolsa.calidad_bolsa}-</p>
       </div>
       <div class="kilos-bolsa">
-        <p id="tamaniosBolsa${bolsa.id_bolsa}"><b>Tamaños:</b></p>
+        <p id="tamaniosBolsa${bolsa.bolsa.id_bolsa}"><b>Tamaños:</b></p>
       </div>
     </div>
 
-    <button class="btn-editar" onClick="botonEditar(${bolsa.id_bolsa})">Editar</button>
-    <button class="btn-borrar" onClick="botonBorrar(${bolsa.id_bolsa})">Borrar</button>
+    <button class="btn-editar" onClick="botonEditar(${bolsa.bolsa.id_bolsa})">Editar</button>
+    <button class="btn-borrar" onClick="botonBorrar(${bolsa.bolsa.id_bolsa})">Borrar</button>
 
   </div>`
 
-  rellenarKilosBolsa(bolsa.id_bolsa);
+  rellenarKilosBolsa(bolsa);
 
 }
 
-async function rellenarKilosBolsa(id_bolsa) {
-  let kilosBolsa = await getKilosBolsaPorId(id_bolsa);
+function rellenarKilosBolsa(bolsa) {
 
-  let idPTamanios = "tamaniosBolsa" + id_bolsa;
+  let idPTamanios = "tamaniosBolsa" + bolsa.bolsa.id_bolsa;
+
+  let kilosBolsa = bolsa.kilosBolsa;
 
   let pTamanios = document.getElementById(idPTamanios);
   kilosBolsa.forEach(element => {

@@ -115,6 +115,86 @@ async function sweetAlertSeleccionMascota() {
 }
 
 
+async function sweetAlert_confirmar_borrado_kilos_bolsa(kilos_bolsa) {
+  let resultado;
+  await Swal.fire({
+      title: '¿Seguro que desea borrar el tamaño: ' + kilos_bolsa + 'kg?',
+      icon: 'warning',
+      showCancelButton: true,
+      toast: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonText: "Cancelar",
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, borrar'
+  }).then((result) => {
+      if (result.isConfirmed) {
+          resultado = true;
+      } else {
+          resultado = false;
+      }
+  })
+
+  return resultado;
+}
+
+
+async function sweetAlertAgregarMarcaBolsa() {
+  await Swal.fire({
+      title: "Debes indicar la marca de la bolsa",
+      icon: "error",
+      showConfirmButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      toast: true,
+      stopKeydownPropagation: false,
+      position: "top",
+  })
+}
+
+async function sweetAlertBolsaRepetida() {
+  await Swal.fire({
+      title: "Ya existe una bolsa con ese nombre",
+      icon: "error",
+      showConfirmButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      toast: true,
+      stopKeydownPropagation: false,
+      position: "center",
+  })
+}
+
+async function sweetAlertAgregarTamanioBolsa() {
+  await Swal.fire({
+      title: "Debes agregar al menos 1 tamaño de bolsa",
+      icon: "error",
+      showConfirmButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      toast: true,
+      stopKeydownPropagation: false,
+      position: "top",
+  })
+}
+
+
+async function sweetAlertCompletarInputTamanio() {
+  await Swal.fire({
+      title: "Debes completar el campo de agregar tamaño",
+      icon: "error",
+      showConfirmButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      toast: true,
+      stopKeydownPropagation: false,
+      position: "top",
+  })
+}
+
 
 module.exports = { 
     confirmar_borrado_venta, 
@@ -122,6 +202,11 @@ module.exports = {
     noSeDetectoCliente,
     sweetAlertVentaExitosa,
     sweetAlertErrorDesconocidoVenta,
-    sweetAlertSeleccionMascota
+    sweetAlertSeleccionMascota,
+    sweetAlert_confirmar_borrado_kilos_bolsa,
+    sweetAlertAgregarMarcaBolsa,
+    sweetAlertBolsaRepetida,
+    sweetAlertAgregarTamanioBolsa,
+    sweetAlertCompletarInputTamanio
 }
   

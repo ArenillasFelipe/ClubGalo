@@ -22,9 +22,9 @@ async function getAllBolsas() {
 }
 
 
-async function get20Bolsas(salto) {
+async function get18Bolsas(salto) {
     const conn = await getConnection();
-    const result = await conn.query('SELECT * FROM bolsas where validoBolsa = true LIMIT ?, 20;', salto);
+    const result = await conn.query('SELECT * FROM bolsas where validoBolsa = true LIMIT ?, 18;', salto);
     // conn.release();
     return result.map(bolsaData => new Bolsa(
       bolsaData.id_bolsa,
@@ -50,10 +50,10 @@ async function getBolsaById(id_bolsa) {
 }
 
 
-async function get20BolsasBySearch(busqueda, salto) {
+async function get18BolsasBySearch(busqueda, salto) {
     const conn = await getConnection();
     busqueda = "%" + busqueda + "%";
-    const result = await conn.query('SELECT * FROM bolsas WHERE (marca_bolsa like ? or calidad_bolsa like ?) and validoBolsa = true LIMIT ?, 20;', [busqueda, busqueda, salto]);
+    const result = await conn.query('SELECT * FROM bolsas WHERE (marca_bolsa like ? or calidad_bolsa like ?) and validoBolsa = true LIMIT ?, 18;', [busqueda, busqueda, salto]);
     // conn.release();
     if (!result[0]) {
         return null;
@@ -86,9 +86,9 @@ async function deleteBolsaById(id_bolsa) {
 }
 
 module.exports = {
-    get20Bolsas,
+    get18Bolsas,
     getBolsaById,
-    get20BolsasBySearch,
+    get18BolsasBySearch,
     updateBolsaById,
     insertBolsa,
     deleteBolsaById,
