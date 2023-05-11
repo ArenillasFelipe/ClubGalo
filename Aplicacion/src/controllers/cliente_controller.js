@@ -4,11 +4,13 @@ const mascotaModel = require('../models/mascotaModel');
 
 async function getClienteSegunBusqueda(busqueda) {
     let cliente = await clienteModel.get20ClientesBySearch(busqueda);
+
+    if (!cliente) {
+        throw new Error("noExisteCliente");
+    }
+
     if (cliente.length > 1) {
         throw new Error("variosClientes");
-    }
-    if (cliente.length === 0) {
-        throw new Error("noExisteCliente");
     }
     return cliente[0]
 }
@@ -61,8 +63,9 @@ async function get20ClientesConMascotasBySearch(busqueda, salto) {
 
 
 async function restarPuntosCliente(puntosActuales, puntosParaRestar, id_cliente) {
+    console.log(puntosActuales, puntosParaRestar, id_cliente);
     let newPuntos = puntosActuales - puntosParaRestar;
-    await clienteModel.actualizarPuntosClienteById(newPuntos, id_cliente);
+    await clienteModel.actualizarPuntosClienteById(id_cliente, newPuntos);
     return newPuntos;
 }
 

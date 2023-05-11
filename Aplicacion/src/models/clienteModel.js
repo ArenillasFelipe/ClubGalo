@@ -134,9 +134,9 @@ async function deleteClienteById(id_cliente) {
 }
 
 
-async function restarPuntosClienteById(puntosParaRestar, id_cliente) {
+async function actualizarPuntosClienteById(id_cliente, newPuntos) {
     const conn = await getConnection();
-    await conn.query('update clientes set puntos = (puntos - ?) where id_cliente = ?',[puntosParaRestar, id_cliente]);
+    await conn.query('update clientes set puntos = ? where id_cliente = ?',[newPuntos, id_cliente]);
 }
 
 module.exports = {
@@ -147,5 +147,5 @@ module.exports = {
     deleteClienteById,
     insertCliente,
     Cliente,
-    restarPuntosClienteById
+    actualizarPuntosClienteById
 }
