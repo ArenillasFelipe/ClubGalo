@@ -1,8 +1,9 @@
-const { remote, app } = require('electron');
-const { getCLientemain, recargarPaginaPrincipal, eliminarClienteMain, cerrarVentanasEmergentes, getsoloClientefullnamemain, actualizarClienteMain, agregarMascotaMain, getMascotaidmain, getMascotasidCliente, eliminarMascotaMain, actualizarMascotaMain, getUltimoClienteRegistrado, guardarClienteMain } = require('../../main');
+const { remote } = require('electron');
 const main = remote.require('./main');
+
 let cliente;
-let CantidadMascotas;
+let mascotas;
+
 inicio();
 listenerCruz();
 

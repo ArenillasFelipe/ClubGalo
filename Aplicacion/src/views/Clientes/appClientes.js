@@ -1,6 +1,7 @@
-const { remote, app } = require('electron');
-const { getCLientemain, buscar20ClientesMain, recargarPaginaPrincipal, createWindowAgregarCliente, get20ClientesTodos,eliminarClienteMain, getMascotasidCliente, getMascotaidmain, createWindowEditarCliente } = require('../../main');
+const { remote } = require('electron');
 const main = remote.require('./main');
+const cliente_controller = require('../../controllers/cliente_controller');
+const sweetAlerts = require('../../utils/sweetAlerts');
 
 
 
@@ -29,7 +30,7 @@ window.addEventListener('scroll', () => {
 
   // Si el usuario ha llegado al final de la página
   if (doc.scrollTop + window.innerHeight === doc.scrollHeight) {
-    get20Clientes();
+    get20ClientesConMascotas(barra_busqueda.value);
   }
 });
 
@@ -43,27 +44,18 @@ barra_busqueda = document.getElementById("barra-busqueda");
 
 formBuscador.addEventListener('submit', (e) => {
   e.preventDefault();
-  if (barra_busqueda.value != "") {
-    salto = 0;
-    divClientes.innerHTML = "";
-    buscar20ClientesApp(barra_busqueda.value);
-  }else{
-    get20Clientes();
-  }
+
+  salto = 0;
+  divClientes.innerHTML = "";
+  get20ClientesConMascotas(barra_busqueda.value);
 
 });
 
-async function buscar20ClientesApp(busqueda){
-  let resultado = await buscar20ClientesMain(busqueda, salto);
+get20ClientesConMascotas();
+async function get20ClientesConMascotas(busqueda) {
+  let resultado = await cliente_controller.get20ClientesConMascotasBySearch(busqueda, salto);
   salto += 20;
   renderClientes(resultado);
-}
-
-
-async function get20Clientes() {
-    let resultado = await get20ClientesTodos(salto);
-    salto += 20;
-    renderClientes(resultado);
 }
 
 
@@ -71,18 +63,17 @@ divClientes = document.getElementById("divClientes");
 
 /////////////////////////////////INNERS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function renderClientes(clientes) {
-    for (let index = 0; index < clientes.length; index++){
-        const element = clientes[index];
-        idCliente = element.id_cliente;
-        mascotas = await getMascotasidCliente(idCliente);
+async function renderClientes(clientesConMascotas) {
+  for (let index = 0; index < clientesConMascotas.length; index++) {
+    const element = clientesConMascotas[index];
+    console.log(element);
 
-        divClientes.innerHTML += `<div class="container-cliente">
+    divClientes.innerHTML += `<div class="container-cliente">
         <div class="container-datoscliente">
           <div class="datos-persona" id="datos-persona">
-            <p class="pdireccion"><span style="font-weight: 800;">Direccion:</span> ${element.calle} ${element.calle_numero}</p>
-            <p class="ptelefono"><span style="font-weight: 800;">Telefono:</span> ${element.telefono}</p>
-            <p class="pmascotas" id="pmascotas${idCliente}"><span style="font-weight: 800;">Mascotas:</span></p>
+            <p class="pdireccion"><span style="font-weight: 800;">Direccion:</span> ${element.cliente.calle} ${element.cliente.calle_numero}</p>
+            <p class="ptelefono"><span style="font-weight: 800;">Telefono:</span> ${element.cliente.telefono}</p>
+            <p class="pmascotas" id="pmascotas${element.cliente.id_cliente}"><span style="font-weight: 800;">Mascotas:</span></p>
           </div>
         </div>
         <img id="imagenpersona" src="../../imagenes/persona.png">
@@ -95,191 +86,111 @@ async function renderClientes(clientes) {
             </div>
             <div class="mostrar-datos">
                 <label for="selectmascota"><span style="font-weight: 800;">Mostrando datos de:</span></label>
-                <select name="selectmascota" class="select-mascota" id="select-mascota${idCliente}">
+                <select name="selectmascota" class="select-mascota" id="select-mascota${element.cliente.id_cliente}">
                 </select>
             </div>
-            <div class="mostrando-datos" id="mostrando-datos${idCliente}">
+            <div class="mostrando-datos" id="mostrando-datos${element.cliente.id_cliente}">
             </div>
           </div>
         </div>
         <div class="container-nombre">
-          <p class="pnombre">${element.primernombre} ${element.nombrepila} ${element.apellido}</p>
+          <p class="pnombre">${element.cliente.primernombre} ${element.cliente.nombrepila} ${element.cliente.apellido}</p>
         </div>
         <div class="container-id">
-          <p class="pid">Nº: ${element.id_cliente}</p>
+          <p class="pid">Nº: ${element.cliente.id_cliente}</p>
         </div>
         <div class="puntos">
-          <p class="ppuntos">Puntos: ${element.puntos}</p>
+          <p class="ppuntos">Puntos: ${element.cliente.puntos}</p>
         </div>
-        <button class="btn-borrar" type="submit" onClick="botonBorrar(${idCliente})">Borrar</button>
-        <button class="btn-editar" type="submit" onClick="botonEditar(${idCliente})">Editar</button>
+        <button class="btn-borrar" type="submit" onClick="botonBorrar(${element.cliente.id_cliente})">Borrar</button>
+        <button class="btn-editar" type="submit" onClick="botonEditar(${element.cliente.id_cliente})">Editar</button>
       </div>`;
 
-        let idDocument = "pmascotas" + idCliente;
-        let idSelect = "select-mascota" + idCliente;
-        pmascotas = document.getElementById(idDocument);
-        let select = document.getElementById(idSelect);
-        select.innerHTML = "";
-        mascotas.forEach(element => {
-            pmascotas.innerHTML += ` ${element.nombremascota} -`;
-            select.innerHTML += `<option value="` + element.id_mascota + `">` + element.nombremascota + `</option>`
-        });
+    let idDocument = "pmascotas" + element.cliente.id_cliente;
+    let idSelect = "select-mascota" + element.cliente.id_cliente;
+    pmascotas = document.getElementById(idDocument);
+    let select = document.getElementById(idSelect);
+    select.innerHTML = "";
 
-        cambiarDatosMascota(select.value, idCliente);
+    let mascotas = element.mascotas;
 
+    mascotas.forEach(element => {
+      pmascotas.innerHTML += ` ${element.nombremascota} -`;
+      select.innerHTML += `<option value="` + element.id_mascota + `">` + element.nombremascota + `</option>`
+    });
 
-
-
-
-    }
-    for (let index = 0; index < clientes.length; index++){
-        const element = clientes[index];
-        let idCliente = element.id_cliente;
-        mascotas = await getMascotasidCliente(idCliente);
-
-        let idDocument = "pmascotas" + idCliente;
-        let idSelect = "select-mascota" + idCliente;
-        pmascotas = document.getElementById(idDocument);
-        let select = document.getElementById(idSelect);
+    cambiarDatosMascota(select.value, element);
 
 
-        select = document.getElementById(idSelect);
-        console.log("value select:", select);
-        select.addEventListener('change', (e) => {
-            e.preventDefault();
-            idMascota = select.value;
-            
-            cambiarDatosMascota(idMascota, idCliente);
-        
-        });
+  }
+  for (let index = 0; index < clientesConMascotas.length; index++) {
+    const element = clientesConMascotas[index];
 
-    }
+    let idDocument = "pmascotas" + element.cliente.id_cliente;
+    let idSelect = "select-mascota" + element.cliente.id_cliente;
+    pmascotas = document.getElementById(idDocument);
+    let select = document.getElementById(idSelect);
+
+
+    select = document.getElementById(idSelect);
+    console.log("value select:", select);
+    select.addEventListener('change', (e) => {
+      e.preventDefault();
+      idMascota = select.value;
+
+      cambiarDatosMascota(idMascota, element);
+
+    });
+
+  }
 
 }
-/*    <div class="container-cliente">
-      <div class="container-datoscliente">
-        <div class="datos-persona" id="datos-persona">
-          <p class="pdireccion"><span style="font-weight: 800;">Direccion:</span> San Martin 850</p>
-          <p class="ptelefono"><span style="font-weight: 800;">Telefono:</span> 3573431358</p>
-          <p class="pmascotas"><span style="font-weight: 800;">Mascotas:</span> Teo - Pocho - Bruno - Pichicho</p>
-        </div>
-      </div>
-      <img id="imagenpersona" src="../../imagenes/persona.png">
- 
- 
-      <div class="div-mascotas">
-        <div class="datos-mascota">
-          <div class="imagen-perro">
-            <img src="../../imagenes/perro-gato.png" width="120">
-          </div>
-          <div class="mostrar-datos">
-            <form>
-              <label for="selectmascota"><span style="font-weight: 800;">Mostrando datos de:</span></label>
-              <select name="selectmascota" class="select-mascota" id="select-mascota">
-              </select>
-            </form>
-          </div>
-          <div class="mostrando-datos" id="mostrando-datos">
-            <p><span style="font-weight: 800;">Animal:</span> Perro</p>
-            <p><span style="font-weight: 800;">Raza:</span> Bulldog ingles</p>
-            <p><span style="font-weight: 800;">Peso:</span> 30kg</p>
-            <p><span style="font-weight: 800;">Edad:</span> 8</p>
-            <p><span style="font-weight: 800;">Actividad:</span> Baja</p>
-            <p><span style="font-weight: 800;">Afecciones:</span> Dermatitis y obesidad</p>
-            <p><span style="font-weight: 800;">Cumpleaños:</span> 24/05/2002</p>
-          </div>
-        </div>
-      </div>
-      <div class="container-nombre">
-        <p class="pnombre">Maximiliano Sebastian Arenillas</p>
-      </div>
-      <div class="container-id">
-        <p class="pid">ID: 1567</p>
-      </div>
-      <div class="puntos">
-        <p class="ppuntos">Puntos: 2253</p>
-      </div>
-    </div>
-*/
 
+async function cambiarDatosMascota(idMascota, clienteConMascotas) {
 
-get20Clientes();
+  let mascotas = clienteConMascotas.mascotas;
 
-async function cambiarDatosMascota(idMascota, idCliente) {
+  let mascotaAMostrar = mascotas.find(mascota => mascota.id_mascota == idMascota);
 
-    console.log(idMascota);
-    console.log(idCliente);
-    mascota = await getMascotaidmain(idMascota);
-    idMostrandoDatos = "mostrando-datos" + idCliente;
-    mostrandoDatos = document.getElementById(idMostrandoDatos);
+  idMostrandoDatos = "mostrando-datos" + clienteConMascotas.cliente.id_cliente;
+  mostrandoDatos = document.getElementById(idMostrandoDatos);
 
-    dia = mascota[0].nacimiento;
-    mes = mascota[0].nacimiento;
-    anio = mascota[0].nacimiento;
-
-    dia = dia.getDate();
-    mes = mes.getMonth();
-    mes = mes + 1;
-    anio = anio.getFullYear();
-
-    mostrandoDatos.innerHTML = `<p><span style="font-weight: 800;">Animal:</span> ${mascota[0].animal}</p>
-    <p><span style="font-weight: 800;">Raza:</span> ${mascota[0].raza}</p>
-    <p><span style="font-weight: 800;">Peso:</span> ${mascota[0].peso}</p>
-    <p><span style="font-weight: 800;">Edad:</span> ${mascota[0].edad}</p>
-    <p><span style="font-weight: 800;">Actividad:</span> ${mascota[0].actividad}</p>
-    <p><span style="font-weight: 800;">Afecciones:</span> ${mascota[0].afecciones}</p>
-    <p><span style="font-weight: 800;">Cumpleaños:</span> ` + dia + `/` + mes + `/` + anio + `</p>`
-
+  mostrandoDatos.innerHTML = `<p><span style="font-weight: 800;">Animal:</span> ${mascotaAMostrar.animal}</p>
+    <p><span style="font-weight: 800;">Raza:</span> ${mascotaAMostrar.raza}</p>
+    <p><span style="font-weight: 800;">Peso:</span> ${mascotaAMostrar.peso}</p>
+    <p><span style="font-weight: 800;">Edad:</span> ${mascotaAMostrar.edad}</p>
+    <p><span style="font-weight: 800;">Actividad:</span> ${mascotaAMostrar.actividad}</p>
+    <p><span style="font-weight: 800;">Afecciones:</span> ${mascotaAMostrar.afecciones}</p>
+    <p><span style="font-weight: 800;">Cumpleaños:</span>${mascotaAMostrar.nacimiento}</p>`
 
 }
 
 
 function botonEditar(idCliente) {
-localStorage.setItem("ClienteAEditar",  idCliente);
-main.createWindowEditarCliente();
+  localStorage.setItem("ClienteAEditar", idCliente);
+  main.createWindowEditarCliente();
 }
 
 async function botonBorrar(idCliente) {
   let respuesta = await sweetAlertBorrar();
   if (respuesta) {
-  await main.eliminarClienteMain(idCliente);
-  await Swal.fire(
-    '¡Borrado!',
-    'El cliente ha sido eliminado con exito.',
-    'success',
-  )
-  main.recargarPaginaPrincipal();
+    await main.eliminarClienteMain(idCliente);
+    await Swal.fire(
+      '¡Borrado!',
+      'El cliente ha sido eliminado con exito.',
+      'success',
+    )
+    main.recargarPaginaPrincipal();
   }
 }
 
 
-function botonAgregarCliente(){
-  localStorage.setItem("EstadoCliente",  "NoCreado");
+function botonAgregarCliente() {
+  localStorage.setItem("EstadoCliente", "NoCreado");
   main.createWindowAgregarCliente();
 }
 
 
-async function sweetAlertBorrar(){
-  let resultado;
-  await Swal.fire({
-    title: '¿Seguro que desea borrar el cliente?',
-    text: "Se perderan todos sus datos incluido su historial de venta y mascotas.",
-    footer: "No se podran revertir los cambios",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonText: "Cancelar",
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, borrar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      resultado = true;
-    }else{
-      resultado = false;
-    }
-  })
 
-  return resultado;
-}
 
 

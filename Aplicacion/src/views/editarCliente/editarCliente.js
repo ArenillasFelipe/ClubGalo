@@ -1,21 +1,26 @@
-const { remote, app } = require('electron');
-const { getCLientemain, recargarPaginaPrincipal, getsoloClientefullnamemain, actualizarClienteMain, agregarMascotaMain, getMascotaidmain, getMascotasidCliente, eliminarMascotaMain, actualizarMascotaMain } = require('../../main');
+const { remote } = require('electron');
 const main = remote.require('./main');
+const cliente_controller = require('../../controllers/cliente_controller');
+const mascota_controller = require('../../controllers/mascota_controller');
+const sweetAlerts = require('../../utils/sweetAlerts');
+
+
 let cliente;
-let CantidadMascotas;
+let mascotas;
+let temporalmascotasIDs = 0;
 
 listenerGuardar();
 listenerCruz();
 
-
+getClienteAEditar();
 async function getClienteAEditar() {
-    cliente = localStorage.getItem( "ClienteAEditar" );
-    cliente = await getsoloClientefullnamemain(cliente);
-    console.log(cliente);
-    let mascotas = await getMascotasidCliente(cliente[0].id_cliente);
-    CantidadMascotas = mascotas.length;
-    console.log(mascotas);
-    llenarInputs(cliente, mascotas);
+    let idCliente = localStorage.getItem("ClienteAEditar");
+
+    cliente = await cliente_controller.getClienteById(idCliente);
+    mascotas = await mascota_controller.getMascotasByIdCliente(idCliente);
+
+    llenarInputsCliente();
+    llenarInputsMascotas();
 }
 
 
@@ -44,19 +49,18 @@ let input_aniocumple = document.getElementById("input-aniocumple");
 let divboton_eliminar = document.getElementById("boton-eliminar");
 let divboton_guardarNewMascota = document.getElementById("boton-guardarmascota");
 
+function llenarInputsCliente() {
+    input_primernombre.value = cliente.primernombre
+    input_nombrepila.value = cliente.nombrepila
+    input_apellido.value = cliente.apellido
+    input_calle.value = cliente.calle
+    input_numero.value = cliente.calle_numero
+    input_telefono.value = cliente.telefono
+}
 
+function llenarInputsMascotas() {
 
-function llenarInputs(cliente, mascotas) {
-
-
-    input_primernombre.value = cliente[0].primernombre
-    input_nombrepila.value = cliente[0].nombrepila
-    input_apellido.value = cliente[0].apellido
-    input_calle.value = cliente[0].calle
-    input_numero.value = cliente[0].calle_numero
-    input_telefono.value = cliente[0].telefono
-
-
+    select_mascota.innerHTML = "";
     mascotas.forEach(element => {
         select_mascota.innerHTML += `<option value="` + element.id_mascota + `">` + element.nombremascota + `</option>`
     });
@@ -66,28 +70,15 @@ function llenarInputs(cliente, mascotas) {
     cambiarInputsMascota(mascotas[0].id_mascota);
     select_mascota.addEventListener('change', (e) => {
         e.preventDefault();
-        
-        idMascota = select_mascota.value;
+
+        let idMascota = select_mascota.value;
 
         cambiarInputsMascota(idMascota);
-    
+
     });
-
-
-    
-
-
-
-
-
-
-
-
-
-
 }
 
-async function cambiarInputsMascota(idMascota){
+async function cambiarInputsMascota(idMascota) {
 
     if (idMascota === "agregar") {
         divboton_eliminar.innerHTML = "";
@@ -103,57 +94,90 @@ async function cambiarInputsMascota(idMascota){
         input_diacumple.value = "";
         input_mescumple.value = "";
         input_aniocumple.value = "";
-    }else{
-
+    } else {
+        divboton_guardarNewMascota.innerHTML = `<button class="btnGuardarNewMascota" id="btnActualizarMascota">Guardar</button>`;
         divboton_eliminar.innerHTML = `<button class="btn-eliminarmascota" id="btn-eliminarmascota">ELIMINAR MASCOTA</button>`;
         divboton_guardarNewMascota.innerHTML = "";
-        listenerEliminarMascota();
+        listenerEliminarMascota(idMascota);
+        listenerActualizarMascota(idMascota);
 
-    let mascota = await main.getMascotaidmain(idMascota);
-    console.log(input_animal, mascota);
-    
-    input_nombremascota.value = mascota[0].nombremascota
-    input_animal.value = mascota[0].animal
-    input_raza.value = mascota[0].raza
-    input_peso.value = mascota[0].peso
-    input_edad.value =mascota[0].edad
-    input_actividad.value = mascota[0].actividad
-    input_afecciones.value = mascota[0].afecciones
 
-    dia = mascota[0].nacimiento;
-    mes = dia
-    anio = dia
+        let mascotaAMostrar = mascotas.find(mascota => mascota.id_mascota == idMascota);
 
-    dia = dia.getDate();
-    mes = mes.getMonth() + 1;
-    anio = anio.getFullYear();
 
-    input_diacumple.value = dia;
-    input_mescumple.value = mes;
-    input_aniocumple.value = anio;
+        input_nombremascota.value = mascotaAMostrar.nombremascota
+        input_animal.value = mascotaAMostrar.animal
+        input_raza.value = mascotaAMostrar.raza
+        input_peso.value = mascotaAMostrar.peso
+        input_edad.value = mascotaAMostrar.edad
+        input_actividad.value = mascotaAMostrar.actividad
+        input_afecciones.value = mascotaAMostrar.afecciones
+
+        const partesFecha = mascotaAMostrar.nacimiento.split("/");
+        const dia = parseInt(partesFecha[0]);
+        const mes = parseInt(partesFecha[1]);
+        const anio = parseInt(partesFecha[2]);
+
+        input_diacumple.value = dia;
+        input_mescumple.value = mes;
+        input_aniocumple.value = anio;
     }
 }
 
-
-getClienteAEditar();
-
-
-async function eliminarMascota(){
-    idMascota = select_mascota.value;
-    await eliminarMascotaMain(idMascota);
-    await sweetAlertGuardadoConExito();
-    location.reload();
+function listenerActualizarMascota(idMascota) {
+    let mascota = mascotas.find(mascota => mascota.id_mascota == idMascota);
 }
 
-async function actualizarMascota(){
+
+async function eliminarMascota(idMascota) {
+
+    mascotas = mascotas.filter(mascota => mascota.id_mascota != idMascota);
+
+    await sweetAlerts.sweetAlertGuardadoConExito();
+    llenarInputsMascotas();
+}
+
+async function actualizarMascota() {
 
     if (select_mascota.value === "agregar") {
         agregarMascotaapp();
-    }else{
+    } else {
+
+        let newMascota = {
+            idMascota: "",
+            nombremascota: "",
+            animal: "",
+            raza: "",
+            peso: "",
+            edad: "",
+            actividad: "",
+            afecciones: "",
+            nacimiento: ""
+        }
 
 
+        newMascota.idMascota = select_mascota.value;
+        newMascota.nombremascota = input_nombremascota.value;
+        newMascota.animal = input_animal.value;
+        newMascota.raza = input_raza.value;
+        newMascota.peso = input_peso.value;
+        newMascota.edad = input_edad.value;
+        newMascota.actividad = input_actividad.value;
+        newMascota.afecciones = input_afecciones.value;
+        newMascota.nacimiento = input_aniocumple.value + "-" + input_mescumple.value + "-" + input_diacumple.value;
+
+        await actualizarMascotaMain(newMascota);
+        await sweetAlertGuardadoConExito();
+        location.reload();
+
+    }
+
+}
+
+
+async function agregarMascotaapp() {
     let newMascota = {
-        idMascota: "",
+        id_mascota: "",
         nombremascota: "",
         animal: "",
         raza: "",
@@ -161,11 +185,13 @@ async function actualizarMascota(){
         edad: "",
         actividad: "",
         afecciones: "",
-        nacimiento: ""
+        nacimiento: "",
+        id_cliente: ""
     }
+    //le doy un id temporal (negativo para que no coincida con el de ninguna mascota) a la nueva mascota para poder accederla dentro de la ventana antes de ser guardada en la BD
+    temporalmascotasIDs -= 1;
+    newMascota.id_mascota = temporalmascotasIDs;
 
-
-    newMascota.idMascota = select_mascota.value;
     newMascota.nombremascota = input_nombremascota.value;
     newMascota.animal = input_animal.value;
     newMascota.raza = input_raza.value;
@@ -173,51 +199,20 @@ async function actualizarMascota(){
     newMascota.edad = input_edad.value;
     newMascota.actividad = input_actividad.value;
     newMascota.afecciones = input_afecciones.value;
-    newMascota.nacimiento = input_aniocumple.value + "-" + input_mescumple.value + "-" + input_diacumple.value;
+    newMascota.nacimiento = `${parseInt(input_diacumple.value)}/${parseInt(input_mescumple.value)}/${parseInt(input_aniocumple.value)}`
+    newMascota.id_cliente = cliente.id_cliente;
 
-    await actualizarMascotaMain(newMascota);
-    await sweetAlertGuardadoConExito();
-    location.reload();
-
-}
-
-}
-
-
-async function agregarMascotaapp(){
-    let newMascota = {
-        idMascota: "",
-        nombremascota: "",
-        animal: "",
-        raza: "",
-        peso: "",
-        edad: "",
-        actividad: "",
-        afecciones: "",
-        nacimiento: ""
-    }
-
-
-    newMascota.idMascota = select_mascota.value;
-    newMascota.nombremascota = input_nombremascota.value;
-    newMascota.animal = input_animal.value;
-    newMascota.raza = input_raza.value;
-    newMascota.peso = input_peso.value;
-    newMascota.edad = input_edad.value;
-    newMascota.actividad = input_actividad.value;
-    newMascota.afecciones = input_afecciones.value;
-    newMascota.nacimiento = input_aniocumple.value + "-" + input_mescumple.value + "-" + input_diacumple.value;
-
-    await agregarMascotaMain(newMascota, cliente[0].id_cliente);
-    await sweetAlertGuardadoConExito();
-    location.reload();
+    mascotas.push(newMascota);
+    await sweetAlerts.sweetAlertGuardadoConExito();
+    llenarInputsMascotas();
+    select_mascota.value = newMascota.id_mascota;
 }
 
 
-async function actualizarClienteapp(){
+async function actualizarClienteapp() {
 
     let newCliente = {
-        idCliente: cliente[0].id_cliente,
+        idCliente: cliente.id_cliente,
         primernombre: "",
         nombrepila: "",
         apellido: "",
@@ -225,9 +220,9 @@ async function actualizarClienteapp(){
         numero: "",
         telefono: ""
     }
-    
-    
-    
+
+
+
     newCliente.primernombre = input_primernombre.value
     newCliente.nombrepila = input_nombrepila.value
     newCliente.apellido = input_apellido.value
@@ -240,13 +235,13 @@ async function actualizarClienteapp(){
 }
 
 
-function listenerGuardar(){
+function listenerGuardar() {
     let btnGuardar = document.getElementById("btnGuardar");
     btnGuardar.addEventListener('click', (e) => {
         e.preventDefault();
         if (input_primernombre.value === "" || input_nombrepila.value === "" || input_apellido.value === "" || input_calle.value === "" || input_numero.value === "" || input_telefono.value === "" || input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_edad.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
             sweetAlertCamposSinCompletar();
-        }else{
+        } else {
             actualizarClienteapp();
             actualizarMascota();
         }
@@ -255,59 +250,34 @@ function listenerGuardar(){
 }
 
 
-function listenerEliminarMascota(){
-let btn_eliminarmascota = document.getElementById("btn-eliminarmascota");
-btn_eliminarmascota.addEventListener('click', (e) => {
-    e.preventDefault();
-    eliminarMascota();
-});
+function listenerEliminarMascota(idMascota) {
+    let btn_eliminarmascota = document.getElementById("btn-eliminarmascota");
+    btn_eliminarmascota.addEventListener('click', (e) => {
+        e.preventDefault();
+        eliminarMascota(idMascota);
+    });
 }
 
 
-function listenerGuardarNewMascota(){
-let btnGuardarNewMascota = document.getElementById("btnGuardarNewMascota");
+function listenerGuardarNewMascota() {
+    let btnGuardarNewMascota = document.getElementById("btnGuardarNewMascota");
 
-btnGuardarNewMascota.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_edad.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
-        sweetAlertCamposSinCompletar();
-    } else {
-        actualizarMascota();
-    }
-});
+    btnGuardarNewMascota.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_edad.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
+            sweetAlerts.sweetAlertCamposSinCompletar();
+        } else {
+            actualizarMascota();
+        }
+    });
 
 
 }
 
 
-async function sweetAlertCamposSinCompletar(){
-    await Swal.fire({
-        title: "Debe completar todos los campos",
-        icon: "error",
-        backdrop: true,
-        showConfirmButton: true,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false,
-        stopKeydownPropagation: false,
-        position: "center",
-    })
-}
 
 
-async function sweetAlertGuardadoConExito(){
-    await Swal.fire({
-        title: "¡Cambios guardados con exito!",
-        icon: "success",
-        backdrop: true,
-        showConfirmButton: true,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false,
-        stopKeydownPropagation: false,
-        position: "center",
-    })
-}
+
 
 async function sweetAlertSinMascotas() {
     await Swal.fire({
@@ -329,11 +299,11 @@ function listenerCruz() {
 
     btnCruz.addEventListener('click', (e) => {
         e.preventDefault();
-            if (CantidadMascotas > 0) {
-                main.recargarPaginaPrincipal();
-                main.cerrarVentanasEmergentes();
-            } else {
-                sweetAlertSinMascotas();
-            }
+        if (mascotas.length > 0) {
+            main.recargarPaginaPrincipal();
+            main.cerrarVentanasEmergentes();
+        } else {
+            sweetAlertSinMascotas();
+        }
     });
 }

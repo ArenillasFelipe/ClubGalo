@@ -219,6 +219,61 @@ async function sweetAlert_confirmar_borrado_bolsa() {
 }
 
 
+async function sweetAlertBorrarCliente() {
+  let resultado;
+  await Swal.fire({
+    title: '¿Seguro que desea borrar el cliente?',
+    text: "Se perderan todos sus datos incluido su historial de venta y mascotas.",
+    footer: "No se podran revertir los cambios",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonText: "Cancelar",
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Si, borrar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      resultado = true;
+    } else {
+      resultado = false;
+    }
+  })
+
+  return resultado;
+}
+
+
+
+async function sweetAlertGuardadoConExito() {
+  await Swal.fire({
+      title: "¡Cambios guardados con exito!",
+      icon: "success",
+      backdrop: true,
+      showConfirmButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      stopKeydownPropagation: false,
+      position: "center",
+  })
+}
+
+
+async function sweetAlertCamposSinCompletar() {
+  await Swal.fire({
+      title: "Debe completar todos los campos",
+      icon: "error",
+      backdrop: true,
+      showConfirmButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      stopKeydownPropagation: false,
+      position: "center",
+  })
+}
+
+
 module.exports = { 
     confirmar_borrado_venta, 
     variosClientes, 
@@ -231,6 +286,9 @@ module.exports = {
     sweetAlertBolsaRepetida,
     sweetAlertAgregarTamanioBolsa,
     sweetAlertCompletarInputTamanio,
-    sweetAlert_confirmar_borrado_bolsa
+    sweetAlert_confirmar_borrado_bolsa,
+    sweetAlertBorrarCliente,
+    sweetAlertGuardadoConExito,
+    sweetAlertCamposSinCompletar
 }
   

@@ -20,5 +20,20 @@ async function getMascotasByIdCliente(id_cliente){
     return mascotas;
 }
 
+async function insertMascota(newMascota) {
 
-module.exports = { getMascotasByIdCliente }
+    let nacimiento = newMascota.nacimiento;
+
+    nacimiento = nacimiento.split("/");
+    nacimiento = new Date(nacimiento[2], nacimiento[1] - 1, nacimiento[0]);
+    newMascota.nacimiento = nacimiento;
+
+    await mascotaModel.insertMascota(newMascota);
+}
+
+
+
+module.exports = { 
+    getMascotasByIdCliente,
+    insertMascota
+ }

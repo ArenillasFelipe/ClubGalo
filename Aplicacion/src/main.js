@@ -896,14 +896,14 @@ function createWindowEditarCliente() {
         width: 900,
         height: 570,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
             nodeIntegration: true
         }
     })
-    windowEditarCliente.loadFile('src/ui/editarCliente/editarCliente.html'); //indica el archivo que se cargara en la ventana
+    windowEditarCliente.loadFile('src/views/editarCliente/editarCliente.html'); //indica el archivo que se cargara en la ventana
 }
 
 
