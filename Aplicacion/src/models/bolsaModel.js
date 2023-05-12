@@ -75,14 +75,30 @@ async function updateBolsaById(newBolsa) {
 async function insertBolsa(newBolsa) {
     newBolsa.marca_bolsa = convertirMayusculas(newBolsa.marca_bolsa);
     const conn = await getConnection();
-    await conn.query('insert into bolsas(marca_bolsa, calidad_bolsa) values(?, ?)', [newBolsa.marca_bolsa, newBolsa.calidad_bolsa]);
+    let result = await conn.query('insert into bolsas(marca_bolsa, calidad_bolsa) values(?, ?)', [newBolsa.marca_bolsa, newBolsa.calidad_bolsa]);
     // conn.release();
+    return result;
 }
 
 async function deleteBolsaById(id_bolsa) {
     const conn = await getConnection();
-    await conn.query('update from bolsas set validoBolsa = false where id_bolsa = ?', id_bolsa);
+    await conn.query('update bolsas set validoBolsa = false where id_bolsa = ?', id_bolsa);
     // conn.release();
+}
+
+async function getBolsaByName(marca_bolsa) {
+    const conn = await getConnection();
+    let result = await conn.query('select * from bolsas where marca_bolsa = ? and validoBolsa = true', marca_bolsa);
+    // conn.release();
+    if (!result[0]) {
+        return null;
+    }
+    const bolsaData = result[0];
+    return new Bolsa(
+        bolsaData.id_bolsa,
+        bolsaData.marca_bolsa,
+        bolsaData.calidad_bolsa
+    );
 }
 
 module.exports = {
@@ -93,5 +109,6 @@ module.exports = {
     insertBolsa,
     deleteBolsaById,
     Bolsa,
-    getAllBolsas
+    getAllBolsas,
+    getBolsaByName
 }

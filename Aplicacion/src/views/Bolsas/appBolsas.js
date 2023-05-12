@@ -1,4 +1,5 @@
 const bolsa_controller = require('../../controllers/bolsa_controller');
+const sweetAlerts = require('../../utils/sweetAlerts');
 const { remote } = require('electron');
 const main = remote.require('./main');
 
@@ -142,39 +143,13 @@ function botonEditar(id_bolsa) {
 
 async function botonBorrar(id_bolsa) {
 
-  let confirma_borrado = await sweetAlert_confirmar_borrado();
+  let confirma_borrado = await sweetAlerts.sweetAlert_confirmar_borrado_bolsa();
 
   if (confirma_borrado) {
-    borrarBolsaByIdMain(id_bolsa);
+    await bolsa_controller.borrarBolsaById(id_bolsa);
     location.reload();
   }
 
-}
-
-
-
-
-async function sweetAlert_confirmar_borrado() {
-  let resultado;
-  await Swal.fire({
-    title: '¿Seguro que desea borrar la bolsa?',
-    text: "Se perderan todos los datos de la bolsa y no se realizara seguimiento de las ventas que la incluyan",
-    footer: "No se podran revertir los cambios",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonText: "Cancelar",
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, borrar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      resultado = true;
-    } else {
-      resultado = false;
-    }
-  })
-
-  return resultado;
 }
 
 

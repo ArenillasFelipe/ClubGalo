@@ -984,14 +984,14 @@ function createWindowAgregarBolsa() {
         width: 550,
         height: 450,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
             nodeIntegration: true
         }
     })
-    windowAgregarBolsa.loadFile('src/ui/agregarBolsa/agregarBolsa.html'); //indica el archivo que se cargara en la ventana
+    windowAgregarBolsa.loadFile('src/views/agregarBolsa/agregarBolsa.html'); //indica el archivo que se cargara en la ventana
 }
 
 function createWindowVentasBolsas() {

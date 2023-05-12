@@ -60,9 +60,70 @@ async function getBolsaById(id_bolsa) {
   return bolsasConKilos;
 }
 
+async function actualizarDatosBolsa(newBolsa, kilosBolsa) {
+
+  let bolsasConMismoNombre = await bolsaModel.getBolsaByName(newBolsa.marca_bolsa);
+  try {
+    console.log(`-${bolsasConMismoNombre.marca_bolsa}-`, `-${newBolsa.marca_bolsa}-`);
+    console.log((bolsasConMismoNombre.marca_bolsa != newBolsa.marca_bolsa))
+  } catch (error) {
+    
+  }
+
+  if ((bolsasConMismoNombre) && (bolsasConMismoNombre.id_bolsa != newBolsa.id_bolsa)) {
+    throw new Error("bolsaRepetida");
+  }
+
+    newBolsa.marca_bolsa = (newBolsa.marca_bolsa).toUpperCase();
+
+
+    await bolsaModel.updateBolsaById(newBolsa);
+
+    await bolsaKiloModel.deleteBolsas_KilosByIdBolsa(newBolsa.id_bolsa);
+
+    for (let i = 0; i < kilosBolsa.length; i++) {
+      const element = kilosBolsa[i];
+
+      await bolsaKiloModel.insertBolsa_Kilo(newBolsa.id_bolsa, element);
+
+    }
+}
+
+
+async function borrarBolsaById(id_bolsa) {
+  await bolsaKiloModel.deleteBolsas_KilosByIdBolsa(id_bolsa);
+  await bolsaModel.deleteBolsaById(id_bolsa);
+}
+
+
+
+async function insertBolsa(newBolsa, kilosBolsa) {
+
+  let bolsasConMismoNombre = await bolsaModel.getBolsaByName(newBolsa.marca_bolsa);
+
+  if (bolsasConMismoNombre) {
+    throw new Error("bolsaRepetida");
+  }
+
+    newBolsa.marca_bolsa = (newBolsa.marca_bolsa).toUpperCase();
+
+  let result = await bolsaModel.insertBolsa(newBolsa);
+
+  for (let i = 0; i < kilosBolsa.length; i++) {
+    const element = kilosBolsa[i];
+    await bolsaKiloModel.insertBolsa_Kilo(result.insertId, element);
+  }
+
+
+}
+
+
 module.exports = {
   getAllBolsasOrdenadas,
   getKilosBolsaByIdBolsa,
   get18BolsasSegunBusqueda,
-  getBolsaById
+  getBolsaById,
+  actualizarDatosBolsa,
+  borrarBolsaById,
+  insertBolsa
 }

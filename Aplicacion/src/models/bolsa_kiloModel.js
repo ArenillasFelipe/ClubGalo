@@ -43,13 +43,13 @@ async function insertBolsa_Kilo(id_bolsa, kilos_bolsa) {
 
 async function deleteBolsa_KiloById(id_bolsa_kilo) {
     const conn = await getConnection();
-    await conn.query('update from bolsas_kilos set validoBolsaKilo = false where id_bolsa_kilo = ?', id_bolsa_kilo);
+    await conn.query('update bolsas_kilos set validoBolsaKilo = false where id_bolsa_kilo = ?', id_bolsa_kilo);
     // conn.release();
 }
 
 async function deleteBolsas_KilosByIdBolsa(id_bolsa) {
     const conn = await getConnection();
-    await conn.query('update from bolsas_kilos set validoBolsaKilo = false where id_bolsa = ?', id_bolsa);
+    await conn.query('update bolsas_kilos set validoBolsaKilo = false where id_bolsa = ?', id_bolsa);
     // conn.release();
 }
 

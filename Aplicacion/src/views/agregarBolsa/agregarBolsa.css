@@ -186,6 +186,13 @@ label{
     font-weight: 800;
 }
 
+.swal2-container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 10px;
+  }
+
 
 
 .spanKiloBolsa:hover {
