@@ -896,7 +896,7 @@ function createWindowEditarCliente() {
         width: 900,
         height: 570,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -933,7 +933,7 @@ function createWindowAgregarCliente() {
             nodeIntegration: true
         }
     })
-    windowAgregarCliente.loadFile('src/ui/agregarCliente/agregarCliente.html'); //indica el archivo que se cargara en la ventana
+    windowAgregarCliente.loadFile('src/views/agregarCliente/agregarCliente.html'); //indica el archivo que se cargara en la ventana
 }
 let windows;
 let mainDocument;

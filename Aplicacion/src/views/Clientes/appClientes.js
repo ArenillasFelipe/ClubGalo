@@ -161,7 +161,7 @@ async function cambiarDatosMascota(idMascota, clienteConMascotas) {
     <p><span style="font-weight: 800;">Edad:</span> ${mascotaAMostrar.edad}</p>
     <p><span style="font-weight: 800;">Actividad:</span> ${mascotaAMostrar.actividad}</p>
     <p><span style="font-weight: 800;">Afecciones:</span> ${mascotaAMostrar.afecciones}</p>
-    <p><span style="font-weight: 800;">Cumpleaños:</span>${mascotaAMostrar.nacimiento}</p>`
+    <p><span style="font-weight: 800;">Cumpleaños:</span> ${mascotaAMostrar.nacimiento}</p>`
 
 }
 
@@ -172,14 +172,11 @@ function botonEditar(idCliente) {
 }
 
 async function botonBorrar(idCliente) {
-  let respuesta = await sweetAlertBorrar();
-  if (respuesta) {
-    await main.eliminarClienteMain(idCliente);
-    await Swal.fire(
-      '¡Borrado!',
-      'El cliente ha sido eliminado con exito.',
-      'success',
-    )
+  let confirma_borrado = await sweetAlerts.sweetAlertBorrarCliente();
+  if (confirma_borrado) {
+
+    await cliente_controller.borrarClienteById(idCliente);
+    await sweetAlerts.sweetAlertClienteBorradoConExito();
     main.recargarPaginaPrincipal();
   }
 }

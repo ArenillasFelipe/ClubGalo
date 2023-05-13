@@ -223,8 +223,7 @@ async function sweetAlertBorrarCliente() {
   let resultado;
   await Swal.fire({
     title: '¿Seguro que desea borrar el cliente?',
-    text: "Se perderan todos sus datos incluido su historial de venta y mascotas.",
-    footer: "No se podran revertir los cambios",
+    text: "No se podran revertir los cambios",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
@@ -240,6 +239,15 @@ async function sweetAlertBorrarCliente() {
   })
 
   return resultado;
+}
+
+
+async function sweetAlertClienteBorradoConExito() {
+  await Swal.fire(
+    '¡Borrado!',
+    'El cliente ha sido eliminado con exito.',
+    'success',
+  )
 }
 
 
@@ -273,6 +281,42 @@ async function sweetAlertCamposSinCompletar() {
   })
 }
 
+async function sweetAlertSinMascotas() {
+  await Swal.fire({
+      title: "Debe agregar al menos una mascota",
+      icon: "error",
+      backdrop: true,
+      showConfirmButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      stopKeydownPropagation: false,
+      position: "center",
+  })
+}
+
+
+async function sweetAlertBorrarMascota() {
+  let resultado;
+  await Swal.fire({
+    title: '¿Seguro que desea borrar la mascota?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonText: "Cancelar",
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Si, borrar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      resultado = true;
+    } else {
+      resultado = false;
+    }
+  })
+
+  return resultado;
+}
+
 
 module.exports = { 
     confirmar_borrado_venta, 
@@ -289,6 +333,9 @@ module.exports = {
     sweetAlert_confirmar_borrado_bolsa,
     sweetAlertBorrarCliente,
     sweetAlertGuardadoConExito,
-    sweetAlertCamposSinCompletar
+    sweetAlertCamposSinCompletar,
+    sweetAlertSinMascotas,
+    sweetAlertBorrarMascota,
+    sweetAlertClienteBorradoConExito
 }
   

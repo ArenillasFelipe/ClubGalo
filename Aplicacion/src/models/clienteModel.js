@@ -106,25 +106,26 @@ async function get20ClientesBySearch(busqueda, salto) {
 }
 
 async function updateClienteById(newCliente) {
-    newCliente.primernombre = capitalizar.capitalizarPalabras(newCliente.primernombre);
-    newCliente.nombrepila = capitalizar.capitalizarPalabras(newCliente.nombrepila);
-    newCliente.apellido = capitalizar.capitalizarPalabras(newCliente.apellido);
-    newCliente.calle = capitalizar.capitalizarPalabras(newCliente.calle);
+    newCliente.primernombre = capitalizarPalabras(newCliente.primernombre);
+    newCliente.nombrepila = capitalizarPalabras(newCliente.nombrepila);
+    newCliente.apellido = capitalizarPalabras(newCliente.apellido);
+    newCliente.calle = capitalizarPalabras(newCliente.calle);
 
     const conn = await getConnection();
-    await conn.query('update clientes set clientes.primernombre = ?, clientes.nombrepila = ?, clientes.apellido = ?, clientes.telefono = ?, clientes.calle = ?, clientes.calle_numero = ?, clientes.puntos = ? where clientes.id_cliente = ? and validoCliente = true', [newCliente.primernombre, newCliente.nombrepila, newCliente.apellido, newCliente.telefono, newCliente.calle, newCliente.calle_numero, newCliente.puntos, newCliente.idCliente]);
+    await conn.query('update clientes set clientes.primernombre = ?, clientes.nombrepila = ?, clientes.apellido = ?, clientes.telefono = ?, clientes.calle = ?, clientes.calle_numero = ?, clientes.puntos = ? where clientes.id_cliente = ? and validoCliente = true', [newCliente.primernombre, newCliente.nombrepila, newCliente.apellido, newCliente.telefono, newCliente.calle, newCliente.calle_numero, newCliente.puntos, newCliente.id_cliente]);
     // conn.release();
 }
 
 async function insertCliente(newCliente) {
-    newCliente.primernombre = capitalizar.capitalizarPalabras(newCliente.primernombre);
-    newCliente.nombrepila = capitalizar.capitalizarPalabras(newCliente.nombrepila);
-    newCliente.apellido = capitalizar.capitalizarPalabras(newCliente.apellido);
-    newCliente.calle = capitalizar.capitalizarPalabras(newCliente.calle);
+    newCliente.primernombre = capitalizarPalabras(newCliente.primernombre);
+    newCliente.nombrepila = capitalizarPalabras(newCliente.nombrepila);
+    newCliente.apellido = capitalizarPalabras(newCliente.apellido);
+    newCliente.calle = capitalizarPalabras(newCliente.calle);
 
     const conn = await getConnection();
-    await conn.query('insert into clientes(primernombre, nombrepila, apellido, telefono, calle, calle_numero, puntos) values(?, ?, ?, ?, ?, ?, ?)', [newCliente.primernombre, newCliente.nombrepila, newCliente.apellido, newCliente.telefono, newCliente.calle, newCliente.calle_numero, newCliente.puntos]);
+    let resultado = await conn.query('insert into clientes(primernombre, nombrepila, apellido, telefono, calle, calle_numero, puntos) values(?, ?, ?, ?, ?, ?, ?)', [newCliente.primernombre, newCliente.nombrepila, newCliente.apellido, newCliente.telefono, newCliente.calle, newCliente.calle_numero, newCliente.puntos]);
     // conn.release();
+    return resultado;
 }
 
 async function deleteClienteById(id_cliente) {

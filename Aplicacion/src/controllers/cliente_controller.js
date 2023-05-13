@@ -75,10 +75,24 @@ async function borrarClienteById(id_cliente) {
 }
 
 
+async function updateClienteById(newCliente) {
+    await clienteModel.updateClienteById(newCliente);
+}
+
+
+
+async function insertCliente(newCliente) {
+    let resultado = await clienteModel.insertCliente(newCliente);
+    return resultado.insertId;
+}
+
+
 module.exports = {
     getClienteSegunBusqueda,
     getClienteById,
     get20ClientesConMascotasBySearch,
     restarPuntosCliente,
-    borrarClienteById
+    borrarClienteById,
+    updateClienteById,
+    insertCliente
 }

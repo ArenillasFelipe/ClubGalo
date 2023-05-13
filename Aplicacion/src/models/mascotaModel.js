@@ -73,22 +73,22 @@ async function getMascotaById(id_mascota) {
 }
 
 async function updateMascotaById(newMascota) {
-    newMascota.nombremascota = capitalizar.capitalizarPalabras(newMascota.nombremascota);
-    newMascota.raza = capitalizar.capitalizarPalabras(newMascota.raza);
-    newMascota.animal = capitalizar.capitalizarPalabras(newMascota.animal);
-    newMascota.actividad = capitalizar.capitalizarPalabras(newMascota.actividad);
+    newMascota.nombremascota = capitalizarPalabras(newMascota.nombremascota);
+    newMascota.raza = capitalizarPalabras(newMascota.raza);
+    newMascota.animal = capitalizarPalabras(newMascota.animal);
+    newMascota.actividad = capitalizarPalabras(newMascota.actividad);
 
 
     const conn = await getConnection();
-    await conn.query('update mascotas set mascotas.animal = ?, mascotas.raza = ?, mascotas.peso = ?, mascotas.edad = ?, mascotas.actividad = ?, mascotas.afecciones = ?, mascotas.nacimiento = ?, mascotas.nombremascotamascota = ? where mascotas.id_mascota = ?;', [newMascota.animal, newMascota.raza, newMascota.peso, newMascota.edad, newMascota.actividad, newMascota.afecciones, newMascota.nacimiento, newMascota.nombremascotamascota, newMascota.idMascota]);
+    await conn.query('update mascotas set mascotas.animal = ?, mascotas.raza = ?, mascotas.peso = ?, mascotas.edad = ?, mascotas.actividad = ?, mascotas.afecciones = ?, mascotas.nacimiento = ?, mascotas.nombremascota = ? where mascotas.id_mascota = ?;', [newMascota.animal, newMascota.raza, newMascota.peso, newMascota.edad, newMascota.actividad, newMascota.afecciones, newMascota.nacimiento, newMascota.nombremascota, newMascota.id_mascota]);
     // conn.release();
 }
 
 async function insertMascota(newMascota) {
-    newMascota.nombremascota = capitalizar.capitalizarPalabras(newMascota.nombremascota);
-    newMascota.raza = capitalizar.capitalizarPalabras(newMascota.raza);
-    newMascota.animal = capitalizar.capitalizarPalabras(newMascota.animal);
-    newMascota.actividad = capitalizar.capitalizarPalabras(newMascota.actividad);
+    newMascota.nombremascota = capitalizarPalabras(newMascota.nombremascota);
+    newMascota.raza = capitalizarPalabras(newMascota.raza);
+    newMascota.animal = capitalizarPalabras(newMascota.animal);
+    newMascota.actividad = capitalizarPalabras(newMascota.actividad);
 
     const conn = await getConnection();
     await conn.query('insert into mascotas(nacimiento, nombremascota, raza, edad, peso, afecciones, animal, actividad, id_cliente) values(?, ?, ?, ?, ?, ?, ?, ?, ?)', [newMascota.nacimiento,newMascota.nombremascota,newMascota.raza,newMascota.edad,newMascota.peso,newMascota.afecciones,newMascota.animal, newMascota.actividad,newMascota.id_cliente]);
