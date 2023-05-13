@@ -65,7 +65,8 @@ async function get20Ventas(newBusqueda, salto) {
 async function borrarVenta_RestarPuntos(id_venta, confirmaRestarPuntos) {
     if (confirmaRestarPuntos) {
         let venta = await ventaModel.getVentaById(id_venta);
-        await clienteModel.restarPuntosClienteById(venta.puntos_obtenidos, venta.id_cliente);
+
+        await clienteModel.actualizarPuntosClienteById(venta.puntos_obtenidos, venta.id_cliente);
     }
 
     await venta_mascotaModel.deleteVenta_MascotaByIdVenta(id_venta);

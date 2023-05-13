@@ -1,8 +1,7 @@
-const { remote, app } = require('electron');
-const { get10mejoresclientesbolsas, get10mejoresclientespuntos, gettotalbolsas, createWindowVentasBolsas, gettotalpuntos, getmesmaspuntos, get20VentasPorBolsaSegunFiltros } = require('../../main');
-const main = remote.require('./main')
+// const { remote } = require('electron');
+// const main = remote.require('./main');
+const estadisticas_controller = require('../../controllers/estadisticas_controller');
 
-let algo = "";
 //////////////////////////////////////////////////////////////////mejores 10 por cantidad de bolsas
 select1 = document.getElementById("selecttiempobolsaspuntos");
 divForm1 = document.getElementById("divForm1");
@@ -72,32 +71,32 @@ select3.addEventListener('change', (e) => {
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-get10mejoresclientesbolsasapp(select1.value, algo);
-get10mejoresclientespuntosapp(select1.value, algo);
-gettotalbolsasapp(select3.value, algo);
-gettotalpuntosapp(select3.value, algo)
+get10mejoresclientesbolsasapp(select1.value);
+get10mejoresclientespuntosapp(select1.value);
+gettotalbolsasapp(select3.value);
+gettotalpuntosapp(select3.value);
 getmesmaspuntosapp();
 listenerBotonVentasBolsas();
 
 async function get10mejoresclientesbolsasapp(filtro, filtro2) {
 
-    let clientes = await get10mejoresclientesbolsas(filtro, filtro2);
+    let clientesConTotal = await estadisticas_controller.get10MejoresClientesPorCantidadBolsas(filtro, filtro2);
 
-    inner10mejoresporbolsas(clientes);
+    inner10mejoresporbolsas(clientesConTotal);
 
 }
 
 async function get10mejoresclientespuntosapp(filtro, filtro2) {
 
-    let clientes = await get10mejoresclientespuntos(filtro, filtro2);
+    let clientesConTotal = await estadisticas_controller.get10MejoresClientesPorCantidadPuntos(filtro, filtro2);
 
-    inner10mejoresporpuntos(clientes);
+    inner10mejoresporpuntos(clientesConTotal);
 
 }
 
 async function gettotalbolsasapp(filtro, filtro2) {
 
-    let total = await gettotalbolsas(filtro, filtro2);
+    let total = await estadisticas_controller.getTotalBolsas(filtro, filtro2);
 
     innertotalbolsas(total);
 
@@ -105,7 +104,7 @@ async function gettotalbolsasapp(filtro, filtro2) {
 
 async function gettotalpuntosapp(filtro, filtro2) {
 
-    let total = await gettotalpuntos(filtro, filtro2);
+    let total = await estadisticas_controller.getTotalPuntos(filtro, filtro2);
 
     innertotalpuntos(total);
 
@@ -113,20 +112,20 @@ async function gettotalpuntosapp(filtro, filtro2) {
 
 async function getmesmaspuntosapp() {
 
-    let mes = await getmesmaspuntos();
+    let mes = await estadisticas_controller.getMesMasPuntos();
 
     innermesmaspuntos(mes);
 
 }
 
 
-function inner10mejoresporbolsas(clientes) {
+function inner10mejoresporbolsas(clientesConTotal) {
     ol = document.getElementById("ol10mejoresporbolsas");
 
     ol.innerHTML = ""
 
 
-    clientes.forEach(element => {
+    clientesConTotal.forEach(element => {
         ol.innerHTML += `<li>${element.primernombre} ${element.nombrepila} ${element.apellido} (${element.totalbolsas})</li>`
     });
 
@@ -134,13 +133,13 @@ function inner10mejoresporbolsas(clientes) {
 
 }
 
-function inner10mejoresporpuntos(clientes) {
+function inner10mejoresporpuntos(clientesConTotal) {
     ol = document.getElementById("ol10mejoresporpuntos");
 
     ol.innerHTML = ""
 
 
-    clientes.forEach(element => {
+    clientesConTotal.forEach(element => {
         ol.innerHTML += `<li>${element.primernombre} ${element.nombrepila} ${element.apellido} (${element.puntos_obtenidos_total})</li>`
     });
 
@@ -153,19 +152,18 @@ function innertotalbolsas(total) {
     let h2 = document.getElementById("h2totalbolsas");
     console.log(total);
     h2.innerHTML = ""
-    h2.innerHTML += total[0].totalbolsas;
+    h2.innerHTML += total.totalbolsas;
 }
 
 function innertotalpuntos(total) {
     let h2 = document.getElementById("h2totalpuntos");
     console.log(total);
     h2.innerHTML = ""
-    h2.innerHTML += total[0].puntos_obtenidos_total;
+    h2.innerHTML += total.puntos_obtenidos_total;
 }
 
 function innermesmaspuntos(mes) {
     let h2 = document.getElementById("h2mes");
-    mes = mes[0].mes;
     h2.innerHTML = "";
     console.log("mes:", mes)
     switch (mes) {

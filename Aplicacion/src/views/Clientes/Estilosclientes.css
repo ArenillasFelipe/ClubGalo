@@ -118,12 +118,12 @@ nav a:hover {
 
 .busqueda {
   position: absolute;
-  right: 435px;
+  right: 475px;
   top: 25px;
 }
 
 #barra-busqueda {
-  width: 320px;
+  width: 300px;
   right: 50px;
   position: relative;
   border-color: #404198;
