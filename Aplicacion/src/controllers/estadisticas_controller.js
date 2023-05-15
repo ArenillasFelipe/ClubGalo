@@ -26,8 +26,15 @@ async function getTotalPuntos(filtroPrincipal, filtroMes) {
 
 async function getMesMasPuntos() {
     let mes = await estadisticasModel.getmesmaspuntos();
-    return mes[0];
+    return mes[0].mes;
 }
+
+
+async function getVentasPorBolsaSegunFiltros(filtroPrincipal, filtroMes) {
+    let ventasPorBolsa = await estadisticasModel.getVentasPorBolsaSegunFiltros(filtroPrincipal, filtroMes);
+    return ventasPorBolsa;
+}
+
 
 
 module.exports = {
@@ -35,5 +42,6 @@ module.exports = {
     get10MejoresClientesPorCantidadPuntos,
     getMesMasPuntos,
     getTotalPuntos,
-    getTotalBolsas
+    getTotalBolsas,
+    getVentasPorBolsaSegunFiltros
 }

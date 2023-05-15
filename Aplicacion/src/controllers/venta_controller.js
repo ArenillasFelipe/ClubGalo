@@ -63,10 +63,16 @@ async function get20Ventas(newBusqueda, salto) {
 
 
 async function borrarVenta_RestarPuntos(id_venta, confirmaRestarPuntos) {
+
     if (confirmaRestarPuntos) {
         let venta = await ventaModel.getVentaById(id_venta);
+        let cliente = await clienteModel.getClienteById(venta.id_cliente);
 
-        await clienteModel.actualizarPuntosClienteById(venta.puntos_obtenidos, venta.id_cliente);
+
+        let nuevosPuntosCliente = cliente.puntos - venta.puntos_obtenidos + venta.puntos_canjeados;
+        console.log(nuevosPuntosCliente);
+
+        await clienteModel.actualizarPuntosClienteById(venta.id_cliente, nuevosPuntosCliente);
     }
 
     await venta_mascotaModel.deleteVenta_MascotaByIdVenta(id_venta);
@@ -111,8 +117,34 @@ async function getVentasActivasByIdCliente(id_cliente) {
 
 
 
-async function insertarVenta(newVenta, idMascotasVenta) {
+async function insertarVenta(newVenta, idMascotasVenta, puntosActualesCliente, nuevosPuntosCliente) {
     console.log("Mascotas seleccionadas: ", idMascotasVenta);
+
+
+
+        switch (newVenta.calidad_bolsa) {
+            case "BAJA":
+                newVenta.puntos_obtenidos = newVenta.kilos_bolsa * newVenta.cantidad
+                break;
+            case "INTERMEDIA":
+                newVenta.puntos_obtenidos = newVenta.kilos_bolsa * newVenta.cantidad * 2
+                break;
+            case "PREMIUM":
+                newVenta.puntos_obtenidos = newVenta.kilos_bolsa * newVenta.cantidad * 3
+                break;
+            case "SUPER PREMIUM":
+                newVenta.puntos_obtenidos = newVenta.kilos_bolsa * newVenta.cantidad * 4
+                break;
+            default:
+                break;
+        }
+
+
+    newVenta.puntos_canjeados = puntosActualesCliente - nuevosPuntosCliente;
+
+    nuevosPuntosCliente = nuevosPuntosCliente + newVenta.puntos_obtenidos;
+
+    await clienteModel.actualizarPuntosClienteById(newVenta.id_cliente, nuevosPuntosCliente);
 
 
     for (let i = 0; i < idMascotasVenta.length; i++) {

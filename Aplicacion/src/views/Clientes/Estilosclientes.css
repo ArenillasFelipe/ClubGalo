@@ -56,6 +56,12 @@ header {
   animation-duration: 2s;
   border: 1px solid black;
   outline: none;
+  transition-duration: 0.2s;
+}
+
+#agregarCliente:hover {
+  transform: translateY(-1px);
+  box-shadow: 2px 8px 10px;
 }
 
 .logo {
@@ -146,20 +152,6 @@ nav a:hover {
 }
 
 
-.proto-venta {
-  height: 110px;
-  width: 1000px;
-  background-color: white;
-  box-shadow: 3px 3px 10px;
-  border-radius: 10px;
-  margin: 20px auto;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  animation: slide 1.5s;
-}
-
-
 
 @keyframes slide {
   from {
@@ -189,7 +181,7 @@ nav a:hover {
   width: 1000px;
   background-color: white;
   box-shadow: 3px 3px 10px;
-  border-radius: 10px;
+  border-radius: 10px 0px 10px 10px;
   margin: 20px auto;
   display: flex;
   justify-content: space-between;
@@ -317,7 +309,7 @@ nav a:hover {
   left: 460px;
   width: 540px;
   height: 200px;
-  border-radius: 0px 10px 10px 0px;
+  border-radius: 0px 0px 10px 0px;
   -webkit-box-shadow: inset 10px 0px 15px -4px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: inset 10px 0px 15px -4px rgba(0, 0, 0, 0.75);
   box-shadow: inset 10px 0px 15px -4px rgba(0, 0, 0, 0.75);
@@ -355,14 +347,19 @@ nav a:hover {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: medium;
-  border: none;
+  border: 2px solid transparent;
   cursor: pointer;
-  transition: .5s ease all;
+  transition: .3s ease all;
   outline: none;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .btn-borrar:hover {
-  border: 2px solid black;
+  z-index: 1;
+  animation: bordeNegro 0.3s forwards;
+  -webkit-box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
 }
 
 .btn-editar {
@@ -377,16 +374,29 @@ nav a:hover {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: medium;
-  border: none;
+  border: 2px solid transparent;
   cursor: pointer;
-  transition: .5s ease all;
+  transition: .3s ease all;
   outline: none;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .btn-editar:hover {
-  border: 2px solid black;
+  z-index: 1;
+  animation: bordeNegro 0.3s forwards;
+  -webkit-box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
 }
 
+@keyframes bordeNegro {
+  0% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: black;
+  }
+}
 
 
 

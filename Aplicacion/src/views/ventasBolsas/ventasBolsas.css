@@ -16,6 +16,14 @@ input::-webkit-inner-spin-button {
   z-index: 1;
   font-weight: 600;
   font-size: large;
+  cursor: pointer;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#btnExportar:hover {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+  transform: translateY(-1px);
 }
 
 
@@ -72,10 +80,12 @@ body::-webkit-scrollbar {
     height: 32px;
     border-radius: 50%;
     outline: none;
+    transition-duration: 0.1s;
 }
 
-#btnCruz:hover {
-    box-shadow: 0px 1px 10px;
+#btnCruz:hover{
+  transform: translateY(-1px);
+  box-shadow: 0px 1px 10px;
 }
 
 
@@ -242,7 +252,7 @@ table {
   .divFlechaArriba {
     position: fixed;
     top: 90%;
-    right: 820px;
+    right: 830px;
   }
 
   @keyframes deslizarDesdeIzquierda {

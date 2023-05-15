@@ -2,6 +2,7 @@ const { remote } = require('electron');
 const main = remote.require('./main');
 const cliente_controller = require('../../controllers/cliente_controller');
 const sweetAlerts = require('../../utils/sweetAlerts');
+const { calcularEdadMascota } = require('../../utils/calcularFechas');
 
 
 
@@ -51,6 +52,8 @@ formBuscador.addEventListener('submit', (e) => {
 
 });
 
+
+localStorage.clear();
 get20ClientesConMascotas();
 async function get20ClientesConMascotas(busqueda) {
   let resultado = await cliente_controller.get20ClientesConMascotasBySearch(busqueda, salto);
@@ -155,13 +158,15 @@ async function cambiarDatosMascota(idMascota, clienteConMascotas) {
   idMostrandoDatos = "mostrando-datos" + clienteConMascotas.cliente.id_cliente;
   mostrandoDatos = document.getElementById(idMostrandoDatos);
 
+  let edadMascota = calcularEdadMascota(mascotaAMostrar.nacimiento);
+
   mostrandoDatos.innerHTML = `<p><span style="font-weight: 800;">Animal:</span> ${mascotaAMostrar.animal}</p>
     <p><span style="font-weight: 800;">Raza:</span> ${mascotaAMostrar.raza}</p>
     <p><span style="font-weight: 800;">Peso:</span> ${mascotaAMostrar.peso}</p>
-    <p><span style="font-weight: 800;">Edad:</span> ${mascotaAMostrar.edad}</p>
+    <p><span style="font-weight: 800;">Edad:</span> ${edadMascota}</p>
     <p><span style="font-weight: 800;">Actividad:</span> ${mascotaAMostrar.actividad}</p>
     <p><span style="font-weight: 800;">Afecciones:</span> ${mascotaAMostrar.afecciones}</p>
-    <p><span style="font-weight: 800;">Cumpleaños:</span> ${mascotaAMostrar.nacimiento}</p>`
+    <p><span style="font-weight: 800;">Nacimiento:</span> ${mascotaAMostrar.nacimiento}</p>`
 
 }
 

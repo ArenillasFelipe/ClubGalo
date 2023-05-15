@@ -41,16 +41,16 @@ async function get10mejoresclientespuntos(filtro, filtro2) {
     if (filtro == "anio") {
         anio = new Date();
         anio = anio.getFullYear();
-        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente where YEAR(venta.fecha) = ? group by clientes.id_cliente order by puntos_obtenidos DESC LIMIT 10;', anio);
+        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente where YEAR(venta.fecha) = ? group by clientes.id_cliente order by puntos_obtenidos_total DESC LIMIT 10;', anio);
         return resultado;
     } else if (filtro == "total") {
-        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente group by clientes.id_cliente order by puntos_obtenidos DESC LIMIT 10;');
+        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente group by clientes.id_cliente order by puntos_obtenidos_total DESC LIMIT 10;');
         return resultado;
     } else if (filtro == "elegir" && filtro2 != "") {
         anio = filtro2[0] + filtro2[1] + filtro2[2] + filtro2[3];
         mes = filtro2[5] + filtro2[6];
         console.log("anio:", anio, "Mes:", mes);
-        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente where YEAR(venta.fecha) = ? and MONTH(venta.fecha) = ? group by clientes.id_cliente order by puntos_obtenidos DESC LIMIT 10;', [anio, mes]);
+        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente where YEAR(venta.fecha) = ? and MONTH(venta.fecha) = ? group by clientes.id_cliente order by puntos_obtenidos_total DESC LIMIT 10;', [anio, mes]);
         console.log("resultado:", resultado);
         return resultado;
     } else if (filtro == "anioatras") {
@@ -59,7 +59,7 @@ async function get10mejoresclientespuntos(filtro, filtro2) {
         let mes = fechaActual.getMonth() + 1;
         console.log("mes que queremos ver:", mes);
         let dia = fechaActual.getDate();
-        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente where venta.fecha >= "?-?-?" group by clientes.id_cliente order by puntos_obtenidos DESC LIMIT 10;', [aniomenos, mes, dia]);
+        const resultado = await conn.query('select clientes.*, sum(venta.puntos_obtenidos) as puntos_obtenidos_total from clientes inner join venta on venta.id_cliente = clientes.id_cliente where venta.fecha >= "?-?-?" group by clientes.id_cliente order by puntos_obtenidos_total DESC LIMIT 10;', [aniomenos, mes, dia]);
         console.log("resultado:", resultado);
         return resultado;
     }
@@ -143,11 +143,45 @@ async function getmesmaspuntos() {
 }
 
 
+async function getVentasPorBolsaSegunFiltros(filtro, filtro2) {
+    const conn = await getConnection();
+
+    console.log(filtro, filtro2);
+
+    if (filtro == "anio") {
+        anio = new Date();
+        anio = anio.getFullYear();
+        const resultado = await conn.query('select marca_bolsa, sum(cantidad) as cantventas from venta where year(fecha) = ? group by marca_bolsa order by cantventas DESC', anio);
+        return resultado;
+    } else if (filtro == "total") {
+        const resultado = await conn.query('select marca_bolsa, sum(cantidad) as cantventas from venta group by marca_bolsa order by cantventas DESC');
+        return resultado;
+    } else if (filtro == "elegir" && filtro2 != "") {
+        anio = filtro2[0] + filtro2[1] + filtro2[2] + filtro2[3];
+        mes = filtro2[5] + filtro2[6];
+        console.log("anio:", anio, "Mes:", mes);
+        const resultado = await conn.query('select marca_bolsa, sum(cantidad) as cantventas from venta where YEAR(venta.fecha) = ? and MONTH(venta.fecha) = ? group by marca_bolsa order by cantventas DESC', [anio, mes]);
+        console.log("resultado:", resultado);
+        return resultado;
+    } else if (filtro == "anioatras") {
+        let fechaActual = new Date();
+        let aniomenos = fechaActual.getFullYear() - 1;
+        let mes = fechaActual.getMonth() + 1;
+        console.log("mes que queremos ver:", mes);
+        let dia = fechaActual.getDate();
+        const resultado = await conn.query('select marca_bolsa, sum(cantidad) as cantventas from venta where venta.fecha >= "?-?-?" group by marca_bolsa order by cantventas DESC', [aniomenos, mes, dia]);
+        console.log("resultado:", resultado);
+        return resultado;
+    }
+}
+
+
 
 module.exports = {
     get10mejoresclientesbolsas,
     get10mejoresclientespuntos,
     getmesmaspuntos,
     gettotalbolsas,
-    gettotalpuntos
+    gettotalpuntos,
+    getVentasPorBolsaSegunFiltros
 }

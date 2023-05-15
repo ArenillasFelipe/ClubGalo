@@ -1,18 +1,19 @@
 const { getConnection } = require('../database');
+const { convertirMayusculas } = require('../utils/palabras');
 
 class Venta {
-  constructor(fecha, precio, id_cliente, cantidad, id_bolsa_kilo, marca_bolsa, kilos_bolsa, calidad_bolsa, activo, totalventa, puntos_obtenidos, id_venta) {
+  constructor(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, activo, totalventa, puntos_obtenidos, puntos_canjeados, id_venta) {
     this.fecha = fecha;
     this.precio = precio;
     this.id_cliente = id_cliente;
     this.cantidad = cantidad;
-    this.id_bolsa_kilo = id_bolsa_kilo;
     this.marca_bolsa = marca_bolsa;
     this.kilos_bolsa = kilos_bolsa;
     this.calidad_bolsa = calidad_bolsa;
     this.activo = activo;
     this.totalventa = totalventa;
     this.puntos_obtenidos = puntos_obtenidos;
+    this.puntos_canjeados = puntos_canjeados;
     this.id_venta = id_venta;
   }
 }
@@ -26,13 +27,13 @@ async function get20Ventas(salto) {
     ventaData.precio,
     ventaData.id_cliente,
     ventaData.cantidad,
-    ventaData.id_bolsa_kilo,
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
+    ventaData.puntos_canjeados,
     ventaData.id_venta
   ));
 }
@@ -49,13 +50,13 @@ async function getVentaById(id_venta) {
     ventaData.precio,
     ventaData.id_cliente,
     ventaData.cantidad,
-    ventaData.id_bolsa_kilo,
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
+    ventaData.puntos_canjeados,
     ventaData.id_venta
   );
 }
@@ -88,7 +89,7 @@ async function get20VentasBySearch(busqueda, salto) {
     }
   } else {
     let busquedaMod = "%" + busqueda + "%";
-    result = await conn.query(`select venta.* from venta inner join bolsas_kilos on bolsas_kilos.id_bolsa_kilo = venta.id_bolsa_kilo inner join bolsas on bolsas.id_bolsa = bolsas_kilos.id_bolsa where venta.precio like ? or venta.totalventa like ? or bolsas.marca_bolsa like ? or bolsas_kilos.kilos_bolsa like ? order by venta.fecha DESC LIMIT ?, 20;`, [busquedaMod, busquedaMod, busquedaMod, busquedaMod, salto]);
+    result = await conn.query(`select venta.* from venta where precio like ? or totalventa like ? or marca_bolsa like ? or kilos_bolsa like ? or calidad_bolsa like ? order by fecha DESC LIMIT ?, 20;`, [busquedaMod, busquedaMod, busquedaMod, busquedaMod, busquedaMod, salto]);
     // conn.release();
   }
 
@@ -99,20 +100,21 @@ async function get20VentasBySearch(busqueda, salto) {
     ventaData.precio,
     ventaData.id_cliente,
     ventaData.cantidad,
-    ventaData.id_bolsa_kilo,
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
+    ventaData.puntos_canjeados,
     ventaData.id_venta
   ));
 }
 
 async function insertVenta(newVenta) {
   const conn = await getConnection();
-  result = await conn.query('insert into venta(fecha, precio, id_cliente, cantidad, id_bolsa_kilo, marca_bolsa, kilos_bolsa, calidad_bolsa, activo) values(?, ?, ?, ?, ?, ?, ?, ?, ?)', [newVenta.fecha, newVenta.precio, newVenta.id_cliente, newVenta.cantidad, newVenta.id_bolsa_kilo, newVenta.marca_bolsa, newVenta.kilos_bolsa, newVenta.calidad_bolsa, newVenta.activo]);
+  newVenta.marca_bolsa = convertirMayusculas(newVenta.marca_bolsa);
+  result = await conn.query('insert into venta(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, activo, puntos_obtenidos, puntos_canjeados) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [newVenta.fecha, newVenta.precio, newVenta.id_cliente, newVenta.cantidad, newVenta.marca_bolsa, newVenta.kilos_bolsa, newVenta.calidad_bolsa, newVenta.activo, newVenta.puntos_obtenidos, newVenta.puntos_canjeados]);
   // conn.release();
   return result;
 }
@@ -160,13 +162,13 @@ async function get20VentasByIdClienteByFilters(id_cliente, filtro, filtroMes, sa
     ventaData.precio,
     ventaData.id_cliente,
     ventaData.cantidad,
-    ventaData.id_bolsa_kilo,
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
+    ventaData.puntos_canjeados,
     ventaData.id_venta
   ));
 }
@@ -181,13 +183,13 @@ async function getVentasActivasByIdCliente(id_cliente) {
     ventaData.precio,
     ventaData.id_cliente,
     ventaData.cantidad,
-    ventaData.id_bolsa_kilo,
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
+    ventaData.puntos_canjeados,
     ventaData.id_venta
   ));
 }
@@ -202,13 +204,13 @@ async function getUltimas20VentasByIdCliente(id_cliente) {
     ventaData.precio,
     ventaData.id_cliente,
     ventaData.cantidad,
-    ventaData.id_bolsa_kilo,
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
+    ventaData.puntos_canjeados,
     ventaData.id_venta
   ));
 }

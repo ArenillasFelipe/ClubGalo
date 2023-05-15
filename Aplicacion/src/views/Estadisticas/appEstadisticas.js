@@ -1,5 +1,5 @@
-// const { remote } = require('electron');
-// const main = remote.require('./main');
+const { remote } = require('electron');
+const main = remote.require('./main');
 const estadisticas_controller = require('../../controllers/estadisticas_controller');
 
 //////////////////////////////////////////////////////////////////mejores 10 por cantidad de bolsas

@@ -1,6 +1,11 @@
 .datos-mascota {
-    animation: aparecer 2s alternate 1
+    animation-delay: 0.2s;
+    animation-name: aparecer;
+    animation-duration: 0.5s;
+    opacity: 0;
+    animation-fill-mode: forwards;
 }
+
 
 body::-webkit-scrollbar {
     width: 10px;
@@ -15,10 +20,12 @@ body::-webkit-scrollbar {
 
 @keyframes aparecer {
     from {
+        transform: scale(0);
         opacity: 0;
     }
 
     to {
+        transform: scale(1);
         opacity: 1;
     }
 }
@@ -223,7 +230,7 @@ nav a:hover {
     margin: auto;
     margin-top: 10px;
     border: 5px solid #404198;
-    width: 1050px;
+    width: 525px;
     height: 200px;
     position: relative;
     display: flex;
@@ -232,7 +239,16 @@ nav a:hover {
     background-color: white;
     margin-right: none;
     animation: slide 1s;
+    transition: width 0.8s ease;
 }
+
+.ingreso.ampliado {
+    width: 1050px;
+}
+
+
+
+  
 
 @keyframes slide {
     from {
@@ -349,46 +365,14 @@ p {
 
 }
 
-.css-button-shadow-border-sliding--green {
-    min-width: 100px;
-    left: 192px;
-    height: 30px;
-    color: #fff;
-    padding: 5px 10px;
-    font-weight: bold;
+#spanNombreCliente {
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    display: inline-block;
-    outline: none;
-    border-radius: 5px;
-    border: none;
-    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
-    background: #2f9b05;
-    z-index: 1;
 }
 
-.css-button-shadow-border-sliding--green:hover:after {
-    width: 100%;
-    left: 0;
-}
-
-.css-button-shadow-border-sliding--green:after {
-    border-radius: 5px;
-    position: absolute;
-    content: "";
-    width: 0;
-    height: 100%;
-    top: 0;
-    z-index: -1;
-    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5), 7px 7px 20px 0px rgba(0, 0, 0, .1), 4px 4px 5px 0px rgba(0, 0, 0, .1);
-    transition: all 0.3s ease;
-    background-color: #57cc99;
-    right: 0;
-}
-
-.css-button-shadow-border-sliding--green:active {
-    top: 2px;
+#spanNombreCliente:hover{
+    color: #404198;
+    font-weight: 700;
 }
 
 
@@ -467,6 +451,7 @@ p {
     left: 157px;
     top: 90px;
     width: 300px;
+    font-weight: 800;
 }
 
 .pcantbolsas {
@@ -477,6 +462,7 @@ p {
     left: 180px;
     top: 90px;
     width: 300px;
+    font-weight: 800;
 }
 
 .inputcantidad {
@@ -549,12 +535,14 @@ select {
     font-size: medium;
     border: none;
     cursor: pointer;
-    transition: .5s ease all;
     outline: none;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
 }
 
 .btn-ejecutar:hover {
-    border: 2px solid black;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
 }
 
 .btn-borrar {
@@ -570,12 +558,14 @@ select {
     font-size: medium;
     border: none;
     cursor: pointer;
-    transition: .5s ease all;
     outline: none;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
 }
 
 .btn-borrar:hover {
-    border: 2px solid black;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
 }
 
 
@@ -584,6 +574,11 @@ select {
     position: relative;
     left: 1005px;
     top: 140px;
+    animation-delay: 1.4s;
+    animation-name: aparecer;
+    animation-duration: 0.2s;
+    opacity: 0;
+    animation-fill-mode: forwards;
 }
 
 
@@ -604,7 +599,7 @@ input::-webkit-inner-spin-button {
 
 #borrar {
     position: relative;
-    left: 0px;
+    left: 20px;
     top: 0px;
     height: 30px;
     width: 90px;
@@ -615,12 +610,37 @@ input::-webkit-inner-spin-button {
     font-size: medium;
     border: none;
     cursor: pointer;
-    transition: .5s ease all;
     outline: none;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
 }
 
 #borrar:hover {
-    border: 2px solid black;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+#verificar {
+    position: relative;
+    left: 212px;
+    top: 0px;
+    height: 30px;
+    width: 90px;
+    background: #2f9b05;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: medium;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#verificar:hover {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
 }
 
 #mascota {
@@ -666,6 +686,13 @@ b {
     transition: .5s ease all;
     outline: none;
     border-radius: 4px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#btnRestarPuntos:hover {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-1px);
 }
 
 #divBotonRestarPuntos {
@@ -909,4 +936,37 @@ box-shadow: inset 30px 0px 30px -15px rgba(0,0,0,0.75);
     -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+}
+
+
+.restaurarPuntos {
+    position: absolute;
+    left: 30px;
+    top: 4px;
+    height: 20px;
+    width: 80px;
+    background: #2f9b05;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: medium;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.restaurarPuntos:hover {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-1px);
+}
+
+
+
+.h4SinVentas{
+    color: rgb(180, 180, 180);
+    position: relative;
+    top: 45px;
+    font-size: 25px;
 }

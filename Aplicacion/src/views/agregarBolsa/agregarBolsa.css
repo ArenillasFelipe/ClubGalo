@@ -47,10 +47,12 @@ body {
     height: 32px;
     border-radius: 50%;
     outline: none;
+    transition-duration: 0.1s;
 }
 
 #btnCruz:hover{
-    box-shadow: 0px 1px 10px;
+  transform: translateY(-1px);
+  box-shadow: 0px 1px 10px;
 }
 
 
@@ -107,7 +109,7 @@ label{
     height: 60px;
 }
 
-#btnAgregar{
+#btnAgregar {
     top: 160px;
     left: 160px;
     position: absolute;
@@ -123,6 +125,13 @@ label{
     transition: .2s ease all;
     outline: none;
     font-weight: 600;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#btnAgregar:hover {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-1px);
 }
 
 
@@ -169,8 +178,7 @@ label{
     font-weight: 800;
 }
 
-
-#container-btnGuardar button{
+#container-btnGuardar button {
     border: 2px solid black;
     height: 30px;
     width: 120px;
@@ -184,6 +192,13 @@ label{
     transition: .2s ease all;
     outline: none;
     font-weight: 800;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#container-btnGuardar button:hover {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
 }
 
 .swal2-container {

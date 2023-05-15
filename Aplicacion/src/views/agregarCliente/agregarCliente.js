@@ -3,6 +3,7 @@ const main = remote.require('./main');
 const cliente_controller = require('../../controllers/cliente_controller');
 const mascota_controller = require('../../controllers/mascota_controller');
 const sweetAlerts = require('../../utils/sweetAlerts');
+const { calcularEdadMascota } = require('../../utils/calcularFechas');
 
 let mascotas = [];
 let temporalmascotasIDs = 0;
@@ -22,7 +23,7 @@ let input_nombremascota = document.getElementById("input-nombremascota");
 let input_animal = document.getElementById("input-animal");
 let input_raza = document.getElementById("input-raza");
 let input_peso = document.getElementById("input-peso");
-let input_edad = document.getElementById("input-edad");
+let spanEdad = document.getElementById("spanEdad");
 let input_actividad = document.getElementById("input-actividad");
 let input_afecciones = document.getElementById("input-afecciones");
 let input_diacumple = document.getElementById("input-diacumple");
@@ -76,7 +77,7 @@ async function cambiarInputsMascota(idMascota) {
         input_nombremascota.value = "";
         input_raza.value = "Sin raza";
         input_peso.value = "";
-        input_edad.value = "";
+        spanEdad.textContent = "";
         input_actividad.value = "";
         input_afecciones.value = "Ninguna";
         input_diacumple.value = "";
@@ -96,7 +97,10 @@ async function cambiarInputsMascota(idMascota) {
         input_animal.value = mascotaAMostrar.animal
         input_raza.value = mascotaAMostrar.raza
         input_peso.value = mascotaAMostrar.peso
-        input_edad.value = mascotaAMostrar.edad
+
+        let edadMascota = calcularEdadMascota(mascotaAMostrar.nacimiento);
+        spanEdad.textContent = " " + edadMascota;
+
         input_actividad.value = mascotaAMostrar.actividad
         input_afecciones.value = mascotaAMostrar.afecciones
 
@@ -139,7 +143,7 @@ async function eliminarMascota(idMascota) {
 
 async function actualizarMascota(idMascota) {
 
-    if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_edad.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
+    if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
         sweetAlerts.sweetAlertCamposSinCompletar();
         return
     }
@@ -154,7 +158,6 @@ async function actualizarMascota(idMascota) {
         mascotas[indice].animal = input_animal.value;
         mascotas[indice].raza = input_raza.value;
         mascotas[indice].peso = input_peso.value;
-        mascotas[indice].edad = input_edad.value;
         mascotas[indice].actividad = input_actividad.value;
         mascotas[indice].afecciones = input_afecciones.value;
         mascotas[indice].nacimiento = `${parseInt(input_diacumple.value)}/${parseInt(input_mescumple.value)}/${parseInt(input_aniocumple.value)}`
@@ -193,7 +196,6 @@ async function agregarMascotaapp() {
     newMascota.animal = input_animal.value;
     newMascota.raza = input_raza.value;
     newMascota.peso = input_peso.value;
-    newMascota.edad = input_edad.value;
     newMascota.actividad = input_actividad.value;
     newMascota.afecciones = input_afecciones.value;
     newMascota.nacimiento = `${parseInt(input_diacumple.value)}/${parseInt(input_mescumple.value)}/${parseInt(input_aniocumple.value)}`
@@ -287,7 +289,7 @@ function listenerGuardarNewMascota() {
 
     btnGuardarNewMascota.addEventListener('click', (e) => {
         e.preventDefault();
-        if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_edad.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
+        if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
             sweetAlerts.sweetAlertCamposSinCompletar();
         } else {
             actualizarMascota();

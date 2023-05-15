@@ -2,15 +2,20 @@ const venta_controller = require('../../controllers/venta_controller');
 const bolsa_controller = require('../../controllers/bolsa_controller');
 const mascota_controller = require('../../controllers/mascota_controller');
 const cliente_controller = require('../../controllers/cliente_controller');
-
+const { remote } = require('electron');
+const main = remote.require('./main');
 const { Venta } = require('../../models/ventaModel');
 const sweetAlerts = require('../../utils/sweetAlerts');
-const calcularDias = require('../../utils/calcularDias');
+const calcularFechas = require('../../utils/calcularFechas');
+
+let cliente;
+let nuevosPuntos;
 
 let inputCliente = document.getElementById("inputCliente");
 inputCliente.focus();
 
 const formCliente = document.getElementById("form-ingreso");
+
 
 formCliente.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -23,7 +28,7 @@ const MainFunctionVenta = async () => {
 
 
     //obtengo el cliente segun lo ingresado en el input
-    let cliente
+
     try {
         cliente = await cliente_controller.getClienteSegunBusqueda(inputCliente.value);
     } catch (error) {
@@ -39,6 +44,10 @@ const MainFunctionVenta = async () => {
     }
     ///////////////////////////////////////////
 
+    nuevosPuntos = cliente.puntos;
+
+    let divIngreso = document.getElementById("ingreso");
+    divIngreso.classList.add('ampliado');
 
     //obtengo las mascotas del cliente
     let mascotas = await mascota_controller.getMascotasByIdCliente(cliente.id_cliente);
@@ -50,23 +59,15 @@ const MainFunctionVenta = async () => {
     try {
         historialVentasConBolsas = await venta_controller.get20UltimasVentasByIdCliente(cliente.id_cliente);
     } catch (error) {
-        if (error.message == "sinVentas") {
-            //TODO: poner texto sin ventas en historial de ventas
-            console.log("no trajo ninguna venta");
-        }
+        console.log(error);
     }
     ////////////////////////////////////////////////////
 
-    console.log(cliente, mascotas, historialVentasConBolsas);
 
 
     //llamo a la funcion para rellenar la pantalla a partir de los datos obtenidos
-    innerCliente(cliente, mascotas, historialVentasConBolsas);
+    innerCliente(mascotas, historialVentasConBolsas);
     //////////////////////////////////////////////////////////////
-
-    //llamo a la funcion para traer las ventas activas(a las que se les esta realizando seguimiento) del cliente
-    let ventasActivas = venta_controller.getVentasActivasByIdCliente(cliente.id_cliente);
-    ///////////////////////////////////////////////////////////////////////////////////////////
 
 
     //creo el listener del select para ver los datos de las mascotas
@@ -98,7 +99,19 @@ const MainFunctionVenta = async () => {
 }
 
 
+preguntarClienteEditado();
+async function preguntarClienteEditado() {
 
+    //pregunto si se esta recargando la pagina por haber editado el cliente
+    let idClienteEditado = localStorage.getItem("ClienteEditado");
+    localStorage.clear();
+
+    if (idClienteEditado) {
+        inputCliente.value = idClienteEditado;
+        MainFunctionVenta();
+    }
+
+}
 
 
 
@@ -120,7 +133,9 @@ formCliente.addEventListener('reset', (e) => {
     agregado.innerHTML = "";
     inputCliente.value = "";
     divVentasActivas.innerHTML = "";
-
+    let divIngreso = document.getElementById("ingreso");
+    divIngreso.classList.remove('ampliado');
+    inputCliente.focus();
 })
 
 
@@ -133,15 +148,38 @@ function mostrarDatos(mascotas) {
 
     let mostrandoDatos = document.getElementById("mostrando-datos");
 
+    let edadMascota = calcularFechas.calcularEdadMascota(mascota.nacimiento);
+
     mostrandoDatos.innerHTML = ""
     mostrandoDatos.innerHTML +=
         `<p><b>Animal:</b> ` + mascota.animal + `</p>
     <p><b>Raza:</b> ` + mascota.raza + `</p>
     <p><b>Peso:</b> ` + mascota.peso + `</p>
-    <p><b>Edad:</b> ` + mascota.edad + `</p>
+    <p><b>Edad:</b> ` + edadMascota + `</p>
     <p><b>Actividad:</b> ` + mascota.actividad + `</p>
-    <p><b>Afecciones:</b> ` + mascota.afecciones + `</p>
-    <p><b>Cumpleaños:</b> ` + mascota.nacimiento + `</p>`
+    <p><b>Afecciones:</b> ` + mascota.afecciones + `</p>`
+
+
+    let fechaActual = new Date();
+
+    let diaActual = fechaActual.getDate();
+    let mesActual = fechaActual.getMonth() + 1;
+
+    const partesFecha = mascota.nacimiento.split("/"); // Separar la fecha en tres partes
+
+    let diaMascota = parseInt(partesFecha[0]);
+    let mesMascota = parseInt(partesFecha[1]);
+
+    console.log(diaActual, diaMascota, mesActual, mesMascota)
+
+    if (diaActual == diaMascota && mesActual == mesMascota) {
+        mostrandoDatos.innerHTML += `<p style="color: firebrick;"><b>Nacimiento:</b> ` + mascota.nacimiento + `</p>`
+    } else {
+        mostrandoDatos.innerHTML += `<p><b>Nacimiento:</b> ` + mascota.nacimiento + `</p>`
+    }
+
+
+
 
 
 
@@ -153,33 +191,33 @@ function mostrarDatos(mascotas) {
 
 async function venta(cliente, mascotas) {
     try {
-    precio = document.getElementById("inputprecio");
-    marca_bolsa = document.getElementById('input-marca');
-    if(bolsaSeleccionada.marca_bolsa != marca_bolsa.value) throw new Error(); 
-    cantbolsas = document.getElementById("inputcantbolsas");
-    let mascotasVenta = [];
+        precio = document.getElementById("inputprecio");
+        marca_bolsa = document.getElementById('input-marca');
+        if (bolsaSeleccionada.marca_bolsa != marca_bolsa.value) throw new Error();
+        cantbolsas = document.getElementById("inputcantbolsas");
+        let mascotasVenta = [];
         console.log(bolsaSeleccionada);
-    let newVenta = new Venta(new Date(), precio.value, cliente.id_cliente, cantbolsas.value, bolsaSeleccionada.id_bolsa_kilo, bolsaSeleccionada.marca_bolsa, bolsaSeleccionada.kilos_bolsa, bolsaSeleccionada.calidad_bolsa, true);
+        let newVenta = new Venta(new Date(), precio.value, cliente.id_cliente, cantbolsas.value, bolsaSeleccionada.marca_bolsa, bolsaSeleccionada.kilos_bolsa, bolsaSeleccionada.calidad_bolsa, true);
 
-    mascotas.forEach(element => {
+        mascotas.forEach(element => {
 
-        checks = document.getElementById(element.nombremascota);
+            checks = document.getElementById(element.nombremascota);
 
-        if (checks.checked) {
-            mascotasVenta.push(element.id_mascota);
+            if (checks.checked) {
+                mascotasVenta.push(element.id_mascota);
+            }
+
+        });
+
+        if (mascotasVenta.length == 0) {
+
+            await sweetAlerts.sweetAlertSeleccionMascota();
+            return
+
         }
 
-    });
 
-    if (mascotasVenta.length == 0) {
-
-        await sweetAlerts.sweetAlertSeleccionMascota();
-        return
-
-    }
-
-    
-        await venta_controller.insertarVenta(newVenta, mascotasVenta);
+        await venta_controller.insertarVenta(newVenta, mascotasVenta, cliente.puntos, nuevosPuntos);
         await sweetAlerts.sweetAlertVentaExitosa();
         location.reload();
     } catch (error) {
@@ -198,7 +236,7 @@ async function venta(cliente, mascotas) {
 
 
 ////////////////////////////////INNERS//////////////////////////////////////////////////////////
-function innerCliente(cliente, mascotas, historialVentasConBolsas) {
+function innerCliente(mascotas, historialVentasConBolsas) {
 
     agregado = document.getElementById("agregado");
     ingreso = document.getElementById("mascota");
@@ -238,10 +276,10 @@ function innerCliente(cliente, mascotas, historialVentasConBolsas) {
 
 <div class="datos-cliente">
 <h2 class="h2cliente">Datos del Cliente</h2>
-<p><b>Nombre:</b> ` + cliente.primernombre + ` ` + cliente.nombrepila + ` ` + cliente.apellido + `</p>
+<p><b>Nombre:</b><span id="spanNombreCliente" onclick="editarCliente()"> ${cliente.primernombre} ${cliente.nombrepila} ${cliente.apellido}</span></p>
 <p><b>Telefono:</b> ` + cliente.telefono + `</p>
 <p><b>Direccion:</b> ` + cliente.calle + ` ` + cliente.calle_numero + `</p>
-<p><b>Puntos:</b><span id="spanPuntos"> ` + cliente.puntos + `<div id="divBotonRestarPuntos"><button id="btnRestarPuntos" onclick="botonRestarPuntos(${cliente.id_cliente})"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button></div></span></p>
+<p><b>Puntos:</b><span id="spanPuntos"> ` + cliente.puntos + `<div id="divBotonRestarPuntos"><button id="btnRestarPuntos" onclick="botonRestarPuntos()"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button></div></span></p>
 <div id="divInputRestarPuntos"></div>
 <br>
 <h3>Historial de compras</h3>
@@ -330,6 +368,9 @@ function rellenarDatos(mascotas, historialVentasConBolsas) {
             divHistorial.innerHTML += `<div><p> ${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`
         });
 
+    }else{
+        var divHistorial = document.getElementById("historial");
+        divHistorial.innerHTML += `<h4 class="h4SinVentas">Sin Compras</h4>`
     }
 
     mostrarDatos(mascotas);
@@ -410,8 +451,8 @@ async function actualizarKgBolsa() {
 }
 
 function listenerSelectKG() {
-        selectKG = document.getElementById("selectkilos");
-        selectKG.addEventListener('change', (e) => {
+    selectKG = document.getElementById("selectkilos");
+    selectKG.addEventListener('change', (e) => {
         e.preventDefault();
 
         bolsaSeleccionada.kilos_bolsa = selectKG.value;
@@ -420,7 +461,7 @@ function listenerSelectKG() {
 }
 
 
-function botonRestarPuntos(id_cliente) {
+function botonRestarPuntos() {
 
     let divInputRestarPuntos = document.getElementById("divInputRestarPuntos");
     let divBotonRestarPuntos = document.getElementById("divBotonRestarPuntos");
@@ -428,65 +469,88 @@ function botonRestarPuntos(id_cliente) {
     divBotonRestarPuntos.innerHTML = "";
     divInputRestarPuntos.innerHTML = `<form id="formRestarPuntos"><input type="number" id="inputRestarPuntos" placeholder="Restar..." required><button type="submit" id="confirmarRestarPuntos"><img src="../../imagenes/tick.png" id="imgTick"></button><button type="reset" id="cancelarRestarPuntos"><img src="../../imagenes/cruz_negra.png" id="imgCruz_negra"></button></form>`;
 
-    listenerFormRestarPuntos(id_cliente);
-    listenerFormCancelarRestarPuntos(id_cliente);
+    listenerFormRestarPuntos();
+    listenerFormCancelarRestarPuntos();
 
 }
 
-function listenerFormRestarPuntos(id_cliente) {
+function listenerFormRestarPuntos() {
 
     formRestarPuntos = document.getElementById("formRestarPuntos");
     formRestarPuntos.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        confirmarRestarPuntos(id_cliente);
+        confirmarRestarPuntos();
 
     })
 
 }
 
-function listenerFormCancelarRestarPuntos(id_cliente) {
+function listenerFormCancelarRestarPuntos() {
 
     formRestarPuntos = document.getElementById("formRestarPuntos");
     formRestarPuntos.addEventListener('reset', (e) => {
         e.preventDefault();
 
-        cancelarRestarPuntos(id_cliente);
+        cancelarRestarPuntos();
 
     })
 
 }
 
-async function confirmarRestarPuntos(id_cliente) {
+async function confirmarRestarPuntos() {
 
     let inputRestarPuntos = document.getElementById("inputRestarPuntos");
     let divInputRestarPuntos = document.getElementById("divInputRestarPuntos");
     let divBotonRestarPuntos = document.getElementById("divBotonRestarPuntos");
     let spanPuntos = document.getElementById("spanPuntos");
-    let nuevosPuntos = await cliente_controller.restarPuntosCliente(spanPuntos.textContent.trim(), inputRestarPuntos.value, id_cliente);
 
-    spanPuntos.innerHTML = ` ${nuevosPuntos}`;
+    if (parseInt(inputRestarPuntos.value) > nuevosPuntos) {
+        await sweetAlerts.sweetAlertPuntosNegativos();
+        return
+    }
+    nuevosPuntos = nuevosPuntos - parseInt(inputRestarPuntos.value);
+
+    spanPuntos.textContent = ` ${nuevosPuntos}`;
 
     divInputRestarPuntos.innerHTML = "";
-    divBotonRestarPuntos.innerHTML = `<button id="btnRestarPuntos" onclick="botonRestarPuntos(${id_cliente})"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button>`;
+    divBotonRestarPuntos.innerHTML = `<button id="btnRestarPuntos" onclick="botonRestarPuntos()"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button>`;
+
+    if (cliente.puntos != nuevosPuntos) {
+        divInputRestarPuntos.innerHTML = `<button class="restaurarPuntos" id="btnRestaurarPuntos" onclick="restaurarPuntos()">Restaurar</button>`;
+    }
 
 }
 
 
-function cancelarRestarPuntos(id_cliente) {
+function cancelarRestarPuntos() {
 
     let divInputRestarPuntos = document.getElementById("divInputRestarPuntos");
     let divBotonRestarPuntos = document.getElementById("divBotonRestarPuntos");
-    divInputRestarPuntos.innerHTML = "";
-    divBotonRestarPuntos.innerHTML = `<button id="btnRestarPuntos" onclick="botonRestarPuntos(${id_cliente})"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button>`;
 
+    divInputRestarPuntos.innerHTML = "";
+    divBotonRestarPuntos.innerHTML = `<button id="btnRestarPuntos" onclick="botonRestarPuntos()"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button>`;
+
+    if (cliente.puntos != nuevosPuntos) {
+        divInputRestarPuntos.innerHTML = `<button class="restaurarPuntos" id="btnRestaurarPuntos" onclick="restaurarPuntos()">Restaurar</button>`;
+    }
+
+}
+
+
+function restaurarPuntos() {
+    nuevosPuntos = cliente.puntos;
+    spanPuntos.textContent = ` ${nuevosPuntos}`;
+
+    let divInputRestarPuntos = document.getElementById("divInputRestarPuntos");
+    divInputRestarPuntos.innerHTML = "";
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-async function mainVentasActivasCliente(id_cliente) {
-    let ventasActivas = await venta_controller.getVentasActivasByIdCliente(id_cliente);
+async function mainVentasActivasCliente() {
+    let ventasActivas = await venta_controller.getVentasActivasByIdCliente(cliente.id_cliente);
     console.log("Ventas activas:", ventasActivas);
     renderVentasActivas(ventasActivas);
 }
@@ -500,7 +564,7 @@ function renderVentasActivas(ventasActivas) {
 
     ventasActivas.forEach(element => {
 
-        let dias = calcularDias.calcularDiasEntreFechaActualYFecha(element.venta.fecha);
+        let dias = calcularFechas.calcularDiasEntreFechaActualYFecha(element.venta.fecha);
 
         divVentasActivas.innerHTML += ` <div class="container-ventaActiva">
         <div class="fecha">
@@ -540,5 +604,11 @@ function renderVentasActivas(ventasActivas) {
 
 }
 
+
+
+function editarCliente() {
+    localStorage.setItem("ClienteAEditar", cliente.id_cliente);
+    main.createWindowEditarCliente();
+}
 
 

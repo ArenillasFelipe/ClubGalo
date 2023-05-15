@@ -4,11 +4,10 @@ const { capitalizarPalabras } = require('../utils/palabras');
 
 
 class Mascota {
-    constructor(nacimiento, nombremascota, raza, edad, peso, afecciones, animal, actividad, id_mascota, id_cliente) {
+    constructor(nacimiento, nombremascota, raza, peso, afecciones, animal, actividad, id_mascota, id_cliente) {
       this.nacimiento = nacimiento;
       this.nombremascota = nombremascota;
       this.raza = raza;
-      this.edad = edad;
       this.peso = peso;
       this.afecciones = afecciones;
       this.animal = animal;
@@ -26,7 +25,6 @@ async function getMascotasByIdCliente(id_cliente) {
         mascotaData.nacimiento,
         mascotaData.nombremascota,
         mascotaData.raza,
-        mascotaData.edad,
         mascotaData.peso,
         mascotaData.afecciones,
         mascotaData.animal,
@@ -44,7 +42,6 @@ async function getMascotas() {
         mascotaData.nacimiento,
         mascotaData.nombremascota,
         mascotaData.raza,
-        mascotaData.edad,
         mascotaData.peso,
         mascotaData.afecciones,
         mascotaData.animal,
@@ -63,7 +60,6 @@ async function getMascotaById(id_mascota) {
         mascotaData.nacimiento,
         mascotaData.nombremascota,
         mascotaData.raza,
-        mascotaData.edad,
         mascotaData.peso,
         mascotaData.afecciones,
         mascotaData.animal,
@@ -80,7 +76,7 @@ async function updateMascotaById(newMascota) {
 
 
     const conn = await getConnection();
-    await conn.query('update mascotas set mascotas.animal = ?, mascotas.raza = ?, mascotas.peso = ?, mascotas.edad = ?, mascotas.actividad = ?, mascotas.afecciones = ?, mascotas.nacimiento = ?, mascotas.nombremascota = ? where mascotas.id_mascota = ?;', [newMascota.animal, newMascota.raza, newMascota.peso, newMascota.edad, newMascota.actividad, newMascota.afecciones, newMascota.nacimiento, newMascota.nombremascota, newMascota.id_mascota]);
+    await conn.query('update mascotas set mascotas.animal = ?, mascotas.raza = ?, mascotas.peso = ?, mascotas.actividad = ?, mascotas.afecciones = ?, mascotas.nacimiento = ?, mascotas.nombremascota = ? where mascotas.id_mascota = ?;', [newMascota.animal, newMascota.raza, newMascota.peso, newMascota.actividad, newMascota.afecciones, newMascota.nacimiento, newMascota.nombremascota, newMascota.id_mascota]);
     // conn.release();
 }
 
@@ -91,7 +87,7 @@ async function insertMascota(newMascota) {
     newMascota.actividad = capitalizarPalabras(newMascota.actividad);
 
     const conn = await getConnection();
-    await conn.query('insert into mascotas(nacimiento, nombremascota, raza, edad, peso, afecciones, animal, actividad, id_cliente) values(?, ?, ?, ?, ?, ?, ?, ?, ?)', [newMascota.nacimiento,newMascota.nombremascota,newMascota.raza,newMascota.edad,newMascota.peso,newMascota.afecciones,newMascota.animal, newMascota.actividad,newMascota.id_cliente]);
+    await conn.query('insert into mascotas(nacimiento, nombremascota, raza, peso, afecciones, animal, actividad, id_cliente) values(?, ?, ?, ?, ?, ?, ?, ?)', [newMascota.nacimiento,newMascota.nombremascota,newMascota.raza,newMascota.peso,newMascota.afecciones,newMascota.animal, newMascota.actividad,newMascota.id_cliente]);
     // conn.release();
 }
 

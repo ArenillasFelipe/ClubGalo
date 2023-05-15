@@ -18,9 +18,9 @@ body {
     top: 40%;
     left: 50%;
     width: 10px;
-  }
+}
 
-.container-titulo{
+.container-titulo {
     background-color: #404198;
     width: 100%;
     height: 60px;
@@ -29,7 +29,7 @@ body {
     box-shadow: 0px 1px 10px;
 }
 
-.tituloCentro{
+.tituloCentro {
     position: absolute;
     color: white;
     left: 50%;
@@ -37,13 +37,13 @@ body {
     top: -5px;
 }
 
-.cruz{
+.cruz {
     position: relative;
     width: 20px;
     top: 1px;
 }
 
-#btnCruz{
+#btnCruz {
     cursor: pointer;
     top: 15px;
     left: 92%;
@@ -54,14 +54,16 @@ body {
     height: 32px;
     border-radius: 50%;
     outline: none;
+    transition-duration: 0.1s;
 }
 
 #btnCruz:hover{
-    box-shadow: 0px 1px 10px;
+  transform: translateY(-1px);
+  box-shadow: 0px 1px 10px;
 }
 
 
-b{
+b {
     font-weight: 800;
 }
 
@@ -72,12 +74,12 @@ input {
     outline: none;
 }
 
-label{
+label {
     font-weight: 800;
 }
 
 
-.container-bolsa{
+.container-bolsa {
     height: 240px;
     width: 400px;
     position: absolute;
@@ -88,25 +90,25 @@ label{
     transform: translate(-50%, -50%);
 }
 
-.container-marca{
+.container-marca {
     position: relative;
     top: 20px;
 }
 
-.container-marca input{
+.container-marca input {
     width: 300px;
 }
 
-.container-calidad{
+.container-calidad {
     position: relative;
     top: 40px;
 }
 
-.container-calidad select{
+.container-calidad select {
     width: 140px;
 }
 
-.container-kilos{
+.container-kilos {
     position: relative;
     left: 60px;
     top: 40px;
@@ -114,7 +116,7 @@ label{
     height: 60px;
 }
 
-#btnAgregar{
+#btnAgregar {
     top: 160px;
     left: 160px;
     position: absolute;
@@ -130,6 +132,13 @@ label{
     transition: .2s ease all;
     outline: none;
     font-weight: 600;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#btnAgregar:hover {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-1px);
 }
 
 
@@ -141,7 +150,7 @@ label{
     height: 25px;
 }
 
-#container-inputTamanio input{
+#container-inputTamanio input {
     width: 30px;
 }
 
@@ -160,7 +169,7 @@ label{
     top: 310px;
 }
 
-#btnCancelar{
+#btnCancelar {
     border: 2px solid black;
     height: 30px;
     width: 120px;
@@ -177,7 +186,7 @@ label{
 }
 
 
-#container-btnGuardar button{
+#container-btnGuardar button {
     border: 2px solid black;
     height: 30px;
     width: 120px;
@@ -191,6 +200,13 @@ label{
     transition: .2s ease all;
     outline: none;
     font-weight: 800;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#container-btnGuardar button:hover {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
 }
 
 
@@ -199,5 +215,4 @@ label{
     color: red;
     font-weight: bold;
     cursor: pointer;
-  }
-
+}

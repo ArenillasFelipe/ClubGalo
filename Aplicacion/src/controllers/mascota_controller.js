@@ -22,7 +22,6 @@ async function getMascotasByIdCliente(id_cliente){
 }
 
 async function insertMascota(newMascota) {
-
     let nacimiento = newMascota.nacimiento;
 
     nacimiento = nacimiento.split("/");

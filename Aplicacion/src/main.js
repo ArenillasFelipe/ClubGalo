@@ -896,7 +896,7 @@ function createWindowEditarCliente() {
         width: 900,
         height: 570,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -926,7 +926,7 @@ function createWindowAgregarCliente() {
         width: 900,
         height: 570,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -1012,14 +1012,14 @@ function createWindowVentasBolsas() {
         width: 900,
         height: 650,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
             nodeIntegration: true
         }
     })
-    windowVentasBolsas.loadFile('src/ui/ventasBolsas/ventasBolsas.html'); //indica el archivo que se cargara en la ventana
+    windowVentasBolsas.loadFile('src/views/ventasBolsas/ventasBolsas.html'); //indica el archivo que se cargara en la ventana
 }
 
 

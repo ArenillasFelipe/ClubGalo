@@ -16,7 +16,7 @@ async function confirmar_borrado_venta(){
         '<div class="form-check">' +
         '  <input class="form-check-input" type="checkbox" id="borrar-puntos-checkbox" style="transform: scale(1.5);" checked>' +
         '  <label class="form-check-label" for="borrar-puntos-checkbox">' +
-        '    Borrar puntos otorgados por la venta' +
+        '    Borrar puntos otorgados por la venta y devolver puntos canjeados' +
         '  </label>' +
         '</div>'
     }).then((result) => {
@@ -296,6 +296,21 @@ async function sweetAlertSinMascotas() {
 }
 
 
+async function sweetAlertPuntosNegativos() {
+  await Swal.fire({
+      title: "No puede canjear mas puntos de los disponibles",
+      icon: "error",
+      backdrop: true,
+      showConfirmButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      stopKeydownPropagation: false,
+      position: "center",
+  })
+}
+
+
 async function sweetAlertBorrarMascota() {
   let resultado;
   await Swal.fire({
@@ -336,6 +351,7 @@ module.exports = {
     sweetAlertCamposSinCompletar,
     sweetAlertSinMascotas,
     sweetAlertBorrarMascota,
-    sweetAlertClienteBorradoConExito
+    sweetAlertClienteBorradoConExito,
+    sweetAlertPuntosNegativos
 }
   
