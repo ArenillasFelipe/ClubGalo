@@ -26,6 +26,7 @@ async function get20VentasByIdClienteByFiltersController(id_cliente, filtro, fil
 
 async function get20Ventas(newBusqueda, salto) {
 
+
     // Obtener todas las ventas desde el modelo de ventas
     let ventas = [];
     if (newBusqueda == "" || newBusqueda == undefined) {

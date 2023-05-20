@@ -2,43 +2,57 @@ const sweetAlerts = require('../../utils/sweetAlerts');
 const venta_controller = require('../../controllers/venta_controller');
 
 
-let barra_busqueda = document.getElementById('barra-busqueda');
-const listaVentas = document.getElementById('ventas');
-const busqueda = document.getElementById('busqueda');
+
+
+
+
 const doc = document.documentElement;
-barra_busqueda.focus();
-
-
-let salto = 0;
 
 let flechaArriba = document.getElementById("flechaArriba");
 flechaArriba.style.display = 'none';
+
 // Agrega un eventListener al evento scroll
 window.addEventListener('scroll', () => {
-  var scrollPos = window.scrollY || window.scrollTop || document.getElementsByTagName("html")[0].scrollTop;
-  var windowHeight = document.documentElement.clientHeight;
+  const scrollPos = window.pageYOffset || doc.scrollTop;
 
-  //Mostrar el elemento si la posición actual de scroll es menor o igual a 0
   if (scrollPos <= 0) {
     flechaArriba.style.display = 'none';
   } else {
     flechaArriba.style.display = 'block';
   }
-
-  // Si el usuario ha llegado al final de la página
-  if (doc.scrollTop + window.innerHeight === doc.scrollHeight) {
-    get20VentasClienteapp(newBusqueda);
-  }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let barra_busqueda = document.getElementById('barra-busqueda');
+const listaVentas = document.getElementById('ventas');
+const busqueda = document.getElementById('busqueda');
+barra_busqueda.focus();
+
+
+let salto = 0;
 
 let ventasConDatos;
 let newBusqueda = "";
 
 
-async function get20VentasClienteapp(newBusqueda) {
+async function get20VentasClienteapp() {
+  console.log(salto);
   ventasConDatos = await venta_controller.get20Ventas(newBusqueda, salto);
-  salto += 20;
-  renderVentas(ventasConDatos);
+  renderVentas();
 }
 
 
@@ -46,6 +60,11 @@ async function get20VentasClienteapp(newBusqueda) {
 
 
 function renderVentas() {
+
+  let container_paginado = document.getElementById("container-paginado");
+  container_paginado.style.opacity = 0;
+
+  listaVentas.innerHTML = "";
     ventasConDatos.forEach(element => {
         listaVentas.innerHTML +=
         `<div class="proto-venta">
@@ -77,11 +96,15 @@ function renderVentas() {
     
       </div>`
     });
+
+    container_paginado.style.opacity = 1;
 }
 
 
 async function init() {
     await get20VentasClienteapp();
+    listenerBtnSiguiente();
+    listenerBtnAnterior();
 }
 
 init();
@@ -92,7 +115,7 @@ busqueda.addEventListener('submit', (e) => {
   newBusqueda = barra_busqueda.value;
   salto = 0;
   listaVentas.innerHTML = "";
-  get20VentasClienteapp(newBusqueda);
+  get20VentasClienteapp();
 
 })
 
@@ -115,4 +138,46 @@ async function borrar_venta(idVenta) {
     await venta_controller.borrarVenta_RestarPuntos(idVenta, false);
     location.reload();
   }
+}
+
+
+function listenerBtnSiguiente() {
+  let btnSiguiente = document.getElementById('btnSiguiente')
+  btnSiguiente.addEventListener('click', (e) => {
+    e.preventDefault();
+    paginaSiguiente();
+  })
+
+}
+
+function paginaSiguiente() {
+  let h5Pagina = document.getElementById('h5Pagina');
+  h5Pagina.textContent = parseInt(h5Pagina.textContent) + 1;
+  salto = (parseInt(h5Pagina.textContent) - 1) * 20;
+  get20VentasClienteapp();
+}
+
+
+function listenerBtnAnterior() {
+  let btnAnterior = document.getElementById('btnAnterior')
+  btnAnterior.addEventListener('click', (e) => {
+    e.preventDefault();
+    paginaAnterior();
+  })
+
+}
+
+function paginaAnterior() {
+  let h5Pagina = document.getElementById('h5Pagina');
+
+
+  if (parseInt(h5Pagina.textContent) > 1) {
+
+  h5Pagina.textContent = parseInt(h5Pagina.textContent) - 1;
+  salto = (parseInt(h5Pagina.textContent) - 1) * 20;
+  get20VentasClienteapp();
+
+  }
+
+
 }

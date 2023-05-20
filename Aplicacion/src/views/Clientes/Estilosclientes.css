@@ -435,3 +435,82 @@ nav a:hover {
     transform: translateX(0%);
   }
 }
+
+
+.container-paginado {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 350px;
+  height: 40px;
+  opacity: 0;
+}
+
+
+#btnAnterior{
+  position: absolute;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  font-weight: 700;
+  font-size: larger;
+  left: 0px;
+  top: 0px;
+  transition: 0.5s all;
+}
+
+#btnAnterior:hover {
+  left: -5px;
+}
+
+#btnAnterior img{
+  position: relative;
+  top: 8px;
+}
+
+
+#btnSiguiente {
+  position: absolute;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  font-weight: 700;
+  font-size: larger;
+  left: 230px;
+  top: 0px;
+  transition: 0.5s all;
+}
+
+#btnSiguiente:hover {
+  left: 235px;
+}
+
+#btnSiguiente img{
+  position: relative;
+  top: 8px;
+  color: white;
+}
+
+.container-h5Pagina {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 10px;
+  background-color: #404198;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+
+#h5Pagina {
+  font-size: larger;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -27px;
+  color: white;
+}

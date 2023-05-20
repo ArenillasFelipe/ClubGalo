@@ -356,17 +356,26 @@ function rellenarDatos(mascotas, historialVentasConBolsas) {
     select = document.getElementById("select-mascota");
     seleccionMascota = document.getElementById("seleccion-mascota");
     mascotas.forEach(element => {
-        select.innerHTML += `<option value="` + element.id_mascota + `">` + element.nombremascota + `</option>`
-        seleccionMascota.innerHTML += `<input type="checkbox" value="1" class="checkbox" id="` + element.nombremascota + `">` + element.nombremascota + `<br>`
-
+      select.innerHTML += `<option value="${element.id_mascota}">${element.nombremascota}</option>`;
+      seleccionMascota.innerHTML += `
+        <input type="checkbox" value="1" class="checkbox" id="${element.nombremascota}">
+        <label for="${element.nombremascota}" class="labelCheckboxMascota">${element.nombremascota}</label>
+        <br>
+      `;
     });
+    
     console.log("historial vetnas: ", historialVentasConBolsas);
     if (historialVentasConBolsas) {
         var divHistorial = document.getElementById("historial");
 
-        historialVentasConBolsas.forEach(element => {
-            divHistorial.innerHTML += `<div><p> ${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`
-        });
+        historialVentasConBolsas.forEach((element, index) => {
+            if (index % 2 === 0) {
+              divHistorial.innerHTML += `<div class="ventaHistorialPar"><p>${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`;
+            } else {
+              divHistorial.innerHTML += `<div class="ventaHistorialImpar"><p>${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`;
+            }
+          });
+          
 
     }else{
         var divHistorial = document.getElementById("historial");

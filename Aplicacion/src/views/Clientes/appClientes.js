@@ -6,12 +6,8 @@ const { calcularEdadMascota } = require('../../utils/calcularFechas');
 
 
 
-let barra_busqueda = document.getElementById('barra-busqueda');
-barra_busqueda.focus();
 
 
-let salto = 0;
-// Selecciona el objeto document.documentElement para acceder a las propiedades de la página
 const doc = document.documentElement;
 
 let flechaArriba = document.getElementById("flechaArriba");
@@ -19,21 +15,26 @@ flechaArriba.style.display = 'none';
 
 // Agrega un eventListener al evento scroll
 window.addEventListener('scroll', () => {
-  var scrollPos = window.scrollY || window.scrollTop || document.getElementsByTagName("html")[0].scrollTop;
-  var windowHeight = document.documentElement.clientHeight;
+  const scrollPos = window.pageYOffset || doc.scrollTop;
 
-  //Mostrar el elemento si la posición actual de scroll es menor o igual a 0
   if (scrollPos <= 0) {
     flechaArriba.style.display = 'none';
   } else {
     flechaArriba.style.display = 'block';
   }
-
-  // Si el usuario ha llegado al final de la página
-  if (doc.scrollTop + window.innerHeight === doc.scrollHeight) {
-    get20ClientesConMascotas(barra_busqueda.value);
-  }
 });
+
+
+
+
+
+
+
+let barra_busqueda = document.getElementById('barra-busqueda');
+barra_busqueda.focus();
+
+
+let salto = 0;
 
 
 
@@ -47,17 +48,20 @@ formBuscador.addEventListener('submit', (e) => {
   e.preventDefault();
 
   salto = 0;
-  divClientes.innerHTML = "";
   get20ClientesConMascotas(barra_busqueda.value);
 
 });
 
 
 localStorage.clear();
+
+listenerBtnAnterior();
+listenerBtnSiguiente();
+
+
 get20ClientesConMascotas();
 async function get20ClientesConMascotas(busqueda) {
   let resultado = await cliente_controller.get20ClientesConMascotasBySearch(busqueda, salto);
-  salto += 20;
   renderClientes(resultado);
 }
 
@@ -67,6 +71,11 @@ divClientes = document.getElementById("divClientes");
 /////////////////////////////////INNERS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function renderClientes(clientesConMascotas) {
+  divClientes.innerHTML = "";
+  let container_paginado = document.getElementById("container-paginado");
+  container_paginado.style.opacity = 0;
+
+
   for (let index = 0; index < clientesConMascotas.length; index++) {
     const element = clientesConMascotas[index];
     console.log(element);
@@ -147,6 +156,9 @@ async function renderClientes(clientesConMascotas) {
 
   }
 
+
+
+  container_paginado.style.opacity = 1;
 }
 
 async function cambiarDatosMascota(idMascota, clienteConMascotas) {
@@ -192,6 +204,47 @@ function botonAgregarCliente() {
   main.createWindowAgregarCliente();
 }
 
+
+
+
+function listenerBtnSiguiente() {
+  let btnSiguiente = document.getElementById('btnSiguiente')
+  btnSiguiente.addEventListener('click', (e) => {
+    e.preventDefault();
+    paginaSiguiente();
+  })
+
+}
+
+function paginaSiguiente() {
+  let h5Pagina = document.getElementById('h5Pagina');
+  h5Pagina.textContent = parseInt(h5Pagina.textContent) + 1;
+  salto = (parseInt(h5Pagina.textContent) - 1) * 20;
+  get20ClientesConMascotas();
+}
+
+
+function listenerBtnAnterior() {
+  let btnAnterior = document.getElementById('btnAnterior')
+  btnAnterior.addEventListener('click', (e) => {
+    e.preventDefault();
+    paginaAnterior();
+  })
+
+}
+
+function paginaAnterior() {
+  let h5Pagina = document.getElementById('h5Pagina');
+
+  if (parseInt(h5Pagina.textContent) > 1) {
+
+  h5Pagina.textContent = parseInt(h5Pagina.textContent) - 1;
+  salto = (parseInt(h5Pagina.textContent) - 1) * 20;
+  get20ClientesConMascotas();
+
+  }
+
+}
 
 
 

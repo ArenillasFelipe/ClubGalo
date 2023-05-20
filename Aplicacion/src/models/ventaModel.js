@@ -223,6 +223,13 @@ async function actualizarVentaAInactivaById(id_venta) {
 }
 
 
+async function actualizarVentasClienteAInactivas(id_cliente) {
+  const conn = await getConnection();
+  await conn.query('update venta set activo = false where id_cliente = ?', id_cliente);
+  // conn.release();
+}
+
+
 module.exports = {
   Venta,
   get20Ventas,
@@ -233,5 +240,6 @@ module.exports = {
   get20VentasByIdClienteByFilters,
   getVentasActivasByIdCliente,
   getUltimas20VentasByIdCliente,
-  actualizarVentaAInactivaById
+  actualizarVentaAInactivaById,
+  actualizarVentasClienteAInactivas
 }

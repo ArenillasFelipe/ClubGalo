@@ -1,5 +1,6 @@
 const clienteModel = require('../models/clienteModel');
 const mascotaModel = require('../models/mascotaModel');
+const ventaModel = require('../models/ventaModel');
 
 
 async function getClienteSegunBusqueda(busqueda) {
@@ -70,6 +71,7 @@ async function restarPuntosCliente(puntosActuales, puntosParaRestar, id_cliente)
 }
 
 async function borrarClienteById(id_cliente) {
+    await ventaModel.actualizarVentasClienteAInactivas(id_cliente);
     await clienteModel.deleteClienteById(id_cliente);
     await mascotaModel.deleteMascotasByIdCliente(id_cliente);
 }

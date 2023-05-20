@@ -324,7 +324,7 @@ p {
 
 .seleccion-mascota {
     position: relative;
-    top: 20px;
+    top: 10px;
     font-weight: 600;
 }
 
@@ -335,6 +335,17 @@ p {
     font-size: 14px;
     line-height: 0.5em;
 
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    vertical-align: -4px;
+    cursor: pointer;
+}
+
+.labelCheckboxMascota {
+    cursor: pointer;
 }
 
 .container-cliente {
@@ -384,12 +395,15 @@ p {
 }
 
 .historial div {
-    background: lightgrey;
     border: 2px;
-    margin: 1px;
     padding: 2px;
     width: 475px;
     height: 20px;
+}
+
+.historial div:hover {
+    color: white;
+    background-color: #404198;
 }
 
 .historial div p {
@@ -970,3 +984,16 @@ box-shadow: inset 30px 0px 30px -15px rgba(0,0,0,0.75);
     top: 45px;
     font-size: 25px;
 }
+
+
+.ventaHistorialPar {
+    background-color: lightgray;
+}
+
+.ventaHistorialImpar {
+    background-color: white;
+}
+
+
+
+

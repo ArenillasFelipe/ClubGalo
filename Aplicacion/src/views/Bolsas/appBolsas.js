@@ -4,31 +4,21 @@ const { remote } = require('electron');
 const main = remote.require('./main');
 
 
-let salto = 0;
-let newBusqueda;
 
-let barra_busqueda = document.getElementById('barra-busqueda');
-barra_busqueda.focus();
 
 const doc = document.documentElement;
+
 let flechaArriba = document.getElementById("flechaArriba");
 flechaArriba.style.display = 'none';
 
 // Agrega un eventListener al evento scroll
 window.addEventListener('scroll', () => {
-  var scrollPos = window.scrollY || window.scrollTop || document.getElementsByTagName("html")[0].scrollTop;
-  var windowHeight = document.documentElement.clientHeight;
+  const scrollPos = window.pageYOffset || doc.scrollTop;
 
-  //Mostrar el elemento si la posición actual de scroll es menor o igual a 0
   if (scrollPos <= 0) {
     flechaArriba.style.display = 'none';
   } else {
     flechaArriba.style.display = 'block';
-  }
-
-  // Si el usuario ha llegado al final de la página
-  if (doc.scrollTop + window.innerHeight === doc.scrollHeight) {
-    mainGetYRenderBolsasSegunBusquedaApp(newBusqueda);
   }
 });
 
@@ -36,9 +26,24 @@ window.addEventListener('scroll', () => {
 
 
 
+
+
+
+
+
+
+
+let salto = 0;
+let newBusqueda;
+
+let barra_busqueda = document.getElementById('barra-busqueda');
+barra_busqueda.focus();
+
+
 mainFunctionBolsasApp();
 function mainFunctionBolsasApp() {
-
+  listenerBtnAnterior();
+  listenerBtnSiguiente();
   mainGetYRenderBolsasSegunBusquedaApp();
   crearListenerBuscador();
 
@@ -47,6 +52,9 @@ function mainFunctionBolsasApp() {
 
 
 async function mainGetYRenderBolsasSegunBusquedaApp(newBusqueda) {
+  resetearDivTarjetas();
+  let container_paginado = document.getElementById("container-paginado");
+  container_paginado.style.opacity = 0;
 
   let bolsas18 = await bolsa_controller.get18BolsasSegunBusqueda(newBusqueda, salto);
 
@@ -56,9 +64,7 @@ async function mainGetYRenderBolsasSegunBusquedaApp(newBusqueda) {
     renderBolsaApp(element);
 
   }
-
-  salto += 18;
-
+  container_paginado.style.opacity = 1;
 }
 
 function renderBolsaApp(bolsa) {
@@ -129,8 +135,7 @@ function crearListenerBuscador() {
 }
 
 
-function resetearSaltoYTarjetas() {
-  salto = 0;
+function resetearDivTarjetas() {
   let divBolsas = document.getElementById("bolsas");
   divBolsas.innerHTML = "";
 }
@@ -155,8 +160,43 @@ async function botonBorrar(id_bolsa) {
 
 
 function botonAgregarBolsa() {
-  localStorage.setItem("EstadoBolsa",  "NoCreado");
   main.createWindowAgregarBolsa();
 }
 
 
+function listenerBtnSiguiente() {
+  let btnSiguiente = document.getElementById('btnSiguiente')
+  btnSiguiente.addEventListener('click', (e) => {
+    e.preventDefault();
+    paginaSiguiente();
+  })
+
+}
+
+function paginaSiguiente() {
+  let h5Pagina = document.getElementById('h5Pagina');
+  h5Pagina.textContent = parseInt(h5Pagina.textContent) + 1;
+  salto = (parseInt(h5Pagina.textContent) - 1) * 18;
+  mainGetYRenderBolsasSegunBusquedaApp();
+}
+
+
+function listenerBtnAnterior() {
+  let btnAnterior = document.getElementById('btnAnterior')
+  btnAnterior.addEventListener('click', (e) => {
+    e.preventDefault();
+    paginaAnterior();
+  })
+
+}
+
+function paginaAnterior() {
+  let h5Pagina = document.getElementById('h5Pagina');
+
+  if (parseInt(h5Pagina.textContent) > 1) {
+    h5Pagina.textContent = parseInt(h5Pagina.textContent) - 1;
+    salto = (parseInt(h5Pagina.textContent) - 1) * 18;
+    mainGetYRenderBolsasSegunBusquedaApp();
+  }
+
+}
