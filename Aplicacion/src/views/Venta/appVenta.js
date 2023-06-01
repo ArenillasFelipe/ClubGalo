@@ -8,6 +8,7 @@ const { Venta } = require('../../models/ventaModel');
 const sweetAlerts = require('../../utils/sweetAlerts');
 const calcularFechas = require('../../utils/calcularFechas');
 
+
 let cliente;
 let nuevosPuntos;
 

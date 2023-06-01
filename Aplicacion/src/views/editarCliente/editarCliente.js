@@ -4,6 +4,7 @@ const cliente_controller = require('../../controllers/cliente_controller');
 const mascota_controller = require('../../controllers/mascota_controller');
 const sweetAlerts = require('../../utils/sweetAlerts');
 const { calcularEdadMascota } = require('../../utils/calcularFechas');
+const nodemailer = require('nodemailer');
 
 
 let cliente;
@@ -84,7 +85,7 @@ function llenarInputsMascotas() {
 
     if (mascotasMod[0]) {
         cambiarInputsMascota(mascotasMod[0].id_mascota);
-    }else{
+    } else {
         cambiarInputsMascota("agregar");
     }
 
@@ -116,7 +117,7 @@ async function cambiarInputsMascota(idMascota) {
         input_mescumple.value = "";
         input_aniocumple.value = "";
     } else {
-        divboton_guardarNewMascota.innerHTML = `<button class="btnGuardarNewMascota" id="btnActualizarMascota">Aceptar</button>`;
+        divboton_guardarNewMascota.innerHTML = `<button class="btnGuardarNewMascota" id="btnActualizarMascota" type="submit">Aceptar</button>`;
         divboton_eliminar.innerHTML = `<button class="btn-eliminarmascota" id="btn-eliminarmascota">ELIMINAR MASCOTA</button>`;
         listenerEliminarMascota(idMascota);
         listenerActualizarMascota(idMascota);
@@ -290,17 +291,21 @@ function listenerGuardar() {
 }
 //input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_edad.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "")
 async function guardarMascotasApp() {
-    console.log("antes de guardar: ",mascotasMod);
+    console.log("antes de guardar: ", mascotasMod);
     await mascota_controller.actualizarMascotasCliente(mascotasMod, mascotasOriginal);
 }
 
 async function guardarClienteConMascotas() {
+    if (parseInt(cliente.puntos) < parseInt(input_puntos.value)) {
+      await enviarEmailCambioDePuntos();
+    }
+  
     await guardarClienteapp();
     await guardarMascotasApp();
     localStorage.setItem("ClienteEditado", cliente.id_cliente);
     main.recargarPaginaPrincipal();
     main.cerrarVentanasEmergentes();
-}
+  }
 
 
 function listenerEliminarMascota(idMascota) {
@@ -337,3 +342,65 @@ function listenerCruz() {
 
     });
 }
+
+
+
+function enviarEmailCambioDePuntos() {
+
+    document.body.innerHTML += `        <div class="container-load-spinner" id="container-load-spinner">
+    <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+    </div>
+</div>`
+
+    return new Promise((resolve, reject) => {
+        let fechaActual = new Date();
+
+        let dia = fechaActual.getDate();
+        let mes = fechaActual.getMonth() + 1;
+        let anio = fechaActual.getFullYear();
+        let hora = fechaActual.getHours();
+        let minutos = fechaActual.getMinutes();
+
+        // Configurar el transporter (proveedor de correo)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'felipearenillas02@gmail.com', // Tu dirección de correo
+                pass: 'whddwihzohvhowza' // Tu contraseña de correo
+            }
+        });
+
+        // Definir el contenido del correo electrónico
+        const mailOptions = {
+            from: 'felipearenillas02@gmail.com', // Dirección de correo del remitente
+            to: 'fgiarde@gmail.com', // Dirección de correo del destinatario
+            subject: 'Aviso modificacion de puntos Club Galo',
+            html: `
+    <p>Los puntos del cliente ${cliente.primernombre} ${cliente.nombrepila} ${cliente.apellido}(Nº: ${cliente.id_cliente}) han sido modificados de ${cliente.puntos} a ${input_puntos.value} el dia ${dia}/${mes}/${anio} a las ${hora}:${minutos}hs</p>
+    <img src="cid:logo" alt="Logo de la empresa" width="200px" style="position: center;">
+  `,
+  attachments: [
+    {
+      filename: 'logo-galo.png',
+      path: 'src/imagenes/logo-galo.png',
+      cid: 'logo',
+    },
+  ],
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+                reject(error);
+            } else {
+                console.log('Correo electrónico enviado: ' + info.response);
+                resolve();
+            }
+        });
+    });
+}
+

@@ -1,3 +1,6 @@
+const Swal = require('sweetalert2');
+
+
 async function confirmar_borrado_venta(){
     let resultado;
     let checkBorrarPuntos;
@@ -41,8 +44,8 @@ async function confirmar_borrado_venta(){
 
   async function variosClientes() {
     await Swal.fire({
-      title: "Existen varios clientes con ese nombre",
-      text: "Ingrese el nombre completo o el id",
+      title: "Existen varios clientes segun los datos ingresados",
+      text: "Ingrese datos extra o el Nº de cliente",
       icon: "error",
       backdrop: true,
       showConfirmButton: true,
@@ -64,7 +67,6 @@ async function confirmar_borrado_venta(){
       allowEnterKey: true,
       stopKeydownPropagation: false,
       position: "center",
-      zIndex: 9
     })
   }
 

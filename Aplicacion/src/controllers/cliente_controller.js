@@ -4,9 +4,10 @@ const ventaModel = require('../models/ventaModel');
 
 
 async function getClienteSegunBusqueda(busqueda) {
-    let cliente = await clienteModel.get20ClientesBySearch(busqueda);
-
-    if (!cliente) {
+    let cliente = [];
+    cliente = await clienteModel.get20ClientesBySearch(busqueda);
+    console.log(cliente);
+    if (!cliente || cliente.length == 0) {
         throw new Error("noExisteCliente");
     }
 
@@ -29,34 +30,39 @@ async function get20ClientesConMascotasBySearch(busqueda, salto) {
     if(busqueda){
     clientes = await clienteModel.get20ClientesBySearch(busqueda, salto);
     }else{
+        console.log("salto: ",salto)
         clientes = await clienteModel.get20Clientes(salto);
     }
 
-    for (let i = 0; i < clientes.length; i++) {
 
-        let mascotasCliente = await mascotaModel.getMascotasByIdCliente(clientes[i].id_cliente);
+    if (clientes) {
+        for (let i = 0; i < clientes.length; i++) {
 
-        for (let i = 0; i < mascotasCliente.length; i++) {
-            
-            dia = mascotasCliente[i].nacimiento;
-            mes = mascotasCliente[i].nacimiento;
-            anio = mascotasCliente[i].nacimiento;
+            let mascotasCliente = await mascotaModel.getMascotasByIdCliente(clientes[i].id_cliente);
     
-            dia = dia.getDate();
-            mes = mes.getMonth();
-            mes = mes + 1;
-            anio = anio.getFullYear();
-            
-            mascotasCliente[i].nacimiento = `${dia}/${mes}/${anio}`;
+            for (let i = 0; i < mascotasCliente.length; i++) {
+                
+                dia = mascotasCliente[i].nacimiento;
+                mes = mascotasCliente[i].nacimiento;
+                anio = mascotasCliente[i].nacimiento;
+        
+                dia = dia.getDate();
+                mes = mes.getMonth();
+                mes = mes + 1;
+                anio = anio.getFullYear();
+                
+                mascotasCliente[i].nacimiento = `${dia}/${mes}/${anio}`;
+            }
+    
+            clientesConMascotas.push({
+                cliente: clientes[i],
+                mascotas: mascotasCliente
+            });
+    
+    
         }
-
-        clientesConMascotas.push({
-            cliente: clientes[i],
-            mascotas: mascotasCliente
-        });
-
-
     }
+    
 
     return clientesConMascotas;
 }
@@ -96,5 +102,5 @@ module.exports = {
     restarPuntosCliente,
     borrarClienteById,
     updateClienteById,
-    insertCliente
+    insertCliente,
 }

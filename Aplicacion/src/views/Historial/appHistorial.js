@@ -92,6 +92,10 @@ function renderVentas() {
           <h2><b>Total:</b> $${(element.venta.totalventa).toFixed(2)}</h2>
         </div>
 
+        <div class="puntos">
+        <h2><b>Ptos. Canjeados:</b> ${(element.venta.puntos_canjeados)}</h2>
+      </div>
+
         <button class="btnCruz" onclick="borrar_venta(${element.venta.id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button>
     
       </div>`

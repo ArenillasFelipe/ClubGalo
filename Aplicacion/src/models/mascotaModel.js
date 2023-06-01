@@ -31,7 +31,7 @@ async function getMascotasByIdCliente(id_cliente) {
         mascotaData.actividad,
         mascotaData.id_mascota,
         mascotaData.id_cliente));
-}  
+}
 
 
 async function getMascotas() {

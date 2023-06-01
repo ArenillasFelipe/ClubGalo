@@ -16,7 +16,6 @@ body::-webkit-scrollbar-thumb {
 }
 
 .swal2-container {
-  position: absolute;
   top: 0px;
   width: 1100px;
 }
@@ -125,7 +124,7 @@ nav a:hover {
 
 
 .proto-venta {
-  height: 130px;
+  height: 150px;
   width: 1000px;
   background-color: white;
   box-shadow: 3px 3px 10px;
@@ -139,17 +138,22 @@ nav a:hover {
 
 
 
-
-
 .total {
   position: absolute;
   right: 10px;
-  top: 75px;
+  top: 95px;
+}
+
+.puntos {
+  position: absolute;
+  font-size: small;
+  right: 230px;
+  top: 104px;
 }
 
 .fecha {
   position: absolute;
-  bottom: 75px;
+  bottom: 95px;
   left: 6px;
 }
 

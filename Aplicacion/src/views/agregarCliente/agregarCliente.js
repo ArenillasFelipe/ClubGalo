@@ -4,6 +4,7 @@ const cliente_controller = require('../../controllers/cliente_controller');
 const mascota_controller = require('../../controllers/mascota_controller');
 const sweetAlerts = require('../../utils/sweetAlerts');
 const { calcularEdadMascota } = require('../../utils/calcularFechas');
+const nodemailer = require('nodemailer');
 
 let mascotas = [];
 let temporalmascotasIDs = 0;
@@ -52,7 +53,7 @@ function llenarInputsMascotas() {
 
     if (mascotas[0]) {
         cambiarInputsMascota(mascotas[0].id_mascota);
-    }else{
+    } else {
         cambiarInputsMascota("agregar");
     }
 
@@ -229,8 +230,15 @@ async function guardarClienteapp() {
     newCliente.telefono = input_telefono.value
     newCliente.puntos = input_puntos.value
 
-
     let idCliente = await cliente_controller.insertCliente(newCliente);
+
+    newCliente.id_cliente = idCliente;
+
+    if (parseInt(newCliente.puntos) > 0) {
+        await enviarEmailPuntos(newCliente);
+    }
+
+
     return idCliente;
 }
 
@@ -307,5 +315,69 @@ function listenerCruz() {
 
         main.cerrarVentanasEmergentes();
 
+    });
+}
+
+
+
+
+
+
+function enviarEmailPuntos(newCliente) {
+
+    document.body.innerHTML += `        <div class="container-load-spinner" id="container-load-spinner">
+    <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+    </div>
+</div>`
+
+    return new Promise((resolve, reject) => {
+        let fechaActual = new Date();
+
+        let dia = fechaActual.getDate();
+        let mes = fechaActual.getMonth() + 1;
+        let anio = fechaActual.getFullYear();
+        let hora = fechaActual.getHours();
+        let minutos = fechaActual.getMinutes();
+
+        // Configurar el transporter (proveedor de correo)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'felipearenillas02@gmail.com', // Tu dirección de correo
+                pass: 'whddwihzohvhowza' // Tu contraseña de correo
+            }
+        });
+
+        // Definir el contenido del correo electrónico
+        const mailOptions = {
+            from: 'felipearenillas02@gmail.com', // Dirección de correo del remitente
+            to: 'fgiarde@gmail.com', // Dirección de correo del destinatario
+            subject: 'Aviso creacion de cliente con puntos Club Galo',
+            html: `
+    <p>Se ha creado un nuevo cliente llamado ${newCliente.primernombre} ${newCliente.nombrepila} ${newCliente.apellido}(Nº: ${newCliente.id_cliente}) con ${newCliente.puntos} puntos el dia ${dia}/${mes}/${anio} a las ${hora}:${minutos}hs</p>
+    <img src="cid:logo" alt="Logo de la empresa" width="200px" style="position: center;">
+  `,
+            attachments: [
+                {
+                    filename: 'logo-galo.png',
+                    path: 'src/imagenes/logo-galo.png',
+                    cid: 'logo',
+                },
+            ],
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+                reject(error);
+            } else {
+                console.log('Correo electrónico enviado: ' + info.response);
+                resolve();
+            }
+        });
     });
 }

@@ -289,7 +289,7 @@ function listenerScrollParaTopeDePagina() {
       let select = document.getElementById("selectfiltrado");
       if (select.value == "elegir") {
         input = document.getElementById("inputmonth1");
-        mainCrearTablaPrincipalSegunFiltros(newBusqueda, filtradoPrincipal, filtradoMes);
+        mainCrearTablaPrincipalSegunFiltros(newBusqueda, select.value, input.value);
       } else {
         console.log("holaa")
         mainCrearTablaPrincipalSegunFiltros(newBusqueda, select.value, "");

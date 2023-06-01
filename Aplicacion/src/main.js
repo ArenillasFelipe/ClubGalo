@@ -1,4 +1,4 @@
-const { BrowserWindow, Notification } = require('electron')
+const { BrowserWindow, Notification, app } = require('electron')
 const { getConnection } = require('./database')
 
 async function borrar_venta_main(idVenta) {
@@ -874,6 +874,12 @@ function createWindow() {
             nodeIntegration: true
         }
     })
+
+    window.on('closed', () => {
+        app.quit();
+    });
+
+
     window.loadFile('src/views/historial/historial.html'); //indica el archivo que se cargara en la ventana
 }
 
@@ -903,6 +909,11 @@ function createWindowEditarCliente() {
             nodeIntegration: true
         }
     })
+
+    windowEditarCliente.on('closed', () => {
+        cerrarVentanasEmergentes();
+    });
+
     windowEditarCliente.loadFile('src/views/editarCliente/editarCliente.html'); //indica el archivo que se cargara en la ventana
 }
 
@@ -933,6 +944,13 @@ function createWindowAgregarCliente() {
             nodeIntegration: true
         }
     })
+
+
+    windowAgregarCliente.on('closed', () => {
+        cerrarVentanasEmergentes();
+    });
+
+
     windowAgregarCliente.loadFile('src/views/agregarCliente/agregarCliente.html'); //indica el archivo que se cargara en la ventana
 }
 let windows;
@@ -962,6 +980,12 @@ function createWindowEditarBolsa() {
             nodeIntegration: true
         }
     })
+
+
+    windowEditarBolsa.on('closed', () => {
+        cerrarVentanasEmergentes();
+    });
+
     windowEditarBolsa.loadFile('src/views/editarBolsa/editarBolsa.html'); //indica el archivo que se cargara en la ventana
 }
 
@@ -991,6 +1015,12 @@ function createWindowAgregarBolsa() {
             nodeIntegration: true
         }
     })
+
+
+    windowAgregarBolsa.on('closed', () => {
+        cerrarVentanasEmergentes();
+    });
+
     windowAgregarBolsa.loadFile('src/views/agregarBolsa/agregarBolsa.html'); //indica el archivo que se cargara en la ventana
 }
 
@@ -1019,6 +1049,12 @@ function createWindowVentasBolsas() {
             nodeIntegration: true
         }
     })
+
+
+    windowVentasBolsas.on('closed', () => {
+        cerrarVentanasEmergentes();
+    });
+
     windowVentasBolsas.loadFile('src/views/ventasBolsas/ventasBolsas.html'); //indica el archivo que se cargara en la ventana
 }
 

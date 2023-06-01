@@ -47,63 +47,52 @@ async function getClienteById(id_cliente) {
         clienteData.id_cliente);
 }
 
-async function get20ClientesBySearch(busqueda, salto) {
+async function get20ClientesBySearch(cadenaBusqueda, salto) {
 
-    if (!salto) {
-        salto = 0;
-    }
+  if (!salto) {
+    salto = 0;
+  }
 
-    busqueda = busqueda.split(/\s+/);
-    let busqueda0 = busqueda[0];
-    for (let i = 0; i < busqueda.length; i++) {
-        busqueda[i] = busqueda[i] + '%';
-    }
+  try {
     const conn = await getConnection();
-    if (busqueda.length == 1) {
-        const result = await conn.query('select * from clientes where (clientes.id_cliente = ? or clientes.primernombre like ? or clientes.nombrepila like ? or clientes.apellido like ? or clientes.telefono = ?) and validoCliente = true LIMIT ?, 20;', [busqueda0, busqueda[0], busqueda[0], busqueda[0], busqueda0, salto]);
-        // conn.release();
-        if (!result[0]) return null; // devuelve `null` si no se encuentra ningún cliente
-        return result.map(clienteData => new Cliente(
-            clienteData.primernombre,
-            clienteData.nombrepila,
-            clienteData.apellido,
-            clienteData.telefono,
-            clienteData.calle,
-            clienteData.calle_numero,
-            clienteData.puntos,
-            clienteData.id_cliente));
-    }
+    const palabrasClave = cadenaBusqueda.split(' ');
+    const condiciones = palabrasClave.map(palabra => {
+      return `(primernombre LIKE '%${palabra}%'
+        OR nombrepila LIKE '%${palabra}%'
+        OR apellido LIKE '%${palabra}%'
+        OR calle LIKE '%${palabra}%'
+        OR id_cliente = '${palabra}'
+        OR calle_numero = '${palabra}'
+        OR telefono = '${palabra}')`;
+    });
 
-    if (busqueda.length == 2) {
-        const result = await conn.query('select * from clientes where (clientes.primernombre like ? or clientes.nombrepila like ? or clientes.apellido like ? ) and (clientes.primernombre like ? or clientes.nombrepila like ? or clientes.apellido like ? ) and validoCliente = true LIMIT ?, 20;', [busqueda[0], busqueda[0], busqueda[0], busqueda[1], busqueda[1], busqueda[1], salto]);
-        // conn.release();
-        if (!result[0]) return null; // devuelve `null` si no se encuentra ningún cliente
-        return result.map(clienteData => new Cliente(
-            clienteData.primernombre,
-            clienteData.nombrepila,
-            clienteData.apellido,
-            clienteData.telefono,
-            clienteData.calle,
-            clienteData.calle_numero,
-            clienteData.puntos,
-            clienteData.id_cliente));
-    }
+    const condicionesSQL = condiciones.join(' AND ');
 
-    if (busqueda.length == 3) {
-        const result = await conn.query('select * from clientes where (clientes.primernombre like ? or clientes.nombrepila like ? or clientes.apellido like ?) and (clientes.primernombre like ? or clientes.nombrepila like ? or clientes.apellido like ?) and (clientes.primernombre like ? or clientes.nombrepila like ? or clientes.apellido like ?) and validoCliente = true LIMIT ?, 20;', [busqueda[0], busqueda[0], busqueda[0], busqueda[1], busqueda[1], busqueda[1], busqueda[2], busqueda[2], busqueda[2], salto]);
-        // conn.release();
-        if (!result[0]) return null; // devuelve `null` si no se encuentra ningún cliente
-        return result.map(clienteData => new Cliente(
-            clienteData.primernombre,
-            clienteData.nombrepila,
-            clienteData.apellido,
-            clienteData.telefono,
-            clienteData.calle,
-            clienteData.calle_numero,
-            clienteData.puntos,
-            clienteData.id_cliente));
-    }
+    const sql = `
+      SELECT *
+      FROM clientes
+      WHERE ${condicionesSQL}
+      LIMIT ?, 20
+    `;
+
+    const results = await conn.query(sql, [salto]);
+
+    return results.map(clienteData => new Cliente(
+      clienteData.primernombre,
+      clienteData.nombrepila,
+      clienteData.apellido,
+      clienteData.telefono,
+      clienteData.calle,
+      clienteData.calle_numero,
+      clienteData.puntos,
+      clienteData.id_cliente
+    ));
+  } catch (error) {
+    throw error;
+  }
 }
+
+
 
 async function updateClienteById(newCliente) {
     newCliente.primernombre = capitalizarPalabras(newCliente.primernombre);
