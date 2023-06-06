@@ -458,6 +458,7 @@ nav a:hover {
   left: 0px;
   top: 0px;
   transition: 0.5s all;
+  display: none;
 }
 
 #btnAnterior:hover {

@@ -51,13 +51,16 @@ function mainFunctionBolsasApp() {
 }
 
 
-async function mainGetYRenderBolsasSegunBusquedaApp(newBusqueda) {
+async function mainGetYRenderBolsasSegunBusquedaApp() {
   resetearDivTarjetas();
   let container_paginado = document.getElementById("container-paginado");
   container_paginado.style.opacity = 0;
 
   let bolsas18 = await bolsa_controller.get18BolsasSegunBusqueda(newBusqueda, salto);
-
+  if(await verificarUltimaPagina()) {
+    document.getElementById('btnSiguiente').style.display = "none";
+  }
+  
   for (let indiceBolsa = 0; indiceBolsa < bolsas18.length; indiceBolsa++) {
     const element = bolsas18[indiceBolsa];
 
@@ -125,8 +128,13 @@ function crearListenerBuscador() {
     let barra_busqueda = document.getElementById("barra-busqueda");
     newBusqueda = barra_busqueda.value
 
-    resetearSaltoYTarjetas();
-    mainGetYRenderBolsasSegunBusquedaApp(newBusqueda);
+    resetearDivTarjetas();
+    salto = 0;
+    let h5Pagina = document.getElementById('h5Pagina');
+    h5Pagina.textContent = 1;
+    document.getElementById('btnAnterior').style.display = "none";
+    document.getElementById('btnSiguiente').style.display = "block";
+    mainGetYRenderBolsasSegunBusquedaApp();
 
   });
 
@@ -174,6 +182,9 @@ function listenerBtnSiguiente() {
 }
 
 function paginaSiguiente() {
+
+  document.getElementById('btnAnterior').style.display = "block";
+
   let h5Pagina = document.getElementById('h5Pagina');
   h5Pagina.textContent = parseInt(h5Pagina.textContent) + 1;
   salto = (parseInt(h5Pagina.textContent) - 1) * 18;
@@ -191,6 +202,9 @@ function listenerBtnAnterior() {
 }
 
 function paginaAnterior() {
+
+  document.getElementById('btnSiguiente').style.display = "block";
+
   let h5Pagina = document.getElementById('h5Pagina');
 
   if (parseInt(h5Pagina.textContent) > 1) {
@@ -199,4 +213,20 @@ function paginaAnterior() {
     mainGetYRenderBolsasSegunBusquedaApp();
   }
 
+  if (parseInt(h5Pagina.textContent) == 1) {
+    document.getElementById('btnAnterior').style.display = "none";
+  }
+
+}
+
+
+
+async function verificarUltimaPagina() {
+  let bolsas = [];
+  bolsas = await bolsa_controller.get18BolsasSegunBusqueda(newBusqueda, salto + 18);
+  if (bolsas.length == 0) {
+    return true
+  }else{
+    return false
+  }
 }

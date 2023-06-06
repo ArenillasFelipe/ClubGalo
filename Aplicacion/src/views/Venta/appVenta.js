@@ -155,7 +155,7 @@ function mostrarDatos(mascotas) {
     mostrandoDatos.innerHTML +=
         `<p><b>Animal:</b> ` + mascota.animal + `</p>
     <p><b>Raza:</b> ` + mascota.raza + `</p>
-    <p><b>Peso:</b> ` + mascota.peso + `</p>
+    <p><b>Peso:</b> ` + mascota.peso + `kg</p>
     <p><b>Edad:</b> ` + edadMascota + `</p>
     <p><b>Actividad:</b> ` + mascota.actividad + `</p>
     <p><b>Afecciones:</b> ` + mascota.afecciones + `</p>`
@@ -217,8 +217,12 @@ async function venta(cliente, mascotas) {
 
         }
 
+        // Filtrar las mascotas que tienen IDs en el array "mascotasVenta"
+        mascotas = mascotas.filter((mascota) =>
+            mascotasVenta.includes(mascota.id_mascota)
+        );
 
-        await venta_controller.insertarVenta(newVenta, mascotasVenta, cliente.puntos, nuevosPuntos);
+        await venta_controller.insertarVenta(newVenta, mascotas, cliente.puntos, nuevosPuntos);
         await sweetAlerts.sweetAlertVentaExitosa();
         location.reload();
     } catch (error) {
@@ -357,28 +361,28 @@ function rellenarDatos(mascotas, historialVentasConBolsas) {
     select = document.getElementById("select-mascota");
     seleccionMascota = document.getElementById("seleccion-mascota");
     mascotas.forEach(element => {
-      select.innerHTML += `<option value="${element.id_mascota}">${element.nombremascota}</option>`;
-      seleccionMascota.innerHTML += `
+        select.innerHTML += `<option value="${element.id_mascota}">${element.nombremascota}</option>`;
+        seleccionMascota.innerHTML += `
         <input type="checkbox" value="1" class="checkbox" id="${element.nombremascota}">
         <label for="${element.nombremascota}" class="labelCheckboxMascota">${element.nombremascota}</label>
         <br>
       `;
     });
-    
+
     console.log("historial vetnas: ", historialVentasConBolsas);
     if (historialVentasConBolsas) {
         var divHistorial = document.getElementById("historial");
 
         historialVentasConBolsas.forEach((element, index) => {
             if (index % 2 === 0) {
-              divHistorial.innerHTML += `<div class="ventaHistorialPar"><p>${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`;
+                divHistorial.innerHTML += `<div class="ventaHistorialPar"><p>${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`;
             } else {
-              divHistorial.innerHTML += `<div class="ventaHistorialImpar"><p>${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`;
+                divHistorial.innerHTML += `<div class="ventaHistorialImpar"><p>${element.marca_bolsa} ${element.kilos_bolsa}kg (${element.calidad_bolsa})</p></div>`;
             }
-          });
-          
+        });
 
-    }else{
+
+    } else {
         var divHistorial = document.getElementById("historial");
         divHistorial.innerHTML += `<h4 class="h4SinVentas">Sin Compras</h4>`
     }
@@ -574,7 +578,11 @@ function renderVentasActivas(ventasActivas) {
 
     ventasActivas.forEach(element => {
 
-        let dias = calcularFechas.calcularDiasEntreFechaActualYFecha(element.venta.fecha);
+        let dias = calcularFechas.calcularDiasEntreFechas(element.venta.fecha, new Date());
+ 
+        let diasRestantes = calcularFechas.calcularDiasEntreFechas(new Date(), element.venta.vencimiento);
+
+        let kilosRestantes = calcularFechas.calcularKilosRestantesBolsa(element.mascotas, element.venta);
 
         divVentasActivas.innerHTML += ` <div class="container-ventaActiva">
         <div class="fecha">
@@ -593,7 +601,7 @@ function renderVentasActivas(ventasActivas) {
             </div>
 
             <div class="estadoBolsa">
-                <b>Estado:</b> Quedan 20kg en total (Quedan 230 dias)
+                <b>Estado:</b> Quedan ${kilosRestantes}kg en total (Quedan ${diasRestantes} dias)
             </div>
 
         </div>

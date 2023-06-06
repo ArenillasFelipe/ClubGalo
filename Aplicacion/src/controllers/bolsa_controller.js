@@ -26,7 +26,7 @@ async function getKilosBolsaByIdBolsa(id_bolsa) {
 
 async function get18BolsasSegunBusqueda(busqueda, salto) {
   let bolsas;
-
+  console.log(busqueda, salto);
   if (!busqueda) {
     bolsas = await bolsaModel.get18Bolsas(salto);
   } else {
@@ -34,17 +34,20 @@ async function get18BolsasSegunBusqueda(busqueda, salto) {
   }
 
   let bolsasConKilos = [];
-  for (let i = 0; i < bolsas.length; i++) {
-    const element = bolsas[i];
+  if (bolsas) {
 
-    kilos_bolsa = await bolsaKiloModel.getKilosBolsaByIdBolsa(element.id_bolsa);
 
-    bolsasConKilos.push({
-      bolsa: element,
-      kilosBolsa: kilos_bolsa
-    });
+    for (let i = 0; i < bolsas.length; i++) {
+      const element = bolsas[i];
+
+      kilos_bolsa = await bolsaKiloModel.getKilosBolsaByIdBolsa(element.id_bolsa);
+
+      bolsasConKilos.push({
+        bolsa: element,
+        kilosBolsa: kilos_bolsa
+      });
+    }
   }
-
   return bolsasConKilos;
 }
 
@@ -67,26 +70,26 @@ async function actualizarDatosBolsa(newBolsa, kilosBolsa) {
     console.log(`-${bolsasConMismoNombre.marca_bolsa}-`, `-${newBolsa.marca_bolsa}-`);
     console.log((bolsasConMismoNombre.marca_bolsa != newBolsa.marca_bolsa))
   } catch (error) {
-    
+
   }
 
   if ((bolsasConMismoNombre) && (bolsasConMismoNombre.id_bolsa != newBolsa.id_bolsa)) {
     throw new Error("bolsaRepetida");
   }
 
-    newBolsa.marca_bolsa = (newBolsa.marca_bolsa).toUpperCase();
+  newBolsa.marca_bolsa = (newBolsa.marca_bolsa).toUpperCase();
 
 
-    await bolsaModel.updateBolsaById(newBolsa);
+  await bolsaModel.updateBolsaById(newBolsa);
 
-    await bolsaKiloModel.deleteBolsas_KilosByIdBolsa(newBolsa.id_bolsa);
+  await bolsaKiloModel.deleteBolsas_KilosByIdBolsa(newBolsa.id_bolsa);
 
-    for (let i = 0; i < kilosBolsa.length; i++) {
-      const element = kilosBolsa[i];
+  for (let i = 0; i < kilosBolsa.length; i++) {
+    const element = kilosBolsa[i];
 
-      await bolsaKiloModel.insertBolsa_Kilo(newBolsa.id_bolsa, element);
+    await bolsaKiloModel.insertBolsa_Kilo(newBolsa.id_bolsa, element);
 
-    }
+  }
 }
 
 
@@ -105,7 +108,7 @@ async function insertBolsa(newBolsa, kilosBolsa) {
     throw new Error("bolsaRepetida");
   }
 
-    newBolsa.marca_bolsa = (newBolsa.marca_bolsa).toUpperCase();
+  newBolsa.marca_bolsa = (newBolsa.marca_bolsa).toUpperCase();
 
   let result = await bolsaModel.insertBolsa(newBolsa);
 

@@ -63,7 +63,7 @@ input {
     width: 40px;
 }
 
-.input-animal {
+#selectAnimal {
     margin-right: 20px;
     width: 60px;
 }
@@ -283,3 +283,10 @@ input {
       transform: rotate(360deg);
     }
   }
+
+
+
+
+  select{
+    font-weight: 700;
+}

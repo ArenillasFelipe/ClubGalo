@@ -52,6 +52,9 @@ let newBusqueda = "";
 async function get20VentasClienteapp() {
   console.log(salto);
   ventasConDatos = await venta_controller.get20Ventas(newBusqueda, salto);
+  if(await verificarUltimaPagina()) {
+    document.getElementById('btnSiguiente').style.display = "none";
+  }
   renderVentas();
 }
 
@@ -119,6 +122,10 @@ busqueda.addEventListener('submit', (e) => {
   newBusqueda = barra_busqueda.value;
   salto = 0;
   listaVentas.innerHTML = "";
+  let h5Pagina = document.getElementById('h5Pagina');
+  h5Pagina.textContent = 1;
+  document.getElementById('btnAnterior').style.display = "none";
+  document.getElementById('btnSiguiente').style.display = "block";
   get20VentasClienteapp();
 
 })
@@ -155,6 +162,9 @@ function listenerBtnSiguiente() {
 }
 
 function paginaSiguiente() {
+
+  document.getElementById('btnAnterior').style.display = "block";
+
   let h5Pagina = document.getElementById('h5Pagina');
   h5Pagina.textContent = parseInt(h5Pagina.textContent) + 1;
   salto = (parseInt(h5Pagina.textContent) - 1) * 20;
@@ -172,6 +182,9 @@ function listenerBtnAnterior() {
 }
 
 function paginaAnterior() {
+
+  document.getElementById('btnSiguiente').style.display = "block";
+
   let h5Pagina = document.getElementById('h5Pagina');
 
 
@@ -183,5 +196,19 @@ function paginaAnterior() {
 
   }
 
+  if (parseInt(h5Pagina.textContent) == 1) {
+    document.getElementById('btnAnterior').style.display = "none";
+  }
 
+
+}
+
+async function verificarUltimaPagina() {
+  let ventas = [];
+  ventas = await venta_controller.get20Ventas(newBusqueda, salto + 20);
+  if (ventas.length == 0) {
+    return true
+  }else{
+    return false
+  }
 }

@@ -42,13 +42,16 @@ let salto = 0;
 
 
 formBuscador = document.getElementById("busqueda");
-barra_busqueda = document.getElementById("barra-busqueda");
 
 formBuscador.addEventListener('submit', (e) => {
   e.preventDefault();
 
   salto = 0;
-  get20ClientesConMascotas(barra_busqueda.value);
+  let h5Pagina = document.getElementById('h5Pagina');
+  h5Pagina.textContent = 1;
+  document.getElementById('btnAnterior').style.display = "none";
+  document.getElementById('btnSiguiente').style.display = "block";
+  get20ClientesConMascotas();
 
 });
 
@@ -60,8 +63,11 @@ listenerBtnSiguiente();
 
 
 get20ClientesConMascotas();
-async function get20ClientesConMascotas(busqueda) {
-  let resultado = await cliente_controller.get20ClientesConMascotasBySearch(busqueda, salto);
+async function get20ClientesConMascotas() {
+  let resultado = await cliente_controller.get20ClientesConMascotasBySearch(barra_busqueda.value, salto);
+  if(await verificarUltimaPagina()) {
+    document.getElementById('btnSiguiente').style.display = "none";
+  }
   renderClientes(resultado);
 }
 
@@ -174,7 +180,7 @@ async function cambiarDatosMascota(idMascota, clienteConMascotas) {
 
   mostrandoDatos.innerHTML = `<p><span style="font-weight: 800;">Animal:</span> ${mascotaAMostrar.animal}</p>
     <p><span style="font-weight: 800;">Raza:</span> ${mascotaAMostrar.raza}</p>
-    <p><span style="font-weight: 800;">Peso:</span> ${mascotaAMostrar.peso}</p>
+    <p><span style="font-weight: 800;">Peso:</span> ${mascotaAMostrar.peso}kg</p>
     <p><span style="font-weight: 800;">Edad:</span> ${edadMascota}</p>
     <p><span style="font-weight: 800;">Actividad:</span> ${mascotaAMostrar.actividad}</p>
     <p><span style="font-weight: 800;">Afecciones:</span> ${mascotaAMostrar.afecciones}</p>
@@ -217,6 +223,9 @@ function listenerBtnSiguiente() {
 }
 
 function paginaSiguiente() {
+
+  document.getElementById('btnAnterior').style.display = "block";
+
   let h5Pagina = document.getElementById('h5Pagina');
   h5Pagina.textContent = parseInt(h5Pagina.textContent) + 1;
   salto = (parseInt(h5Pagina.textContent) - 1) * 20;
@@ -234,6 +243,9 @@ function listenerBtnAnterior() {
 }
 
 function paginaAnterior() {
+
+  document.getElementById('btnSiguiente').style.display = "block";
+
   let h5Pagina = document.getElementById('h5Pagina');
 
   if (parseInt(h5Pagina.textContent) > 1) {
@@ -244,8 +256,20 @@ function paginaAnterior() {
 
   }
 
+  if (parseInt(h5Pagina.textContent) == 1) {
+    document.getElementById('btnAnterior').style.display = "none";
+  }
+
 }
 
-
+async function verificarUltimaPagina() {
+  let clientes = [];
+  clientes = await cliente_controller.get20ClientesConMascotasBySearch(barra_busqueda.value, salto + 20);
+  if (clientes.length == 0) {
+    return true
+  }else{
+    return false
+  }
+}
 
 

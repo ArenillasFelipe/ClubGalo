@@ -39,7 +39,7 @@ let input_puntos = document.getElementById("input-puntos");
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 let select_mascota = document.getElementById("select-mascota");
 let input_nombremascota = document.getElementById("input-nombremascota");
-let input_animal = document.getElementById("input-animal");
+let input_animal = document.getElementById("selectAnimal");
 let input_raza = document.getElementById("input-raza");
 let input_peso = document.getElementById("input-peso");
 let spanEdad = document.getElementById("spanEdad");

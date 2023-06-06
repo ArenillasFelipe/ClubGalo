@@ -2,6 +2,7 @@ const clienteModel = require('../models/clienteModel');
 const ventaModel = require('../models/ventaModel');
 const mascotaModel = require('../models/mascotaModel');
 const venta_mascotaModel = require('../models/venta_mascotaModel');
+const { calcularDuracionBolsa, sumarDiasAFechaActual, calcularDiasEntreFechas } = require('../utils/calcularFechas');
 
 
 async function get20VentasByIdClienteByFiltersController(id_cliente, filtro, filtroMes, salto) {
@@ -118,9 +119,12 @@ async function getVentasActivasByIdCliente(id_cliente) {
 
 
 
-async function insertarVenta(newVenta, idMascotasVenta, puntosActualesCliente, nuevosPuntosCliente) {
-    console.log("Mascotas seleccionadas: ", idMascotasVenta);
+async function insertarVenta(newVenta, mascotasVenta, puntosActualesCliente, nuevosPuntosCliente) {
+    console.log("Mascotas seleccionadas: ", mascotasVenta);
+        
 
+        newVenta.precio = (newVenta.precio).replace(/,/g, '.');
+        newVenta.precio = parseFloat(newVenta.precio);
 
 
         switch (newVenta.calidad_bolsa) {
@@ -148,23 +152,65 @@ async function insertarVenta(newVenta, idMascotasVenta, puntosActualesCliente, n
     await clienteModel.actualizarPuntosClienteById(newVenta.id_cliente, nuevosPuntosCliente);
 
 
-    for (let i = 0; i < idMascotasVenta.length; i++) {
+    for (let i = 0; i < mascotasVenta.length; i++) {
 
-        let ventaActivaMascota = await venta_mascotaModel.getVenta_MascotaActivaByIdMascota(idMascotasVenta[i]);
+        let ventaActivaMascota = await venta_mascotaModel.getVenta_MascotaActivaByIdMascota(mascotasVenta[i].id_mascota);
 
         if (ventaActivaMascota) {
             await ventaModel.actualizarVentaAInactivaById(ventaActivaMascota.id_venta);
         }
     }
 
+    let duracionBolsa = calcularDuracionBolsa(mascotasVenta, newVenta);
+    let vencimientoVenta = sumarDiasAFechaActual(duracionBolsa);
+    newVenta.vencimiento = vencimientoVenta;
+    console.log("duracion bolsa: ", duracionBolsa);
     resultInsert = await ventaModel.insertVenta(newVenta);
 
 
     console.log("id con el que se guardo: ", resultInsert.insertId);
 
-    for (let i = 0; i < idMascotasVenta.length; i++) {
-        await venta_mascotaModel.insertVenta_Mascota(resultInsert.insertId, idMascotasVenta[i]);
+    for (let i = 0; i < mascotasVenta.length; i++) {
+        await venta_mascotaModel.insertVenta_Mascota(resultInsert.insertId, mascotasVenta[i].id_mascota);
     }
+}
+
+
+async function getVentasPorVencerConMascotas() {
+    let ventas = [];
+    ventas = await ventaModel.getVentasPorVencer();
+
+
+    let ventasConMascotas = [];
+    for (let i = 0; i < ventas.length; i++) {
+
+        let cliente = await clienteModel.getClienteById(ventas[i].id_cliente);
+
+        ventas[i].vencimiento = Math.round(calcularDiasEntreFechas(new Date(), ventas[i].vencimiento));
+
+        let idMascotasVenta = await venta_mascotaModel.getVenta_MascotasByIdVenta(ventas[i].id_venta);
+        let mascotas = [];
+        for (let i = 0; i < idMascotasVenta.length; i++) {
+            let mascota = await mascotaModel.getMascotaById(idMascotasVenta[i].id_mascota);
+            mascotas.push(mascota);
+        }
+
+        // Agregar la información del cliente a la venta correspondiente
+        ventasConMascotas.push({
+            venta: ventas[i],
+            mascotas: mascotas,
+            cliente: cliente
+        });
+    }
+
+
+    return ventasConMascotas;
+}
+
+
+
+async function actualizarVentasVencidas() {
+    await ventaModel.actualizarVentasVencidas();
 }
 
 
@@ -174,5 +220,7 @@ module.exports = {
     borrarVenta_RestarPuntos,
     get20UltimasVentasByIdCliente,
     getVentasActivasByIdCliente,
-    insertarVenta
+    insertarVenta,
+    getVentasPorVencerConMascotas,
+    actualizarVentasVencidas
 }

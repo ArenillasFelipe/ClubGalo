@@ -2,7 +2,7 @@ const { getConnection } = require('../database');
 const { convertirMayusculas } = require('../utils/palabras');
 
 class Venta {
-  constructor(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, activo, totalventa, puntos_obtenidos, puntos_canjeados, id_venta) {
+  constructor(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, activo, totalventa, puntos_obtenidos, puntos_canjeados, vencimiento, id_venta) {
     this.fecha = fecha;
     this.precio = precio;
     this.id_cliente = id_cliente;
@@ -14,6 +14,7 @@ class Venta {
     this.totalventa = totalventa;
     this.puntos_obtenidos = puntos_obtenidos;
     this.puntos_canjeados = puntos_canjeados;
+    this.vencimiento = vencimiento;
     this.id_venta = id_venta;
   }
 }
@@ -34,6 +35,7 @@ async function get20Ventas(salto) {
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
     ventaData.puntos_canjeados,
+    ventaData.vencimiento,
     ventaData.id_venta
   ));
 }
@@ -57,6 +59,7 @@ async function getVentaById(id_venta) {
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
     ventaData.puntos_canjeados,
+    ventaData.vencimiento,
     ventaData.id_venta
   );
 }
@@ -107,6 +110,7 @@ async function get20VentasBySearch(busqueda, salto) {
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
     ventaData.puntos_canjeados,
+    ventaData.vencimiento,
     ventaData.id_venta
   ));
 }
@@ -114,7 +118,7 @@ async function get20VentasBySearch(busqueda, salto) {
 async function insertVenta(newVenta) {
   const conn = await getConnection();
   newVenta.marca_bolsa = convertirMayusculas(newVenta.marca_bolsa);
-  result = await conn.query('insert into venta(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, activo, puntos_obtenidos, puntos_canjeados) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [newVenta.fecha, newVenta.precio, newVenta.id_cliente, newVenta.cantidad, newVenta.marca_bolsa, newVenta.kilos_bolsa, newVenta.calidad_bolsa, newVenta.activo, newVenta.puntos_obtenidos, newVenta.puntos_canjeados]);
+  result = await conn.query('insert into venta(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, activo, puntos_obtenidos, puntos_canjeados, vencimiento) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [newVenta.fecha, newVenta.precio, newVenta.id_cliente, newVenta.cantidad, newVenta.marca_bolsa, newVenta.kilos_bolsa, newVenta.calidad_bolsa, newVenta.activo, newVenta.puntos_obtenidos, newVenta.puntos_canjeados, newVenta.vencimiento]);
   // conn.release();
   return result;
 }
@@ -169,6 +173,7 @@ async function get20VentasByIdClienteByFilters(id_cliente, filtro, filtroMes, sa
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
     ventaData.puntos_canjeados,
+    ventaData.vencimiento,
     ventaData.id_venta
   ));
 }
@@ -190,6 +195,7 @@ async function getVentasActivasByIdCliente(id_cliente) {
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
     ventaData.puntos_canjeados,
+    ventaData.vencimiento,
     ventaData.id_venta
   ));
 }
@@ -211,6 +217,7 @@ async function getUltimas20VentasByIdCliente(id_cliente) {
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
     ventaData.puntos_canjeados,
+    ventaData.vencimiento,
     ventaData.id_venta
   ));
 }
@@ -230,6 +237,49 @@ async function actualizarVentasClienteAInactivas(id_cliente) {
 }
 
 
+async function getVentasPorVencer() {
+  const conn = await getConnection();
+  const result = await conn.query('SELECT * FROM venta WHERE vencimiento <= DATE_ADD(CURDATE(), INTERVAL 8 DAY) AND vencimiento >= CURDATE() AND activo = true ORDER BY vencimiento ASC');
+  // conn.release();
+  return result.map(ventaData => new Venta(
+    ventaData.fecha,
+    ventaData.precio,
+    ventaData.id_cliente,
+    ventaData.cantidad,
+    ventaData.marca_bolsa,
+    ventaData.kilos_bolsa,
+    ventaData.calidad_bolsa,
+    ventaData.activo,
+    ventaData.totalventa,
+    ventaData.puntos_obtenidos,
+    ventaData.puntos_canjeados,
+    ventaData.vencimiento,
+    ventaData.id_venta
+  ));
+}
+
+
+async function actualizarVentasVencidas() {
+  const conn = await getConnection();
+
+// Obtener la fecha actual
+var fechaAyer = new Date();
+
+// Restar un día a la fecha actual
+fechaAyer.setDate(fechaAyer.getDate() - 1);
+
+// Establecer la hora a la última hora del día
+fechaAyer.setHours(23, 59, 59, 999);
+
+
+  await conn.query('UPDATE venta SET activo = false WHERE vencimiento <= ? ', fechaAyer);
+  // conn.release();
+}
+
+
+
+
+
 module.exports = {
   Venta,
   get20Ventas,
@@ -241,5 +291,7 @@ module.exports = {
   getVentasActivasByIdCliente,
   getUltimas20VentasByIdCliente,
   actualizarVentaAInactivaById,
-  actualizarVentasClienteAInactivas
+  actualizarVentasClienteAInactivas,
+  getVentasPorVencer,
+  actualizarVentasVencidas
 }
