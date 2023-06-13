@@ -163,7 +163,7 @@ function createWindowAgregarBolsa() {
         width: 550,
         height: 450,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
