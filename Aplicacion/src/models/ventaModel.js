@@ -2,7 +2,7 @@ const { getConnection } = require('../database');
 const { convertirMayusculas } = require('../utils/palabras');
 
 class Venta {
-  constructor(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, activo, totalventa, puntos_obtenidos, puntos_canjeados, vencimiento, id_venta) {
+  constructor(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, marca_previa, kilos_previos, calidad_previa, activo, totalventa, puntos_obtenidos, puntos_canjeados, vencimiento, id_venta) {
     this.fecha = fecha;
     this.precio = precio;
     this.id_cliente = id_cliente;
@@ -10,6 +10,9 @@ class Venta {
     this.marca_bolsa = marca_bolsa;
     this.kilos_bolsa = kilos_bolsa;
     this.calidad_bolsa = calidad_bolsa;
+    this.marca_previa = marca_previa;
+    this.kilos_previos = kilos_previos
+    this.calidad_previa = calidad_previa;
     this.activo = activo;
     this.totalventa = totalventa;
     this.puntos_obtenidos = puntos_obtenidos;
@@ -19,9 +22,13 @@ class Venta {
   }
 }
 
+
+
+
+
 async function get20Ventas(salto) {
   const conn = await getConnection();
-  const result = await conn.query('SELECT * FROM venta order by venta.fecha DESC LIMIT ?, 20;', salto);
+  const result = await conn.query('SELECT * FROM venta ORDER BY fecha DESC LIMIT ?, 20;', salto);
   // conn.release();
   return result.map(ventaData => new Venta(
     ventaData.fecha,
@@ -31,6 +38,9 @@ async function get20Ventas(salto) {
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
+    ventaData.marca_previa,
+    ventaData.kilos_previos,
+    ventaData.calidad_previa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
@@ -39,6 +49,9 @@ async function get20Ventas(salto) {
     ventaData.id_venta
   ));
 }
+
+
+
 
 
 async function getVentaById(id_venta) {
@@ -55,6 +68,9 @@ async function getVentaById(id_venta) {
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
+    ventaData.marca_previa,
+    ventaData.kilos_previos,
+    ventaData.calidad_previa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
@@ -106,6 +122,9 @@ async function get20VentasBySearch(busqueda, salto) {
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
+    ventaData.marca_previa,
+    ventaData.kilos_previos,
+    ventaData.calidad_previa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
@@ -116,12 +135,14 @@ async function get20VentasBySearch(busqueda, salto) {
 }
 
 async function insertVenta(newVenta) {
+  console.log("newVenta antes de insertar:", newVenta);
   const conn = await getConnection();
   newVenta.marca_bolsa = convertirMayusculas(newVenta.marca_bolsa);
-  result = await conn.query('insert into venta(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, activo, puntos_obtenidos, puntos_canjeados, vencimiento) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [newVenta.fecha, newVenta.precio, newVenta.id_cliente, newVenta.cantidad, newVenta.marca_bolsa, newVenta.kilos_bolsa, newVenta.calidad_bolsa, newVenta.activo, newVenta.puntos_obtenidos, newVenta.puntos_canjeados, newVenta.vencimiento]);
+  result = await conn.query('INSERT INTO venta(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, marca_previa, kilos_previos, calidad_previa, activo, puntos_obtenidos, puntos_canjeados, vencimiento) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [newVenta.fecha, newVenta.precio, newVenta.id_cliente, newVenta.cantidad, newVenta.marca_bolsa, newVenta.kilos_bolsa, newVenta.calidad_bolsa, newVenta.marca_previa, newVenta.kilos_previos, newVenta.calidad_previa, newVenta.activo, newVenta.puntos_obtenidos, newVenta.puntos_canjeados, newVenta.vencimiento]);
   // conn.release();
   return result;
 }
+
 
 async function deleteVentaById(id_venta) {
   const conn = await getConnection();
@@ -169,6 +190,9 @@ async function get20VentasByIdClienteByFilters(id_cliente, filtro, filtroMes, sa
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
+    ventaData.marca_previa,
+    ventaData.kilos_previos,
+    ventaData.calidad_previa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
@@ -183,6 +207,7 @@ async function getVentasActivasByIdCliente(id_cliente) {
   const conn = await getConnection();
   const result = await conn.query('SELECT * FROM venta where id_cliente = ? and activo = true order by venta.fecha', id_cliente);
   // conn.release();
+  console.log("result: ", result);
   return result.map(ventaData => new Venta(
     ventaData.fecha,
     ventaData.precio,
@@ -191,6 +216,9 @@ async function getVentasActivasByIdCliente(id_cliente) {
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
+    ventaData.marca_previa,
+    ventaData.kilos_previos,
+    ventaData.calidad_previa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
@@ -213,6 +241,9 @@ async function getUltimas20VentasByIdCliente(id_cliente) {
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
+    ventaData.marca_previa,
+    ventaData.kilos_previos,
+    ventaData.calidad_previa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
@@ -237,9 +268,9 @@ async function actualizarVentasClienteAInactivas(id_cliente) {
 }
 
 
-async function getVentasPorVencer() {
+async function get20VentasPorVencer(salto) {
   const conn = await getConnection();
-  const result = await conn.query('SELECT * FROM venta WHERE vencimiento <= DATE_ADD(CURDATE(), INTERVAL 8 DAY) AND vencimiento >= CURDATE() AND activo = true ORDER BY vencimiento ASC');
+  const result = await conn.query('SELECT * FROM venta WHERE vencimiento <= DATE_ADD(CURDATE(), INTERVAL 8 DAY) AND vencimiento >= CURDATE() AND activo = true ORDER BY vencimiento ASC limit ?, 20;', salto);
   // conn.release();
   return result.map(ventaData => new Venta(
     ventaData.fecha,
@@ -249,6 +280,9 @@ async function getVentasPorVencer() {
     ventaData.marca_bolsa,
     ventaData.kilos_bolsa,
     ventaData.calidad_bolsa,
+    ventaData.marca_previa,
+    ventaData.kilos_previos,
+    ventaData.calidad_previa,
     ventaData.activo,
     ventaData.totalventa,
     ventaData.puntos_obtenidos,
@@ -292,6 +326,6 @@ module.exports = {
   getUltimas20VentasByIdCliente,
   actualizarVentaAInactivaById,
   actualizarVentasClienteAInactivas,
-  getVentasPorVencer,
+  get20VentasPorVencer,
   actualizarVentasVencidas
 }

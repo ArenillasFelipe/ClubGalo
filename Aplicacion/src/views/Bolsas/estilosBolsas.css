@@ -641,7 +641,7 @@ nav a:hover {
   transform: translateX(-50%);
   width: 350px;
   height: 40px;
-  opacity: 0;
+  display: none;
 }
 
 

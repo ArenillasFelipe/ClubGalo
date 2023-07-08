@@ -79,7 +79,7 @@ divClientes = document.getElementById("divClientes");
 async function renderClientes(clientesConMascotas) {
   divClientes.innerHTML = "";
   let container_paginado = document.getElementById("container-paginado");
-  container_paginado.style.opacity = 0;
+  container_paginado.style.display = "none";
 
 
   for (let index = 0; index < clientesConMascotas.length; index++) {
@@ -164,7 +164,7 @@ async function renderClientes(clientesConMascotas) {
 
 
 
-  container_paginado.style.opacity = 1;
+  container_paginado.style.display = "block";
 }
 
 async function cambiarDatosMascota(idMascota, clienteConMascotas) {

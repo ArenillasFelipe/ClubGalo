@@ -1,5 +1,4 @@
-const { BrowserWindow, Notification, app } = require('electron');
-const { getConnection } = require('./database');
+const { BrowserWindow, app } = require('electron');
 const { actualizarVentasVencidas } = require('./models/ventaModel');
 
 
@@ -57,7 +56,7 @@ function createWindowEditarCliente() {
         width: 900,
         height: 570,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -92,7 +91,7 @@ function createWindowAgregarCliente() {
         width: 900,
         height: 570,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -128,7 +127,7 @@ function createWindowEditarBolsa() {
         width: 550,
         height: 450,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {

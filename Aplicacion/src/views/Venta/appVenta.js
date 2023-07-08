@@ -11,6 +11,9 @@ const calcularFechas = require('../../utils/calcularFechas');
 
 let cliente;
 let nuevosPuntos;
+let kilosPrevios = 0;
+let marcaPrevia;
+let calidadPrevia;
 
 let inputCliente = document.getElementById("inputCliente");
 inputCliente.focus();
@@ -100,15 +103,15 @@ const MainFunctionVenta = async () => {
 }
 
 
-preguntarClienteEditado();
-async function preguntarClienteEditado() {
+preguntarClienteVenta();
+async function preguntarClienteVenta() {
 
-    //pregunto si se esta recargando la pagina por haber editado el cliente
-    let idClienteEditado = localStorage.getItem("ClienteEditado");
+    //pregunto si se esta recargando la pagina por haber editado el cliente o por haber dado click desde seguimiento
+    let idClienteVenta = localStorage.getItem("ClienteVenta");
     localStorage.clear();
 
-    if (idClienteEditado) {
-        inputCliente.value = idClienteEditado;
+    if (idClienteVenta) {
+        inputCliente.value = idClienteVenta;
         MainFunctionVenta();
     }
 
@@ -198,11 +201,56 @@ async function venta(cliente, mascotas) {
         cantbolsas = document.getElementById("inputcantbolsas");
         let mascotasVenta = [];
         console.log(bolsaSeleccionada);
-        let newVenta = new Venta(new Date(), precio.value, cliente.id_cliente, cantbolsas.value, bolsaSeleccionada.marca_bolsa, bolsaSeleccionada.kilos_bolsa, bolsaSeleccionada.calidad_bolsa, true);
 
+
+        console.log("logs que me importan: ", bolsaSeleccionada.calidad_bolsa, );
+
+
+        let nuevaVenta = {
+            fecha: "",
+            precio: "",
+            id_cliente: "",
+            cantidad: "",
+            marca_bolsa: "",
+            kilos_bolsa: "",
+            calidad_bolsa: "",
+            marca_previa: "",
+            kilos_previos: "",
+            calidad_previa: "",
+            activo: "",
+            totalventa: "",
+            puntos_obtenidos: "",
+            puntos_canjeados: "",
+            vencimiento: "",
+            id_venta: ""
+        }
+
+        nuevaVenta.fecha = new Date();
+        nuevaVenta.precio = parseFloat(precio.value);
+        nuevaVenta.id_cliente = cliente.id_cliente;
+        nuevaVenta.cantidad = parseInt(cantbolsas.value);
+        nuevaVenta.marca_bolsa = bolsaSeleccionada.marca_bolsa;
+        nuevaVenta.kilos_bolsa = bolsaSeleccionada.kilos_bolsa;
+        nuevaVenta.calidad_bolsa = bolsaSeleccionada.calidad_bolsa;
+        nuevaVenta.marca_previa = marcaPrevia;
+        nuevaVenta.kilos_previos = kilosPrevios;
+        nuevaVenta.calidad_previa = calidadPrevia;
+        nuevaVenta.activo = true;
+        nuevaVenta.totalventa = "";
+        nuevaVenta.puntos_obtenidos = "";
+        nuevaVenta.puntos_canjeados = "";
+        nuevaVenta.vencimiento = "";
+        nuevaVenta.id_venta = "";
+
+
+        console.log("logs que me importan2: ", bolsaSeleccionada.calidad_bolsa, parseInt(cantbolsas.value));
+
+
+        console.log("nuevaVenta justo cuando lo creo: ", nuevaVenta);
+        console.log("log desdepues del log que quiero")
         mascotas.forEach(element => {
 
-            checks = document.getElementById(element.nombremascota);
+            checks = document.getElementById(`checkbox${element.nombremascota}`);
 
             if (checks.checked) {
                 mascotasVenta.push(element.id_mascota);
@@ -221,8 +269,7 @@ async function venta(cliente, mascotas) {
         mascotas = mascotas.filter((mascota) =>
             mascotasVenta.includes(mascota.id_mascota)
         );
-
-        await venta_controller.insertarVenta(newVenta, mascotas, cliente.puntos, nuevosPuntos);
+        await venta_controller.insertarVenta(nuevaVenta, mascotas, cliente.puntos, nuevosPuntos);
         await sweetAlerts.sweetAlertVentaExitosa();
         location.reload();
     } catch (error) {
@@ -363,8 +410,8 @@ function rellenarDatos(mascotas, historialVentasConBolsas) {
     mascotas.forEach(element => {
         select.innerHTML += `<option value="${element.id_mascota}">${element.nombremascota}</option>`;
         seleccionMascota.innerHTML += `
-        <input type="checkbox" value="1" class="checkbox" id="${element.nombremascota}">
-        <label for="${element.nombremascota}" class="labelCheckboxMascota">${element.nombremascota}</label>
+        <input type="checkbox" value="1" class="checkbox" id="checkbox${element.nombremascota}">
+        <label for="checkbox${element.nombremascota}" class="labelCheckboxMascota">${element.nombremascota}</label>
         <br>
       `;
     });
@@ -400,39 +447,51 @@ async function inputBolsas() {
     let input = document.getElementById("input-marca");
 
     input.addEventListener("keyup", (e) => {
-        //loop through above array
-        //Initially remove all elements ( so if user erases a letter or adds new letter then clean previous outputs)
+        // Limpiar los elementos anteriores
         removeElements();
+
+        let searchTerms = input.value.replace(/\s+/g, ' ');
+        searchTerms = searchTerms.trim().toUpperCase().split(" ");
+
         bolsas.forEach((bolsa) => {
-            let marcaBolsa = bolsa.marca_bolsa;
-            //convert input to lowercase and compare with each string
-            if (
-                marcaBolsa.toLowerCase().startsWith(input.value.toLowerCase()) &&
-                input.value != ""
-            ) {
-                //create li element
+            let marcaBolsa = bolsa.marca_bolsa.toUpperCase().replace(/\s/g, ""); // Eliminar espacios en blanco
+
+            let matchesAllTerms = true;
+
+            searchTerms.forEach((term) => {
+                if (!marcaBolsa.includes(term)) {
+                    matchesAllTerms = false;
+                    return; // Salir del bucle forEach
+                }
+            });
+
+            if (matchesAllTerms && input.value.trim() !== "") {
+                // Crear elemento de lista (li)
                 let listItem = document.createElement("li");
-                //One common class name
                 listItem.classList.add("list-items");
                 listItem.style.cursor = "pointer";
                 listItem.addEventListener("click", () => displayNames(bolsa));
-                //Display matched part in bold
-                let word = "<b>" + marcaBolsa.substr(0, input.value.length) + "</b>";
-                word += marcaBolsa.substr(input.value.length);
-                //display the value in array
+
+                // Resaltar las palabras coincidentes en negrita
+                let word = bolsa.marca_bolsa;
+                searchTerms.forEach((term) => {
+                    word = word.replace(new RegExp(term, "gi"), "<b>$&</b>");
+                });
+
                 listItem.innerHTML = word;
                 document.querySelector(".list").appendChild(listItem);
             }
         });
     });
+
     function displayNames(bolsa) {
         input.value = bolsa.marca_bolsa;
-        bolsaSeleccionada = bolsa
+        bolsaSeleccionada = bolsa;
         actualizarKgBolsa();
         removeElements();
     }
+
     function removeElements() {
-        //clear all the item
         selectKG = document.getElementById("selectkilos");
         selectKG.innerHTML = "";
         let items = document.querySelectorAll(".list-items");
@@ -441,6 +500,9 @@ async function inputBolsas() {
         });
     }
 }
+
+
+
 
 
 
@@ -576,10 +638,10 @@ function renderVentasActivas(ventasActivas) {
 
     divVentasActivas.innerHTML = "";
 
-    ventasActivas.forEach(element => {
+    ventasActivas.forEach(function (element, index) {
 
         let dias = calcularFechas.calcularDiasEntreFechas(element.venta.fecha, new Date());
- 
+
         let diasRestantes = calcularFechas.calcularDiasEntreFechas(new Date(), element.venta.vencimiento);
 
         let kilosRestantes = calcularFechas.calcularKilosRestantesBolsa(element.mascotas, element.venta);
@@ -590,6 +652,11 @@ function renderVentasActivas(ventasActivas) {
         </div>
 
         <div class="container-datos-mascotas">
+
+            <div class="ContainerCheckboxVentaActiva">
+            <input type="checkbox" name="checkboxVentaActiva${element.venta.id_venta}" id="checkboxVentaActiva${element.venta.id_venta}" class="checkboxVentaActiva" value="1">
+            <label for="checkboxVentaActiva${element.venta.id_venta}">Compra por adelantado</label>
+            </div>
 
             <div class="datos-ventaActiva">
                 <h3 class="h3Bolsa"><b>Bolsa: </b>${element.venta.marca_bolsa}</h3>
@@ -619,7 +686,7 @@ function renderVentasActivas(ventasActivas) {
 
 
     });
-
+    listenerCheckboxesVentasActivas(ventasActivas);
 }
 
 
@@ -628,5 +695,81 @@ function editarCliente() {
     localStorage.setItem("ClienteAEditar", cliente.id_cliente);
     main.createWindowEditarCliente();
 }
+
+function listenerCheckboxesVentasActivas(ventasActivas) {
+    ventasActivas.forEach(function (ventaActiva) {
+      let mascotasVentaActiva = ventaActiva.mascotas;
+      let kilosRestantes = calcularFechas.calcularKilosRestantesBolsa(mascotasVentaActiva, ventaActiva.venta);
+  
+      // Crear el listener para el checkbox de la venta activa
+      let checkboxVentaActiva = document.getElementById(`checkboxVentaActiva${ventaActiva.venta.id_venta}`);
+      checkboxVentaActiva.addEventListener('change', function (e) {
+        if (checkboxVentaActiva.checked) {
+          desmarcarCheboxesVentasActivas(ventasActivas, ventaActiva.venta.id_venta);
+            
+          //descmarco todos los checkboxes de mascotas para despues mas abajo volver a marcar el que es
+          let checkboxesMascotas = document.querySelectorAll(".checkbox");
+          checkboxesMascotas.forEach(element => {
+            console.log("desmarco checkbox");
+            element.checked = false;
+          });
+
+          kilosPrevios = kilosRestantes;
+          marcaPrevia = ventaActiva.venta.marca_bolsa;
+          calidadPrevia = ventaActiva.venta.calidad_bolsa;
+          console.log("kilosPrevios: ", kilosPrevios);
+          console.log("marcaPrevia: ", marcaPrevia);
+          console.log("calidadPrevia: ",  calidadPrevia);
+        
+
+          //marco los checkboxes de las mascotas de la venta activa
+          mascotasVentaActiva.forEach(function (mascota) {
+            let checkboxMascota = document.getElementById(`checkbox${mascota.nombremascota}`);
+            checkboxMascota.checked = true;
+          });
+        } else {
+          mascotasVentaActiva.forEach(function (mascota) {
+            let checkboxMascota = document.getElementById(`checkbox${mascota.nombremascota}`);
+            checkboxMascota.checked = false;
+            console.log("entro a no checked");
+            kilosPrevios = 0;
+            marcaPrevia = undefined;
+            calidadPrevia = undefined;
+            console.log("kilosPrevios: ", kilosPrevios);
+            console.log("marcaPrevia: ", marcaPrevia);
+            console.log("calidadPrevia: ",  calidadPrevia);
+          });
+        }
+      });
+    });
+  }
+  
+
+function desmarcarCheboxesVentasActivas(ventasActivas, idVentaMantener) {
+   console.log(ventasActivas); 
+  ventasActivas = quitarVentaActivaPorId(ventasActivas, idVentaMantener);
+  console.log(ventasActivas); 
+    console.log("funcion desmarcar checkboxes");
+    //desmarco todos los checkbox de ventas activas y los de sus respectivas mascotas
+    ventasActivas.forEach(function (element, index) {
+        console.log(index);
+        let checkboxVentaActiva = document.getElementById(`checkboxVentaActiva${element.venta.id_venta}`);
+        checkboxVentaActiva.checked = false;
+
+    });
+
+
+
+
+}
+
+
+
+function quitarVentaActivaPorId(ventasActivas, idVenta) {
+    let ventasSeleccionadas = ventasActivas.filter(objeto => objeto.venta.id_venta != idVenta);
+    return ventasSeleccionadas;
+}
+
+  
 
 

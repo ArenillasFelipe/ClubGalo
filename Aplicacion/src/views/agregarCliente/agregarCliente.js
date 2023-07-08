@@ -89,6 +89,7 @@ async function cambiarInputsMascota(idMascota) {
         divboton_eliminar.innerHTML = `<button class="btn-eliminarmascota" id="btn-eliminarmascota">ELIMINAR MASCOTA</button>`;
         listenerEliminarMascota(idMascota);
         listenerActualizarMascota(idMascota);
+        listenersCambiosInputsMascota();
 
 
         let mascotaAMostrar = mascotas.find(mascota => mascota.id_mascota == idMascota);
@@ -378,6 +379,20 @@ function enviarEmailPuntos(newCliente) {
                 console.log('Correo electrónico enviado: ' + info.response);
                 resolve();
             }
+        });
+    });
+}
+
+
+function listenersCambiosInputsMascota() {
+
+    let btnActualizarMascota = document.getElementById("btnActualizarMascota");
+
+    const inputsMascota = document.querySelectorAll('.inputMascota');
+
+    inputsMascota.forEach(function (input) {
+        input.addEventListener('input', function () {
+            btnActualizarMascota.style.display = "block";
         });
     });
 }

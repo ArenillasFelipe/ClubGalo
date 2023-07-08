@@ -57,13 +57,13 @@ async function get20ClientesBySearch(cadenaBusqueda, salto) {
     const conn = await getConnection();
     const palabrasClave = cadenaBusqueda.split(' ');
     const condiciones = palabrasClave.map(palabra => {
-      return `(primernombre LIKE '%${palabra}%'
+      return `((primernombre LIKE '%${palabra}%'
         OR nombrepila LIKE '%${palabra}%'
         OR apellido LIKE '%${palabra}%'
         OR calle LIKE '%${palabra}%'
         OR id_cliente = '${palabra}'
         OR calle_numero = '${palabra}'
-        OR telefono = '${palabra}')`;
+        OR telefono = '${palabra}') AND validoCliente = true)`;
     });
 
     const condicionesSQL = condiciones.join(' AND ');

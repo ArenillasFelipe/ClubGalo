@@ -13,8 +13,8 @@ barra_busqueda.focus();
 init();
 function init() {
 
-  newBusqueda = sessionStorage.getItem("historialCliente");
-  sessionStorage.clear();
+  newBusqueda = localStorage.getItem("historialCliente");
+  localStorage.clear();
 
   crearListenerBuscador();
   listenerScrollParaTopeDePagina();
@@ -37,7 +37,7 @@ function crearListenerBuscador() {
 
     barra_busqueda = document.getElementById('barra-busqueda')
     newBusqueda = barra_busqueda.value;
-    sessionStorage.setItem("historialCliente", newBusqueda);
+    localStorage.setItem("historialCliente", newBusqueda);
     location.href = "../historialPersona/historialPersona.html";
 
   })
@@ -313,12 +313,12 @@ async function borrar_venta(idVenta) {
 
     if (resultados.confirma_borrar_puntos) {
       await venta_controller.borrarVenta_RestarPuntos(idVenta, true);
-      sessionStorage.setItem("historialCliente", cliente.id_cliente);
+      localStorage.setItem("historialCliente", cliente.id_cliente);
       location.reload();
       return
     }
     await venta_controller.borrarVenta_RestarPuntos(idVenta, false);
-    sessionStorage.setItem("historialCliente", cliente.id_cliente);
+    localStorage.setItem("historialCliente", cliente.id_cliente);
     location.reload();
   }
 }

@@ -18,19 +18,20 @@
                 <div class="datos-cliente">
                         <h1>Datos del Cliente</h1>
                         <p><span style="font-weight: 800;">Primer Nombre:</span> <input required type="text"
-                                        class="input-primernombre" id="input-primernombre"></p>
+                                        class="input-primernombre inputPersona" id="input-primernombre"></p>
                         <p><span style="font-weight: 800;">Nombre de pila:<span style="font-weight: 800;"></span> <input
-                                                required type="text" class="input-nombrepila" id="input-nombrepila"></p>
+                                                required type="text" class="input-nombrepila inputPersona"
+                                                id="input-nombrepila"></p>
                         <p><span style="font-weight: 800;">Apellido:</span> <input required type="text"
-                                        class="input-apellido" id="input-apellido"></p>
+                                        class="input-apellido inputPersona" id="input-apellido"></p>
                         <p><span style="font-weight: 800;">Direccion(Calle):</span> <input required type="text"
-                                        class="input-calle" id="input-calle"> <span
+                                        class="input-calle inputPersona" id="input-calle"> <span
                                         style="font-weight: 800;">Nro:</span> <input required type="number"
-                                        class="input-numero" id="input-numero"></p>
+                                        class="input-numero inputPersona" id="input-numero"></p>
                         <p><span style="font-weight: 800;">Telefono:</span> <input required type="number"
-                                        class="input-telefono" id="input-telefono"></p>
+                                        class="input-telefono inputPersona" id="input-telefono"></p>
                         <p><span style="font-weight: 800;">Puntos:</span> <input required type="number"
-                                        class="input-telefono" id="input-puntos"></p>
+                                        class="input-telefono inputPersona" id="input-puntos"></p>
                 </div>
 
                 <div class="datos-mascota">
@@ -39,7 +40,8 @@
                         </div>
                         <div class="mostrar-datos">
                                 <form>
-                                        <label for="selectmascota"><span style="font-weight: 800;">Mostrando datos
+                                        <label for="selectmascota"><span style="font-weight: 800;">Mostrando
+                                                        datos
                                                         de:</span></label>
                                         <select name="selectmascota" class="select-mascota" id="select-mascota">
                                         </select>
@@ -47,31 +49,36 @@
                         </div>
                         <div class="mostrando-datos" id="mostrando-datos">
                                 <p><span style="font-weight: 800;">Nombre:</span> <input required type="text"
-                                                class="input-nombremascota" id="input-nombremascota"></p>
-                                <p><span style="font-weight: 800;">Animal:</span> <select id="selectAnimal"><option value="Perro">Perro</option><option value="Gato">Gato</option></select><span
-                                                style="font-weight: 800;">Raza:</span> <input required type="text"
-                                                class="input-raza" id="input-raza"></p>
+                                                class="input-nombremascota inputMascota" id="input-nombremascota"></p>
+                                <p><span style="font-weight: 800;">Animal:</span> <select id="selectAnimal"
+                                                class="inputMascota">
+                                                <option value="Perro">Perro</option>
+                                                <option value="Gato">Gato</option>
+                                        </select><span style="font-weight: 800;">Raza:</span> <input required
+                                                type="text" class="input-raza" id="input-raza"></p>
                                 <p><span style="font-weight: 800;">Peso:</span> <input required type="number"
-                                                class="input-peso" id="input-peso" step="0.01"><span
+                                                class="input-peso inputMascota" id="input-peso" step="0.01"><span
                                                 style="margin-right: 30px; font-weight: 800; ">Kg</span><span
                                                 style="font-weight: 800;">Edad:<span id="spanEdad"></span></span></p>
                                 <p><span style="font-weight: 800;">Actividad:</span> <input required type="text"
-                                                class="input-actividad" id="input-actividad"></p>
+                                                class="input-actividad inputMascota" id="input-actividad"></p>
                                 <p><span style="font-weight: 800;">Afecciones:</span> <input required type="text"
-                                                class="input-afecciones" id="input-afecciones"></p>
+                                                class="input-afecciones inputMascota" id="input-afecciones"></p>
                                 <p><span style="font-weight: 800;">Nacimiento: <input required type="number"
-                                                        class="input-diacumple" id="input-diacumple">/<input required
-                                                        type="number" class="input-mescumple"
+                                                        class="input-diacumple inputMascota"
+                                                        id="input-diacumple">/<input required type="number"
+                                                        class="input-mescumple inputMascota"
                                                         id="input-mescumple">/<input required type="number"
-                                                        class="input-aniocumple" id="input-aniocumple"></span></p>
+                                                        class="input-aniocumple inputMascota"
+                                                        id="input-aniocumple"></span></p>
                                 <div id="boton-guardarmascota"></div>
                                 <div id="boton-eliminar"></div>
                         </div>
                 </div>
                 <button class="btn-editar" type="submit" id="btnGuardar">Guardar</button>
         </form>
-
-
+        <div class="borde">
+        </div>
         <script src="./editarCliente.js"></script>
 </body>
 

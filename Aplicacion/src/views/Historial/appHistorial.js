@@ -52,7 +52,7 @@ let newBusqueda = "";
 async function get20VentasClienteapp() {
   console.log(salto);
   ventasConDatos = await venta_controller.get20Ventas(newBusqueda, salto);
-  if(await verificarUltimaPagina()) {
+  if (await verificarUltimaPagina()) {
     document.getElementById('btnSiguiente').style.display = "none";
   }
   renderVentas();
@@ -65,12 +65,12 @@ async function get20VentasClienteapp() {
 function renderVentas() {
 
   let container_paginado = document.getElementById("container-paginado");
-  container_paginado.style.opacity = 0;
+  container_paginado.style.display = "none";
 
   listaVentas.innerHTML = "";
-    ventasConDatos.forEach(element => {
-        listaVentas.innerHTML +=
-        `<div class="proto-venta">
+  ventasConDatos.forEach(element => {
+    listaVentas.innerHTML +=
+      `<div class="proto-venta">
     
         <div class="fecha">
           <h2><b>${element.venta.fecha}</b></h2>
@@ -90,6 +90,8 @@ function renderVentas() {
           <h3 class="h3Cantidad"><b>Cantidad:</b> ${element.venta.cantidad} bolsa/s de ${element.venta.kilos_bolsa}kg</h3>
           <h3 class="h3PrecioU"><b>Precio unitario:</b> $${(element.venta.precio).toFixed(2)}</h3>
         </div>
+
+        <div class="resumenVenta">
     
         <div class="total">
           <h2><b>Total:</b> $${(element.venta.totalventa).toFixed(2)}</h2>
@@ -98,20 +100,21 @@ function renderVentas() {
         <div class="puntos">
         <h2><b>Ptos. Canjeados:</b> ${(element.venta.puntos_canjeados)}</h2>
       </div>
+        </div>
 
         <button class="btnCruz" onclick="borrar_venta(${element.venta.id_venta})"><img src="../../imagenes/cruz.png" class="cruz"></button>
-    
+      
       </div>`
-    });
+  });
 
-    container_paginado.style.opacity = 1;
+  container_paginado.style.display = "block";
 }
 
 
 async function init() {
-    await get20VentasClienteapp();
-    listenerBtnSiguiente();
-    listenerBtnAnterior();
+  await get20VentasClienteapp();
+  listenerBtnSiguiente();
+  listenerBtnAnterior();
 }
 
 init();
@@ -131,9 +134,9 @@ busqueda.addEventListener('submit', (e) => {
 })
 
 
-function botonPersona(idCliente){
-  sessionStorage.setItem("historialCliente",  idCliente);
-  location.href="../historialPersona/historialPersona.html";
+function botonPersona(idCliente) {
+  localStorage.setItem("historialCliente", idCliente);
+  location.href = "../historialPersona/historialPersona.html";
 }
 
 
@@ -190,9 +193,9 @@ function paginaAnterior() {
 
   if (parseInt(h5Pagina.textContent) > 1) {
 
-  h5Pagina.textContent = parseInt(h5Pagina.textContent) - 1;
-  salto = (parseInt(h5Pagina.textContent) - 1) * 20;
-  get20VentasClienteapp();
+    h5Pagina.textContent = parseInt(h5Pagina.textContent) - 1;
+    salto = (parseInt(h5Pagina.textContent) - 1) * 20;
+    get20VentasClienteapp();
 
   }
 
@@ -208,7 +211,7 @@ async function verificarUltimaPagina() {
   ventas = await venta_controller.get20Ventas(newBusqueda, salto + 20);
   if (ventas.length == 0) {
     return true
-  }else{
+  } else {
     return false
   }
 }

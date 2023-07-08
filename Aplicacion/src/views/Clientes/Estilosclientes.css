@@ -206,7 +206,7 @@ nav a:hover {
 .container-nombre {
   position: relative;
   height: 35px;
-  width: 360px;
+  width: 380px;
   background-color: #404198;
   color: white;
   font-weight: 800;
@@ -226,7 +226,7 @@ nav a:hover {
 }
 
 .container-id {
-  left: -519px;
+  left: -499px;
   position: relative;
   height: 35px;
   width: 115px;
@@ -442,7 +442,7 @@ nav a:hover {
   transform: translateX(-50%);
   width: 350px;
   height: 40px;
-  opacity: 0;
+  display: none;
 }
 
 

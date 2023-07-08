@@ -35,15 +35,29 @@ body {
     text-align: center;
 }
 
+.borde {
+  width: 900px;
+  height: 650px;
+  border: 3px solid black;
+  margin: 0;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  pointer-events: none;
+  z-index: 10;
+}
+
 body::-webkit-scrollbar {
     width: 10px;
     background-color: rgb(56, 94, 94);
+    z-index: 0;
   }
   
   body::-webkit-scrollbar-thumb {
     border-radius: 5px;
     background-color: #404198;
     border-right: 2px solid rgb(56, 94, 94);
+    z-index: 0;
   }
 
 .container-titulo {

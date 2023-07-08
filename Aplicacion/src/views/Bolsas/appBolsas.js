@@ -54,7 +54,7 @@ function mainFunctionBolsasApp() {
 async function mainGetYRenderBolsasSegunBusquedaApp() {
   resetearDivTarjetas();
   let container_paginado = document.getElementById("container-paginado");
-  container_paginado.style.opacity = 0;
+  container_paginado.style.display = "none";
 
   let bolsas18 = await bolsa_controller.get18BolsasSegunBusqueda(newBusqueda, salto);
   if(await verificarUltimaPagina()) {
@@ -67,7 +67,7 @@ async function mainGetYRenderBolsasSegunBusquedaApp() {
     renderBolsaApp(element);
 
   }
-  container_paginado.style.opacity = 1;
+  container_paginado.style.display = "block";
 }
 
 function renderBolsaApp(bolsa) {

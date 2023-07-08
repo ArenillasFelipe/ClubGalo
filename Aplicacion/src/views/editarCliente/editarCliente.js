@@ -23,6 +23,7 @@ async function getClienteAEditar() {
 
     llenarInputsCliente();
     llenarInputsMascotas();
+    listenersCambiosInputsPersona();
 }
 
 
@@ -118,9 +119,10 @@ async function cambiarInputsMascota(idMascota) {
         input_aniocumple.value = "";
     } else {
         divboton_guardarNewMascota.innerHTML = `<button class="btnGuardarNewMascota" id="btnActualizarMascota" type="submit">Aceptar</button>`;
+        listenerActualizarMascota(idMascota);
         divboton_eliminar.innerHTML = `<button class="btn-eliminarmascota" id="btn-eliminarmascota">ELIMINAR MASCOTA</button>`;
         listenerEliminarMascota(idMascota);
-        listenerActualizarMascota(idMascota);
+        listenersCambiosInputsMascota();
 
 
         let mascotaAMostrar = mascotasMod.find(mascota => mascota.id_mascota == idMascota);
@@ -167,6 +169,8 @@ async function eliminarMascota(idMascota) {
     if (confirma_borrado) {
         mascotasMod = mascotasMod.filter(mascota => mascota.id_mascota != idMascota);
 
+        btnGuardar.style.display = 'block'; // Mostramos el botón al hacer cambios
+
         await sweetAlerts.sweetAlertGuardadoConExito();
         llenarInputsMascotas();
     }
@@ -175,6 +179,9 @@ async function eliminarMascota(idMascota) {
 }
 
 async function actualizarMascota(idMascota) {
+
+    btnGuardar.style.display = 'block'; // Mostramos el botón al hacer cambios
+
 
     if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
         sweetAlerts.sweetAlertCamposSinCompletar();
@@ -297,15 +304,15 @@ async function guardarMascotasApp() {
 
 async function guardarClienteConMascotas() {
     if (parseInt(cliente.puntos) < parseInt(input_puntos.value)) {
-      await enviarEmailCambioDePuntos();
+        await enviarEmailCambioDePuntos();
     }
-  
+
     await guardarClienteapp();
     await guardarMascotasApp();
-    localStorage.setItem("ClienteEditado", cliente.id_cliente);
+    localStorage.setItem("ClienteVenta", cliente.id_cliente);
     main.recargarPaginaPrincipal();
     main.cerrarVentanasEmergentes();
-  }
+}
 
 
 function listenerEliminarMascota(idMascota) {
@@ -383,13 +390,13 @@ function enviarEmailCambioDePuntos() {
     <p>Los puntos del cliente ${cliente.primernombre} ${cliente.nombrepila} ${cliente.apellido}(Nº: ${cliente.id_cliente}) han sido modificados de ${cliente.puntos} a ${input_puntos.value} el dia ${dia}/${mes}/${anio} a las ${hora}:${minutos}hs</p>
     <img src="cid:logo" alt="Logo de la empresa" width="200px" style="position: center;">
   `,
-  attachments: [
-    {
-      filename: 'logo-galo.png',
-      path: 'src/imagenes/logo-galo.png',
-      cid: 'logo',
-    },
-  ],
+            attachments: [
+                {
+                    filename: 'logo-galo.png',
+                    path: 'src/imagenes/logo-galo.png',
+                    cid: 'logo',
+                },
+            ],
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -404,3 +411,30 @@ function enviarEmailCambioDePuntos() {
     });
 }
 
+
+
+function listenersCambiosInputsPersona() {
+    const inputsPersona = document.querySelectorAll('.inputPersona');
+
+    inputsPersona.forEach(function (input) {
+        input.addEventListener('input', function () {
+            btnGuardar.style.display = 'block'; // Mostramos el botón al hacer cambios en cualquier input con la clase inputPersona
+        });
+    });
+
+
+}
+
+
+function listenersCambiosInputsMascota() {
+
+    let btnActualizarMascota = document.getElementById("btnActualizarMascota");
+
+    const inputsMascota = document.querySelectorAll('.inputMascota');
+
+    inputsMascota.forEach(function (input) {
+        input.addEventListener('input', function () {
+            btnActualizarMascota.style.display = "block";
+        });
+    });
+}

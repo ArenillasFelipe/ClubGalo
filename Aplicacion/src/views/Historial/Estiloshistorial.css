@@ -136,31 +136,58 @@ nav a:hover {
   font-weight: normal;
 }
 
-
+.resumenVenta {
+  position: absolute;
+  right: 0px;
+  top: 118px;
+  height: 30px;
+  width: 460px;
+  background-color: #404198;
+  color: white;
+  border-radius: 0px 0px 10px 0px;
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+}
 
 .total {
   position: absolute;
   right: 10px;
-  top: 95px;
+  top: -22px;
 }
 
 .puntos {
-  position: absolute;
+  position: relative;
   font-size: small;
-  right: 230px;
-  top: 104px;
+  left: 10px;
+  top: -15px;
+}
+
+.fecha h2 {
+  width: 100%;
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 .fecha {
   position: absolute;
-  bottom: 95px;
-  left: 6px;
+  top: 0px;
+  left: 0px;
+  height: 30px;
+  width: 160px;
+  background-color: #404198;
+  color: white;
+  border-radius: 10px 0px 0px 0px;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
 }
 
 .datos-persona {
   position: absolute;
-  left: 200px;
-  top: 1px;
+  left: 150px;
+  top: 25px;
   line-height: 0.5em;
 }
 
@@ -173,8 +200,8 @@ nav a:hover {
 
 .imagen-persona {
   position: absolute;
-  left: 135px;
-  top: 20px;
+  left: 85px;
+  top: 45px;
 }
 
 
@@ -329,7 +356,7 @@ b {
   transform: translateX(-50%);
   width: 350px;
   height: 40px;
-  opacity: 0;
+  display: none;
 }
 
 

@@ -94,8 +94,8 @@ async function get20UltimasVentasByIdCliente(id_cliente) {
 
 
 async function getVentasActivasByIdCliente(id_cliente) {
-    let ventasActivas = await ventaModel.getVentasActivasByIdCliente(id_cliente);
 
+    let ventasActivas = await ventaModel.getVentasActivasByIdCliente(id_cliente);
 
     let ventasActivasConMascotas = [];
     for (let i = 0; i < ventasActivas.length; i++) {
@@ -123,8 +123,8 @@ async function insertarVenta(newVenta, mascotasVenta, puntosActualesCliente, nue
     console.log("Mascotas seleccionadas: ", mascotasVenta);
         
 
-        newVenta.precio = (newVenta.precio).replace(/,/g, '.');
-        newVenta.precio = parseFloat(newVenta.precio);
+        // newVenta.precio = (newVenta.precio).replace(/,/g, '.');
+        // newVenta.precio = parseFloat(newVenta.precio);
 
 
         switch (newVenta.calidad_bolsa) {
@@ -151,7 +151,8 @@ async function insertarVenta(newVenta, mascotasVenta, puntosActualesCliente, nue
 
     await clienteModel.actualizarPuntosClienteById(newVenta.id_cliente, nuevosPuntosCliente);
 
-
+    //pongo en inactiva las ventas en las que ya estaba la mascota
+    console.log("mascotas seleccionadas:", mascotasVenta);
     for (let i = 0; i < mascotasVenta.length; i++) {
 
         let ventaActivaMascota = await venta_mascotaModel.getVenta_MascotaActivaByIdMascota(mascotasVenta[i].id_mascota);
@@ -176,10 +177,10 @@ async function insertarVenta(newVenta, mascotasVenta, puntosActualesCliente, nue
 }
 
 
-async function getVentasPorVencerConMascotas() {
+async function get20VentasPorVencerConMascotas(salto) {
     let ventas = [];
-    ventas = await ventaModel.getVentasPorVencer();
-
+    ventas = await ventaModel.get20VentasPorVencer(salto);
+    console.log("ventas:" ,ventas);
 
     let ventasConMascotas = [];
     for (let i = 0; i < ventas.length; i++) {
@@ -221,6 +222,6 @@ module.exports = {
     get20UltimasVentasByIdCliente,
     getVentasActivasByIdCliente,
     insertarVenta,
-    getVentasPorVencerConMascotas,
+    get20VentasPorVencerConMascotas,
     actualizarVentasVencidas
 }

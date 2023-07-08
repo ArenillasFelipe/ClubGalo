@@ -24,8 +24,8 @@ async function getMascotasByIdCliente(id_cliente){
 async function insertMascota(newMascota) {
     let nacimiento = newMascota.nacimiento;
 
-    newMascota.peso = (newMascota.peso).replace(/,/g, '.');
-    newMascota.peso = parseFloat(newMascota.peso);
+    // newMascota.peso = (newMascota.peso).replace(/,/g, '.');
+    // newMascota.peso = parseFloat(newMascota.peso);
 
     nacimiento = nacimiento.split("/");
     nacimiento = new Date(nacimiento[2], nacimiento[1] - 1, nacimiento[0]);
@@ -49,8 +49,8 @@ async function actualizarMascotasCliente(mascotasMod, mascotasOriginal) {
     for (let i = 0; i < mascotasMod.length; i++) {
         const element = mascotasMod[i];
         
-        element.peso = (element.peso).replace(/,/g, '.');
-        element.peso = parseFloat(element.peso);
+        // element.peso = (element.peso).replace(/,/g, '.');
+        // element.peso = parseFloat(element.peso);
 
         let nacimiento = element.nacimiento;
 

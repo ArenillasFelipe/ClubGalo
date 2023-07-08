@@ -11,6 +11,18 @@ body {
     font-family: arial;
 }
 
+.borde {
+    width: 894px;
+    height: 564px;
+    border: 3px solid black;
+    margin: 0;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    pointer-events: none;
+}
+
+
 input {
     width: 100px;
     border-color: #404198;
@@ -154,7 +166,7 @@ input {
     color: white;
     left: 50%;
     transform: translateX(-50%);
-    top: -5px;
+    top: -2px;
 }
 
 
@@ -202,6 +214,10 @@ input {
     transition: transform 0.1s, box-shadow 0.1s;
 }
 
+#btnActualizarMascota{
+    display: none;
+}
+
 .btnGuardarNewMascota:hover {
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
     transform: translateY(-2px);
@@ -215,7 +231,7 @@ input {
 
 #btnCruz{
     cursor: pointer;
-    top: 15px;
+    top: 18px;
     left: 860px;
     position: absolute;
     border: none;

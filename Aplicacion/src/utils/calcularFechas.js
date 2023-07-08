@@ -49,308 +49,52 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
     mascota.peso = Math.round(mascota.peso);
   });
 
+  let diasDuracion = calculosDuracionBolsa(mascotasVenta, venta);
+
+  if (venta.calidad_previa && venta.kilos_previos) {
+
+    let ventaMod = venta;
+
+    ventaMod.calidad_bolsa = venta.calidad_previa;
+    ventaMod.kilos_bolsa = venta.kilos_previos;
+    ventaMod.cantidad = 1;
+  
+    diasDuracion += calculosDuracionBolsa(mascotasVenta, ventaMod);
+  }
+
+
+  return diasDuracion;
+
+}
+
+
+function calculosDuracionBolsa(mascotasVenta, venta) {
   if(mascotasVenta[0].animal == "Perro"){
 
-  if (venta.calidad_bolsa == "BAJA") {
-    let PerroBajaValores = {
-      P1_3: 0.125,
-      P4_5: 0.175,
-      P6_7: 0.220,
-      P8_9: 0.252,
-      P10_11: 0.285,
-      P12_13: 0.317,
-      P14_15: 0.350,
-      P16_17: 0.360,
-      P18_19: 0.395,
-      P20_21: 0.430,
-      P22_23: 0.465,
-      P24_25: 0.500,
-      P26_27: 0.510,
-      P28_29: 0.557,
-      P30_31: 0.605,
-      P32_33: 0.652,
-      P34_35: 0.700,
-      P36_37: 0.720,
-      P38_39: 0.752,
-      P40_41: 0.785,
-      P42_43: 0.817,
-      P44_45: 0.850
-    }
-
-
-    // Calcular el consumo diario individual de cada mascota
-    let consumoDiarioTotal = 0;
-
-    mascotasVenta.forEach((mascota) => {
-      let pesoMascota = mascota.peso;
-
-      // Encontrar el rango de peso correspondiente
-      let rangoPeso = null;
-
-      for (let rango in PerroBajaValores) {
-        console.log("rango: ", rango);
-        let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
-
-        console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
-        if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
-          rangoPeso = rango;
-          break;
-        }
-      }
-
-      // Sumar el consumo diario individual al consumo diario total
-      if (rangoPeso) {
-        console.log("rangopeso de la mascota: ", rangoPeso);
-        let consumoDiarioIndividual = PerroBajaValores[rangoPeso];
-        consumoDiarioTotal += consumoDiarioIndividual;
-      }
-    });
-
-    // Calcular los días que durará la bolsa de comida
-    let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
-
-    return diasDuracion;
-
-
-  }
-
-
-
-
-  if (venta.calidad_bolsa == "INTERMEDIA") {
-    let PerroIntermediaValores = {
-      P5_7: 0.160,
-      P8_10: 0.200,
-      P11_12: 0.230,
-      P13_14: 0.260,
-      P15_16: 0.290,
-      P17_18: 0.320,
-      P19_20: 0.350,
-      P21_22: 0.360,
-      P23_24: 0.385,
-      P25_26: 0.410,
-      P27_28: 0.435,
-      P29_30: 0.460,
-      P31_32: 0.470,
-      P33_34: 0.490,
-      P35_36: 0.510,
-      P37_38: 0.530,
-      P39_40: 0.550,
-      P41_42: 0.560,
-      P43_44: 0.580,
-      P45_46: 0.600,
-      P47_48: 0.620,
-      P49_50: 0.640
-    }
-
-
-    // Calcular el consumo diario individual de cada mascota
-    let consumoDiarioTotal = 0;
-
-    mascotasVenta.forEach((mascota) => {
-      let pesoMascota = mascota.peso;
-
-      // Encontrar el rango de peso correspondiente
-      let rangoPeso = null;
-
-      for (let rango in PerroIntermediaValores) {
-        console.log("rango: ", rango);
-        let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
-
-        console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
-        if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
-          rangoPeso = rango;
-          break;
-        }
-      }
-
-      // Sumar el consumo diario individual al consumo diario total
-      if (rangoPeso) {
-        console.log("rangopeso de la mascota: ", rangoPeso);
-        let consumoDiarioIndividual = PerroIntermediaValores[rangoPeso];
-        consumoDiarioTotal += consumoDiarioIndividual;
-      }
-    });
-
-    // Calcular los días que durará la bolsa de comida
-    let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
-    return diasDuracion;
-  }
-
-
-
-  if (venta.calidad_bolsa == "PREMIUM") {
-    let PerroPremiumValores = {
-      P1_2: 0.043,
-      P3_4: 0.068,
-      P5_6: 0.099,
-      P7_8: 0.128,
-      P9_10: 0.167,
-      P11_12: 0.1817,
-      P13_14: 0.2112,
-      P15_16: 0.226,
-      P17_18: 0.2535,
-      P19_20: 0.281,
-      P21_22: 0.2937,
-      P23_24: 0.3192,
-      P25_26: 0.332,
-      P27_28: 0.356,
-      P29_30: 0.380,
-      P31_32: 0.3917,
-      P33_34: 0.4152,
-      P35_36: 0.427,
-      P37_38: 0.4495,
-      P39_40: 0.472,
-      P41_42: 0.4827,
-      P43_44: 0.5042,
-      P45_46: 0.515,
-      P47_48: 0.5365,
-      P49_50: 0.558,
-      P51_52: 0.5682,
-      P53_54: 0.5887,
-      P55_56: 0.599,
-      P57_58: 0.6195,
-      P59_60: 0.640,
-      P61_62: 0.6497,
-      P63_64: 0.6692,
-      P65_66: 0.679,
-      P67_68: 0.6985,
-      P69_70: 0.718,
-      P71_72: 0.7275,
-      P73_74: 0.7465,
-      P75_76: 0.756,
-      P77_78: 0.775,
-      P79_80: 0.794
-    }
-
-
-    // Calcular el consumo diario individual de cada mascota
-    let consumoDiarioTotal = 0;
-
-    mascotasVenta.forEach((mascota) => {
-      let pesoMascota = mascota.peso;
-
-      // Encontrar el rango de peso correspondiente
-      let rangoPeso = null;
-
-      for (let rango in PerroPremiumValores) {
-        console.log("rango: ", rango);
-        let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
-
-        console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
-        if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
-          rangoPeso = rango;
-          break;
-        }
-      }
-
-      // Sumar el consumo diario individual al consumo diario total
-      if (rangoPeso) {
-        console.log("rangopeso de la mascota: ", rangoPeso);
-        let consumoDiarioIndividual = PerroPremiumValores[rangoPeso];
-        consumoDiarioTotal += consumoDiarioIndividual;
-      }
-    });
-
-    // Calcular los días que durará la bolsa de comida
-    let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
-    return diasDuracion;
-  }
-
-
-  if (venta.calidad_bolsa == "SUPER PREMIUM") {
-    let PerroSuperPremiumValores = {
-      P1_2: 0.043,
-      P3_4: 0.068,
-      P5_6: 0.099,
-      P7_8: 0.128,
-      P9_10: 0.167,
-      P11_12: 0.1817,
-      P13_14: 0.2112,
-      P15_16: 0.226,
-      P17_18: 0.2535,
-      P19_20: 0.281,
-      P21_22: 0.2937,
-      P23_24: 0.3192,
-      P25_26: 0.332,
-      P27_28: 0.356,
-      P29_30: 0.380,
-      P31_32: 0.3917,
-      P33_34: 0.4152,
-      P35_36: 0.427,
-      P37_38: 0.4495,
-      P39_40: 0.472,
-      P41_42: 0.4827,
-      P43_44: 0.5042,
-      P45_46: 0.515,
-      P47_48: 0.5365,
-      P49_50: 0.558,
-      P51_52: 0.5682,
-      P53_54: 0.5887,
-      P55_56: 0.599,
-      P57_58: 0.6195,
-      P59_60: 0.640,
-      P61_62: 0.6497,
-      P63_64: 0.6692,
-      P65_66: 0.679,
-      P67_68: 0.6985,
-      P69_70: 0.718,
-      P71_72: 0.7275,
-      P73_74: 0.7465,
-      P75_76: 0.756,
-      P77_78: 0.775,
-      P79_80: 0.794
-    };
-
-
-    // Calcular el consumo diario individual de cada mascota
-    let consumoDiarioTotal = 0;
-
-    mascotasVenta.forEach((mascota) => {
-      let pesoMascota = mascota.peso;
-
-      // Encontrar el rango de peso correspondiente
-      let rangoPeso = null;
-
-      for (let rango in PerroSuperPremiumValores) {
-        console.log("rango: ", rango);
-        let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
-
-        console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
-        if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
-          rangoPeso = rango;
-          break;
-        }
-      }
-
-      // Sumar el consumo diario individual al consumo diario total
-      if (rangoPeso) {
-        console.log("rangopeso de la mascota: ", rangoPeso);
-        let consumoDiarioIndividual = PerroSuperPremiumValores[rangoPeso];
-        consumoDiarioTotal += consumoDiarioIndividual;
-      }
-    });
-
-    // Calcular los días que durará la bolsa de comida
-    let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
-    return diasDuracion;
-  }
-
-  }
-
-
-  if (mascotasVenta[0].animal == "Gato") {
-
-
     if (venta.calidad_bolsa == "BAJA") {
-
-      let GatoBajaValores = {
-        P1: 0.055,
-        P2: 0.065,
-        P3: 0.075,
-        P4: 0.085,
-        P5: 0.095,
-        P6: 0.105
+      let PerroBajaValores = {
+        P1_3: 0.125,
+        P4_5: 0.175,
+        P6_7: 0.220,
+        P8_9: 0.252,
+        P10_11: 0.285,
+        P12_13: 0.317,
+        P14_15: 0.350,
+        P16_17: 0.360,
+        P18_19: 0.395,
+        P20_21: 0.430,
+        P22_23: 0.465,
+        P24_25: 0.500,
+        P26_27: 0.510,
+        P28_29: 0.557,
+        P30_31: 0.605,
+        P32_33: 0.652,
+        P34_35: 0.700,
+        P36_37: 0.720,
+        P38_39: 0.752,
+        P40_41: 0.785,
+        P42_43: 0.817,
+        P44_45: 0.850
       }
   
   
@@ -363,11 +107,12 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
         // Encontrar el rango de peso correspondiente
         let rangoPeso = null;
   
-        for (let rango in GatoBajaValores) {
-          let rangoPesoFloat = parseFloat(rango.slice(1)); // Obtener el valor de rango como número decimal
-          let rangoPesoInt = Math.round(rangoPesoFloat); // Redondear al número entero más cercano
-        
-          if (Math.round(pesoMascota) === rangoPesoInt) {
+        for (let rango in PerroBajaValores) {
+          console.log("rango: ", rango);
+          let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
+  
+          console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+          if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
             rangoPeso = rango;
             break;
           }
@@ -376,14 +121,12 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
           console.log("rangopeso de la mascota: ", rangoPeso);
-          let consumoDiarioIndividual = GatoBajaValores[rangoPeso];
+          let consumoDiarioIndividual = PerroBajaValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
-          console.log("consumo diario individual :", consumoDiarioIndividual);
         }
       });
   
       // Calcular los días que durará la bolsa de comida
-      console.log("consumo diario total: ", consumoDiarioTotal);
       let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
   
       return diasDuracion;
@@ -395,12 +138,29 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
   
   
     if (venta.calidad_bolsa == "INTERMEDIA") {
-      let GatoIntermediaValores = {
-        P2: 0.050,
-        P3: 0.065,
-        P4: 0.080,
-        P5: 0.094,
-        P6: 0.108
+      let PerroIntermediaValores = {
+        P5_7: 0.160,
+        P8_10: 0.200,
+        P11_12: 0.230,
+        P13_14: 0.260,
+        P15_16: 0.290,
+        P17_18: 0.320,
+        P19_20: 0.350,
+        P21_22: 0.360,
+        P23_24: 0.385,
+        P25_26: 0.410,
+        P27_28: 0.435,
+        P29_30: 0.460,
+        P31_32: 0.470,
+        P33_34: 0.490,
+        P35_36: 0.510,
+        P37_38: 0.530,
+        P39_40: 0.550,
+        P41_42: 0.560,
+        P43_44: 0.580,
+        P45_46: 0.600,
+        P47_48: 0.620,
+        P49_50: 0.640
       }
   
   
@@ -413,11 +173,12 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
         // Encontrar el rango de peso correspondiente
         let rangoPeso = null;
   
-        for (let rango in GatoIntermediaValores) {
-          let rangoPesoFloat = parseFloat(rango.slice(1)); // Obtener el valor de rango como número decimal
-          let rangoPesoInt = Math.round(rangoPesoFloat); // Redondear al número entero más cercano
-        
-          if (Math.round(pesoMascota) === rangoPesoInt) {
+        for (let rango in PerroIntermediaValores) {
+          console.log("rango: ", rango);
+          let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
+  
+          console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+          if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
             rangoPeso = rango;
             break;
           }
@@ -426,7 +187,7 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
           console.log("rangopeso de la mascota: ", rangoPeso);
-          let consumoDiarioIndividual = GatoIntermediaValores[rangoPeso];
+          let consumoDiarioIndividual = PerroIntermediaValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
         }
       });
@@ -439,12 +200,47 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
   
   
     if (venta.calidad_bolsa == "PREMIUM") {
-      let GatoPremiumValores = {
-        P2: 0.030,
-        P3: 0.050,
-        P4: 0.060,
-        P5: 0.076,
-        P6: 0.092
+      let PerroPremiumValores = {
+        P1_2: 0.043,
+        P3_4: 0.068,
+        P5_6: 0.099,
+        P7_8: 0.128,
+        P9_10: 0.167,
+        P11_12: 0.1817,
+        P13_14: 0.2112,
+        P15_16: 0.226,
+        P17_18: 0.2535,
+        P19_20: 0.281,
+        P21_22: 0.2937,
+        P23_24: 0.3192,
+        P25_26: 0.332,
+        P27_28: 0.356,
+        P29_30: 0.380,
+        P31_32: 0.3917,
+        P33_34: 0.4152,
+        P35_36: 0.427,
+        P37_38: 0.4495,
+        P39_40: 0.472,
+        P41_42: 0.4827,
+        P43_44: 0.5042,
+        P45_46: 0.515,
+        P47_48: 0.5365,
+        P49_50: 0.558,
+        P51_52: 0.5682,
+        P53_54: 0.5887,
+        P55_56: 0.599,
+        P57_58: 0.6195,
+        P59_60: 0.640,
+        P61_62: 0.6497,
+        P63_64: 0.6692,
+        P65_66: 0.679,
+        P67_68: 0.6985,
+        P69_70: 0.718,
+        P71_72: 0.7275,
+        P73_74: 0.7465,
+        P75_76: 0.756,
+        P77_78: 0.775,
+        P79_80: 0.794
       }
   
   
@@ -457,11 +253,12 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
         // Encontrar el rango de peso correspondiente
         let rangoPeso = null;
   
-        for (let rango in GatoPremiumValores) {
-          let rangoPesoFloat = parseFloat(rango.slice(1)); // Obtener el valor de rango como número decimal
-          let rangoPesoInt = Math.round(rangoPesoFloat); // Redondear al número entero más cercano
-        
-          if (Math.round(pesoMascota) === rangoPesoInt) {
+        for (let rango in PerroPremiumValores) {
+          console.log("rango: ", rango);
+          let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
+  
+          console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+          if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
             rangoPeso = rango;
             break;
           }
@@ -470,7 +267,7 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
           console.log("rangopeso de la mascota: ", rangoPeso);
-          let consumoDiarioIndividual = GatoPremiumValores[rangoPeso];
+          let consumoDiarioIndividual = PerroPremiumValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
         }
       });
@@ -482,13 +279,48 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
   
   
     if (venta.calidad_bolsa == "SUPER PREMIUM") {
-      let GatoSuperPremiumValores = {
-        P2: 0.030,
-        P3: 0.045,
-        P4: 0.060,
-        P5: 0.075,
-        P6: 0.085
-      }
+      let PerroSuperPremiumValores = {
+        P1_2: 0.043,
+        P3_4: 0.068,
+        P5_6: 0.099,
+        P7_8: 0.128,
+        P9_10: 0.167,
+        P11_12: 0.1817,
+        P13_14: 0.2112,
+        P15_16: 0.226,
+        P17_18: 0.2535,
+        P19_20: 0.281,
+        P21_22: 0.2937,
+        P23_24: 0.3192,
+        P25_26: 0.332,
+        P27_28: 0.356,
+        P29_30: 0.380,
+        P31_32: 0.3917,
+        P33_34: 0.4152,
+        P35_36: 0.427,
+        P37_38: 0.4495,
+        P39_40: 0.472,
+        P41_42: 0.4827,
+        P43_44: 0.5042,
+        P45_46: 0.515,
+        P47_48: 0.5365,
+        P49_50: 0.558,
+        P51_52: 0.5682,
+        P53_54: 0.5887,
+        P55_56: 0.599,
+        P57_58: 0.6195,
+        P59_60: 0.640,
+        P61_62: 0.6497,
+        P63_64: 0.6692,
+        P65_66: 0.679,
+        P67_68: 0.6985,
+        P69_70: 0.718,
+        P71_72: 0.7275,
+        P73_74: 0.7465,
+        P75_76: 0.756,
+        P77_78: 0.775,
+        P79_80: 0.794
+      };
   
   
       // Calcular el consumo diario individual de cada mascota
@@ -500,11 +332,12 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
         // Encontrar el rango de peso correspondiente
         let rangoPeso = null;
   
-        for (let rango in GatoSuperPremiumValores) {
-          let rangoPesoFloat = parseFloat(rango.slice(1)); // Obtener el valor de rango como número decimal
-          let rangoPesoInt = Math.round(rangoPesoFloat); // Redondear al número entero más cercano
-        
-          if (Math.round(pesoMascota) === rangoPesoInt) {
+        for (let rango in PerroSuperPremiumValores) {
+          console.log("rango: ", rango);
+          let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
+  
+          console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+          if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
             rangoPeso = rango;
             break;
           }
@@ -513,7 +346,7 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
           console.log("rangopeso de la mascota: ", rangoPeso);
-          let consumoDiarioIndividual = GatoSuperPremiumValores[rangoPeso];
+          let consumoDiarioIndividual = PerroSuperPremiumValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
         }
       });
@@ -522,12 +355,196 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
       let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
       return diasDuracion;
     }
-
-
-  }
-
-
-
+  
+    }
+  
+  
+    if (mascotasVenta[0].animal == "Gato") {
+  
+  
+      if (venta.calidad_bolsa == "BAJA") {
+  
+        let GatoBajaValores = {
+          P1: 0.055,
+          P2: 0.065,
+          P3: 0.075,
+          P4: 0.085,
+          P5: 0.095,
+          P6: 0.105
+        }
+    
+    
+        // Calcular el consumo diario individual de cada mascota
+        let consumoDiarioTotal = 0;
+    
+        mascotasVenta.forEach((mascota) => {
+          let pesoMascota = mascota.peso;
+    
+          // Encontrar el rango de peso correspondiente
+          let rangoPeso = null;
+    
+          for (let rango in GatoBajaValores) {
+            let rangoPesoFloat = parseFloat(rango.slice(1)); // Obtener el valor de rango como número decimal
+            let rangoPesoInt = Math.round(rangoPesoFloat); // Redondear al número entero más cercano
+          
+            if (Math.round(pesoMascota) === rangoPesoInt) {
+              rangoPeso = rango;
+              break;
+            }
+          }
+    
+          // Sumar el consumo diario individual al consumo diario total
+          if (rangoPeso) {
+            console.log("rangopeso de la mascota: ", rangoPeso);
+            let consumoDiarioIndividual = GatoBajaValores[rangoPeso];
+            consumoDiarioTotal += consumoDiarioIndividual;
+            console.log("consumo diario individual :", consumoDiarioIndividual);
+          }
+        });
+    
+        // Calcular los días que durará la bolsa de comida
+        console.log("consumo diario total: ", consumoDiarioTotal);
+        let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
+    
+        return diasDuracion;
+    
+    
+      }
+    
+    
+    
+    
+      if (venta.calidad_bolsa == "INTERMEDIA") {
+        let GatoIntermediaValores = {
+          P2: 0.050,
+          P3: 0.065,
+          P4: 0.080,
+          P5: 0.094,
+          P6: 0.108
+        }
+    
+    
+        // Calcular el consumo diario individual de cada mascota
+        let consumoDiarioTotal = 0;
+    
+        mascotasVenta.forEach((mascota) => {
+          let pesoMascota = mascota.peso;
+    
+          // Encontrar el rango de peso correspondiente
+          let rangoPeso = null;
+    
+          for (let rango in GatoIntermediaValores) {
+            let rangoPesoFloat = parseFloat(rango.slice(1)); // Obtener el valor de rango como número decimal
+            let rangoPesoInt = Math.round(rangoPesoFloat); // Redondear al número entero más cercano
+          
+            if (Math.round(pesoMascota) === rangoPesoInt) {
+              rangoPeso = rango;
+              break;
+            }
+          }
+    
+          // Sumar el consumo diario individual al consumo diario total
+          if (rangoPeso) {
+            console.log("rangopeso de la mascota: ", rangoPeso);
+            let consumoDiarioIndividual = GatoIntermediaValores[rangoPeso];
+            consumoDiarioTotal += consumoDiarioIndividual;
+          }
+        });
+    
+        // Calcular los días que durará la bolsa de comida
+        let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
+        return diasDuracion;
+      }
+    
+    
+    
+      if (venta.calidad_bolsa == "PREMIUM") {
+        let GatoPremiumValores = {
+          P2: 0.030,
+          P3: 0.050,
+          P4: 0.060,
+          P5: 0.076,
+          P6: 0.092
+        }
+    
+    
+        // Calcular el consumo diario individual de cada mascota
+        let consumoDiarioTotal = 0;
+    
+        mascotasVenta.forEach((mascota) => {
+          let pesoMascota = mascota.peso;
+    
+          // Encontrar el rango de peso correspondiente
+          let rangoPeso = null;
+    
+          for (let rango in GatoPremiumValores) {
+            let rangoPesoFloat = parseFloat(rango.slice(1)); // Obtener el valor de rango como número decimal
+            let rangoPesoInt = Math.round(rangoPesoFloat); // Redondear al número entero más cercano
+          
+            if (Math.round(pesoMascota) === rangoPesoInt) {
+              rangoPeso = rango;
+              break;
+            }
+          }
+    
+          // Sumar el consumo diario individual al consumo diario total
+          if (rangoPeso) {
+            console.log("rangopeso de la mascota: ", rangoPeso);
+            let consumoDiarioIndividual = GatoPremiumValores[rangoPeso];
+            consumoDiarioTotal += consumoDiarioIndividual;
+          }
+        });
+    
+        // Calcular los días que durará la bolsa de comida
+        let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
+        return diasDuracion;
+      }
+    
+    
+      if (venta.calidad_bolsa == "SUPER PREMIUM") {
+        let GatoSuperPremiumValores = {
+          P2: 0.030,
+          P3: 0.045,
+          P4: 0.060,
+          P5: 0.075,
+          P6: 0.085
+        }
+    
+    
+        // Calcular el consumo diario individual de cada mascota
+        let consumoDiarioTotal = 0;
+    
+        mascotasVenta.forEach((mascota) => {
+          let pesoMascota = mascota.peso;
+    
+          // Encontrar el rango de peso correspondiente
+          let rangoPeso = null;
+    
+          for (let rango in GatoSuperPremiumValores) {
+            let rangoPesoFloat = parseFloat(rango.slice(1)); // Obtener el valor de rango como número decimal
+            let rangoPesoInt = Math.round(rangoPesoFloat); // Redondear al número entero más cercano
+          
+            if (Math.round(pesoMascota) === rangoPesoInt) {
+              rangoPeso = rango;
+              break;
+            }
+          }
+    
+          // Sumar el consumo diario individual al consumo diario total
+          if (rangoPeso) {
+            console.log("rangopeso de la mascota: ", rangoPeso);
+            let consumoDiarioIndividual = GatoSuperPremiumValores[rangoPeso];
+            consumoDiarioTotal += consumoDiarioIndividual;
+          }
+        });
+    
+        // Calcular los días que durará la bolsa de comida
+        let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
+        return diasDuracion;
+      }
+  
+  
+    }
 }
 
 
@@ -1037,6 +1054,10 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
 
 
 }
+
+
+
+
 
 
 

@@ -1,21 +1,36 @@
 const venta_controller = require('../../controllers/venta_controller');
 
+let salto = 0;
+
 actualizarVentasVencidas();
 async function actualizarVentasVencidas(){
   await venta_controller.actualizarVentasVencidas();
 }
 
-getVentasPorVencer();
-async function getVentasPorVencer() {
+listenerBtnSiguiente();
+listenerBtnAnterior();
+
+get20VentasPorVencer();
+async function get20VentasPorVencer() {
   let ventasConClienteMascotas = [];
-  ventasConClienteMascotas = await venta_controller.getVentasPorVencerConMascotas();
+  ventasConClienteMascotas = await venta_controller.get20VentasPorVencerConMascotas(salto);
   if (ventasConClienteMascotas.length > 0) {
+    if(await verificarUltimaPagina()) {
+      document.getElementById('btnSiguiente').style.display = "none";
+    }
     renderVentasPorVencer(ventasConClienteMascotas);
   }
 }
 
 
 function renderVentasPorVencer(ventasConClienteMascotas) {
+
+  let container_paginado = document.getElementById("container-paginado");
+  container_paginado.style.display = "none";
+
+  divAvisos = document.getElementById("avisos");
+  divAvisos.innerHTML = "";
+
   ventasConClienteMascotas.forEach(element => {
 
 
@@ -39,8 +54,11 @@ function renderVentasPorVencer(ventasConClienteMascotas) {
       <p class="ptelefono"><b>Tel:</b> ${element.cliente.telefono}</p>
       <p class="pdireccion"><b>Direccion:</b> ${element.cliente.calle + " " + element.cliente.calle_numero}</p>
       <p class="ppuntos"><b>Puntos:</b> ${element.cliente.puntos}</p>
+      <button onclick="btnVenta(${element.cliente.id_cliente})" class="btnVenta">Venta</button>
     </div>`
 
+    
+    container_paginado.style.display = "block";
 
     let idmascotas = "pmascotas" + element.venta.id_venta;
     pmascotas = document.getElementById(idmascotas);
@@ -55,4 +73,72 @@ function renderVentasPorVencer(ventasConClienteMascotas) {
 
   });
 
+}
+
+
+
+function listenerBtnSiguiente() {
+  let btnSiguiente = document.getElementById('btnSiguiente')
+  btnSiguiente.addEventListener('click', (e) => {
+    e.preventDefault();
+    paginaSiguiente();
+  })
+
+}
+
+function paginaSiguiente() {
+
+  document.getElementById('btnAnterior').style.display = "block";
+
+  let h5Pagina = document.getElementById('h5Pagina');
+  h5Pagina.textContent = parseInt(h5Pagina.textContent) + 1;
+  salto = (parseInt(h5Pagina.textContent) - 1) * 20;
+  get20VentasPorVencer();
+}
+
+
+function listenerBtnAnterior() {
+  let btnAnterior = document.getElementById('btnAnterior')
+  btnAnterior.addEventListener('click', (e) => {
+    e.preventDefault();
+    paginaAnterior();
+  })
+
+}
+
+function paginaAnterior() {
+
+  document.getElementById('btnSiguiente').style.display = "block";
+
+  let h5Pagina = document.getElementById('h5Pagina');
+
+
+  if (parseInt(h5Pagina.textContent) > 1) {
+
+  h5Pagina.textContent = parseInt(h5Pagina.textContent) - 1;
+  salto = (parseInt(h5Pagina.textContent) - 1) * 20;
+  get20VentasPorVencer();
+  }
+
+  if (parseInt(h5Pagina.textContent) == 1) {
+    document.getElementById('btnAnterior').style.display = "none";
+  }
+
+
+}
+
+async function verificarUltimaPagina() {
+  let ventasConClienteMascotas = [];
+  ventasConClienteMascotas = await venta_controller.get20VentasPorVencerConMascotas(salto + 20);
+  if (ventasConClienteMascotas.length == 0) {
+    return true
+  }else{
+    return false
+  }
+}
+
+
+function btnVenta(id_cliente) {
+  localStorage.setItem("ClienteVenta",  id_cliente);
+  location.href="../Venta/venta.html";
 }
