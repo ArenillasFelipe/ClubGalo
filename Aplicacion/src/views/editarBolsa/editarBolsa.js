@@ -16,11 +16,17 @@ async function mainFunctionEditarBolsa() {
     setSelectCalidadEnCalidadActualSegunBolsa();
     setTamaniosBolsa();
     listenerAgregarTamanio();
-    listenerGuardar();
 
 
 
 
+
+
+}
+
+function insertBtnGuardar() {
+    container_btnGuardar = document.getElementById("container-btnGuardar");
+    container_btnGuardar.innerHTML = `<button id="btnGuardar">Guardar</button>`
 }
 
 function listenerGuardar() {
@@ -134,6 +140,11 @@ function borrarBtnAgregar() {
     container_btnAgregar.innerHTML = "";
 }
 
+function borrarBtnAgregarGrande() {
+    container_btnGuardar = document.getElementById("container-btnGuardar");
+    container_btnGuardar.innerHTML = "";
+}
+
 function cambiarBotonGuardarAAgregar() {
     container_btnGuardar = document.getElementById("container-btnGuardar");
     container_btnGuardar.innerHTML = `<button id="btnAgregarGrande">Agregar+</button>`
@@ -156,9 +167,16 @@ function listenerBtnCancelar() {
     btnCancelar.addEventListener('click', (e) => {
         e.preventDefault();
 
+        if (bolsa.kilosBolsa.length != kilosBolsa.length) {
+            //TODO pueden ser distintos pesos pero misma cantidad de pesos
+            insertBtnGuardar();
+            listenerGuardar();
+        }else{
+            
+        }
 
         borrarInputTamanio();
-        cambiarBotonAgregarAGuardar();
+        borrarBtnAgregarGrande();
         agregarBotonAgregar();
         borrarBotonCancelar();
         listenerAgregarTamanio();
@@ -229,6 +247,8 @@ async function botonAgregarGrande() {
     kilosBolsa.push(parseFloat(inputAgregarTamanio.value));
 
     kilosBolsa = ordenarArrayDeFloats(kilosBolsa);
+
+    console.log(bolsa);
 
     borrarInputTamanio();
     cambiarBotonAgregarAGuardar();

@@ -127,7 +127,7 @@ function createWindowEditarBolsa() {
         width: 550,
         height: 450,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
