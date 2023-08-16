@@ -42,16 +42,28 @@ barra_busqueda.focus();
 
 mainFunctionBolsasApp();
 function mainFunctionBolsasApp() {
+
   listenerBtnAnterior();
   listenerBtnSiguiente();
-  mainGetYRenderBolsasSegunBusquedaApp();
   crearListenerBuscador();
+  preguntarBolsaEditada();
+}
 
-
+function preguntarBolsaEditada() {
+  let marcaBolsaEditada = localStorage.getItem("marcaBolsaEditada");
+  console.log(marcaBolsaEditada);
+  localStorage.clear();
+  if (marcaBolsaEditada) {    
+    barra_busqueda.value = marcaBolsaEditada;
+    document.getElementById("boton-lupa").click();
+  }else{
+    mainGetYRenderBolsasSegunBusquedaApp();
+  }
 }
 
 
 async function mainGetYRenderBolsasSegunBusquedaApp() {
+  console.log("funcion mainget y render bolsas")
   resetearDivTarjetas();
   let container_paginado = document.getElementById("container-paginado");
   container_paginado.style.display = "none";

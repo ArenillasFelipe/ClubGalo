@@ -278,7 +278,7 @@ async function guardarClienteConMascotas() {
 
     await guardarMascotasApp(idCliente);
 
-
+    localStorage.setItem("ClienteVenta", idCliente);
     main.recargarPaginaPrincipal();
     main.cerrarVentanasEmergentes();
 }

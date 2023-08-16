@@ -55,14 +55,23 @@ formBuscador.addEventListener('submit', (e) => {
 
 });
 
-
-localStorage.clear();
-
 listenerBtnAnterior();
 listenerBtnSiguiente();
 
 
-get20ClientesConMascotas();
+preguntarClienteEditado();
+function preguntarClienteEditado() {
+  let id_cliente = localStorage.getItem("ClienteVenta");
+  localStorage.clear();
+  if (id_cliente) {
+    barra_busqueda.value = id_cliente;
+    document.getElementById("boton-lupa").click();
+  }else{
+    get20ClientesConMascotas();
+  }
+}
+
+
 async function get20ClientesConMascotas() {
   let resultado = await cliente_controller.get20ClientesConMascotasBySearch(barra_busqueda.value, salto);
   if(await verificarUltimaPagina()) {

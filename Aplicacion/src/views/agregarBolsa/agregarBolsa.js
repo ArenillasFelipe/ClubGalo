@@ -231,6 +231,9 @@ async function actualizarDatosBolsaApp() {
 
     try {
         await bolsa_controller.insertBolsa(newBolsa, kilosBolsa);
+
+        localStorage.setItem("marcaBolsaEditada", newBolsa.marca_bolsa);
+
         main.recargarPaginaPrincipal();
         main.cerrarVentanasEmergentes();
     } catch (error) {

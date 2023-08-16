@@ -6,6 +6,9 @@ const main = remote.require('./main');
 
 let bolsa;
 let kilosBolsa = [];
+let kilosBolsaOriginal = [];
+let cambiosCalidad = false;
+let cambiosMarca = false;
 
 mainFunctionEditarBolsa();
 async function mainFunctionEditarBolsa() {
@@ -22,11 +25,6 @@ async function mainFunctionEditarBolsa() {
 
 
 
-}
-
-function insertBtnGuardar() {
-    container_btnGuardar = document.getElementById("container-btnGuardar");
-    container_btnGuardar.innerHTML = `<button id="btnGuardar">Guardar</button>`
 }
 
 function listenerGuardar() {
@@ -47,13 +45,23 @@ async function getBolsaAEditar() {
     bolsa = await bolsa_controller.getBolsaById(idBolsa);
     bolsa.kilosBolsa.forEach(element => {
         kilosBolsa.push(element.kilos_bolsa);
+        kilosBolsaOriginal.push(element.kilos_bolsa);
     });
+    kilosBolsa = ordenarArrayDeFloats(kilosBolsa);
+    kilosBolsaOriginal = ordenarArrayDeFloats(kilosBolsaOriginal);
     console.log(bolsa);
 }
 
 function setInputMarcaValorBolsa() {
     let inputMarca = document.getElementById("inputMarca");
     inputMarca.value = bolsa.bolsa.marca_bolsa;
+
+    inputMarca.addEventListener('input', function () {
+            cambiosMarca = true;
+            insertBtnGuardar();
+            listenerGuardar();
+    });
+
 }
 
 function setTamaniosBolsa() {
@@ -125,7 +133,7 @@ function listenerAgregarTamanio() {
 function mainCrearInputTamanio() {
 
     borrarBtnAgregar();
-    cambiarBotonGuardarAAgregar();
+    insertBtnAgregar();
     crearListenerAgregarGrande();
     agregarBtnCancelar();
     agregarInputTamanio();
@@ -145,12 +153,13 @@ function borrarBtnAgregarGrande() {
     container_btnGuardar.innerHTML = "";
 }
 
-function cambiarBotonGuardarAAgregar() {
+function insertBtnAgregar() {
     container_btnGuardar = document.getElementById("container-btnGuardar");
     container_btnGuardar.innerHTML = `<button id="btnAgregarGrande">Agregar+</button>`
 }
 
-function cambiarBotonAgregarAGuardar() {
+function insertBtnGuardar() {
+    console.log("funcion insertBTNguardar")
     container_btnGuardar = document.getElementById("container-btnGuardar");
     container_btnGuardar.innerHTML = `<button id="btnGuardar">Guardar</button>`
 }
@@ -167,20 +176,17 @@ function listenerBtnCancelar() {
     btnCancelar.addEventListener('click', (e) => {
         e.preventDefault();
 
-        if (bolsa.kilosBolsa.length != kilosBolsa.length) {
-            //TODO pueden ser distintos pesos pero misma cantidad de pesos
-            insertBtnGuardar();
-            listenerGuardar();
-        }else{
-            
-        }
-
         borrarInputTamanio();
         borrarBtnAgregarGrande();
         agregarBotonAgregar();
         borrarBotonCancelar();
         listenerAgregarTamanio();
-        listenerGuardar();
+
+        if (!areArraysEqual(kilosBolsa, kilosBolsaOriginal) || cambiosCalidad || cambiosMarca) {
+            console.log("no son iguales los array original y actual")
+            insertBtnGuardar();
+            listenerGuardar();
+        }
 
     });
 }
@@ -237,6 +243,13 @@ function setSelectCalidadEnCalidadActualSegunBolsa() {
     }
 
 
+    document.getElementById("selectCalidad").addEventListener('change', function () {
+        cambiosCalidad = true;
+        insertBtnGuardar();
+        listenerGuardar();
+});
+
+
 }
 
 
@@ -251,7 +264,7 @@ async function botonAgregarGrande() {
     console.log(bolsa);
 
     borrarInputTamanio();
-    cambiarBotonAgregarAGuardar();
+    insertBtnGuardar();
     agregarBotonAgregar();
     borrarBotonCancelar();
     listenerAgregarTamanio();
@@ -272,6 +285,16 @@ async function borrarTamanio(tamanio) {
             kilosBolsa.splice(index, 1);
         }
         setTamaniosBolsa();
+
+        if (!areArraysEqual(kilosBolsa, kilosBolsaOriginal) || cambiosCalidad || cambiosMarca) {
+            console.log("no son iguales los array original y actual");
+            insertBtnGuardar();
+            listenerGuardar();
+        } else {
+            //borro lo del container guardar y para eso uso esta funcion que sirve tambien para eso
+            borrarBtnAgregarGrande();
+        }
+
     }
 
 
@@ -300,6 +323,8 @@ async function actualizarDatosBolsaApp() {
 
     try {
         await bolsa_controller.actualizarDatosBolsa(newBolsa, kilosBolsa);
+
+        localStorage.setItem("marcaBolsaEditada", newBolsa.marca_bolsa);
         main.recargarPaginaPrincipal();
         main.cerrarVentanasEmergentes();
     } catch (error) {
@@ -336,7 +361,10 @@ function crearListenerAgregarGrande() {
 
 
 
-function ordenarArrayDeFloats(arrayDeFloats) {
+function ordenarArrayDeFloats(arrayDeValores) {
+    // Convertir los elementos a floats (si es posible)
+    const arrayDeFloats = arrayDeValores.map(valor => parseFloat(valor)).filter(valor => !isNaN(valor));
+
     // Utilizamos el método sort para ordenar el array de menor a mayor
     arrayDeFloats.sort(function (a, b) {
         return a - b;
@@ -344,4 +372,20 @@ function ordenarArrayDeFloats(arrayDeFloats) {
 
     // Devolvemos el array ordenado
     return arrayDeFloats;
+}
+
+
+function areArraysEqual(arr1, arr2) {
+    if (arr1.length !== arr2.length) {
+        return false;
+    }
+
+    for (let i = 0; i < arr1.length; i++) {
+        console.log("comparando", arr1[i], " y ",)
+        if (arr1[i] !== arr2[i]) {
+            return false;
+        }
+    }
+
+    return true;
 }
