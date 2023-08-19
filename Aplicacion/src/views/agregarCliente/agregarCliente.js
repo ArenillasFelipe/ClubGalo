@@ -12,6 +12,8 @@ let temporalmascotasIDs = 0;
 
 
 let input_primernombre = document.getElementById("input-primernombre");
+input_primernombre.focus();
+
 let input_nombrepila = document.getElementById("input-nombrepila");
 let input_apellido = document.getElementById("input-apellido");
 let input_calle = document.getElementById("input-calle");

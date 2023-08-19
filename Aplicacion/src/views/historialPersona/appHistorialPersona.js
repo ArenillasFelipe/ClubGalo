@@ -13,6 +13,8 @@ barra_busqueda.focus();
 init();
 function init() {
 
+  listenerBotonExportar();
+
   newBusqueda = localStorage.getItem("historialCliente");
   localStorage.clear();
 
@@ -50,8 +52,8 @@ async function mainFunctionHistorialPersona(newBusqueda) {
   } catch (error) {
     console.log(error)
     if (error.message == "variosClientes") {
-    await sweetAlerts.variosClientes();
-    return
+      await sweetAlerts.variosClientes();
+      return
     }
     if (error.message == "noExisteCliente") {
       await sweetAlerts.noSeDetectoCliente();
@@ -126,6 +128,7 @@ function crearListenerFiltrado() {
     salto = 0;
     importeTotal = 0;
     totalBolsas = 0;
+    document.getElementById("btnExportar").style.display = "none";
     /////////////////////////////////////////////
     if (selectFiltrado.value == "elegir") {
       insertInputMonth();
@@ -257,6 +260,7 @@ async function mainCrearTablaPrincipalSegunFiltros(newBusqueda, filtradoPrincipa
 
   if (ventas.length === 0 || ventas.length < 20) {
     CrearTablaTotales();
+    document.getElementById("btnExportar").style.display = "block";
   }
 
   if (ventas.length != 0) {
@@ -321,4 +325,46 @@ async function borrar_venta(idVenta) {
     localStorage.setItem("historialCliente", cliente.id_cliente);
     location.reload();
   }
+}
+
+
+function listenerBotonExportar() {
+  let btnExportar = document.getElementById("btnExportar");
+  btnExportar.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log("CLick!")
+    let nombreArchivo;
+    let intervaloTiempo
+    if (selectfiltrado.value == "elegir") {
+
+      let inputMonth = document.getElementById("inputmonth1");
+      let fecha = inputMonth.value;
+      console.log(inputMonth.value);
+      let fechaDividida = fecha.split('-');
+      let mes = fechaDividida[1];
+      let ano = fechaDividida[0];
+
+      intervaloTiempo = mes + '-' + ano;
+
+    }
+    if (selectfiltrado.value == "total") {
+      intervaloTiempo = "En total";
+    }
+    if (selectfiltrado.value == "anioatras") {
+      intervaloTiempo = "1 año atras";
+    }
+    if (selectfiltrado.value == "anio") {
+      intervaloTiempo = "En este año";
+    }
+
+    nombreArchivo = `Historial de Compras ${cliente.primernombre} ${cliente.nombrepila} ${cliente.apellido} (${intervaloTiempo})`;
+
+    exportTableToExcel("tablaprincipal", nombreArchivo);
+  });
+}
+
+
+function exportTableToExcel(tableID, filename = '') {
+  var table2excel = new Table2Excel();
+  table2excel.export(document.querySelectorAll(`#${tableID}`), filename);
 }

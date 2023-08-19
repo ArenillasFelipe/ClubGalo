@@ -10,6 +10,8 @@ let kilosBolsaOriginal = [];
 let cambiosCalidad = false;
 let cambiosMarca = false;
 
+document.getElementById("inputMarca").focus();
+
 mainFunctionEditarBolsa();
 async function mainFunctionEditarBolsa() {
     listenerCruz();
@@ -215,8 +217,8 @@ function borrarBotonCancelar() {
 
 function agregarInputTamanio() {
     container_inputTamanio = document.getElementById("container-inputTamanio");
-
     container_inputTamanio.innerHTML = `<label>Agregar Tamaño:</label> <input type="number" id="inputAgregarTamanio"><b>Kg</b>`
+    document.getElementById("inputAgregarTamanio").focus();
 
 }
 

@@ -47,8 +47,8 @@ async function getClienteById(id_cliente) {
         clienteData.id_cliente);
 }
 
-async function get20ClientesBySearch(cadenaBusqueda, salto) {
 
+async function get20ClientesBySearchMascotas(cadenaBusqueda, salto) {
   if (!salto) {
     salto = 0;
   }
@@ -56,26 +56,24 @@ async function get20ClientesBySearch(cadenaBusqueda, salto) {
   try {
     const conn = await getConnection();
     const palabrasClave = cadenaBusqueda.split(' ');
-    const condiciones = palabrasClave.map(palabra => {
-      return `((primernombre LIKE '%${palabra}%'
-        OR nombrepila LIKE '%${palabra}%'
-        OR apellido LIKE '%${palabra}%'
-        OR calle LIKE '%${palabra}%'
-        OR id_cliente = '${palabra}'
-        OR calle_numero = '${palabra}'
-        OR telefono = '${palabra}') AND validoCliente = true)`;
+
+    const condicionesMascotas = palabrasClave.map(palabra => {
+      return `mascotas.nombremascota LIKE '%${palabra}%'`;
     });
 
-    const condicionesSQL = condiciones.join(' AND ');
-
     const sql = `
-      SELECT *
+      SELECT clientes.*
       FROM clientes
-      WHERE ${condicionesSQL}
+      INNER JOIN mascotas ON mascotas.id_cliente = clientes.id_cliente
+      WHERE validoCliente = true
+      AND (${condicionesMascotas.join(' OR ')})
+      GROUP BY clientes.id_cliente
+      HAVING COUNT(DISTINCT mascotas.nombremascota) >= ${palabrasClave.length}
       LIMIT ?, 20
     `;
 
     const results = await conn.query(sql, [salto]);
+    console.log("Resultados de búsqueda:", results);
 
     return results.map(clienteData => new Cliente(
       clienteData.primernombre,
@@ -91,6 +89,57 @@ async function get20ClientesBySearch(cadenaBusqueda, salto) {
     throw error;
   }
 }
+
+async function get20ClientesBySearch(cadenaBusqueda, salto) {
+
+  if (!salto) {
+    salto = 0;
+  }
+
+  try {
+    const conn = await getConnection();
+    const palabrasClave = cadenaBusqueda.split(' ');
+  
+    const condiciones = palabrasClave.map(palabra => {
+      return `(
+        clientes.primernombre LIKE '%${palabra}%'
+        OR clientes.nombrepila LIKE '%${palabra}%'
+        OR clientes.apellido LIKE '%${palabra}%'
+        OR clientes.calle LIKE '%${palabra}%'
+        OR clientes.id_cliente = '${palabra}'
+        OR clientes.calle_numero = '${palabra}'
+        OR clientes.telefono = '${palabra}'
+      )`;
+    });
+  
+    const condicionesSQL = condiciones.join(' AND ');
+  
+    const sql = `
+      SELECT clientes.*
+      FROM clientes
+      WHERE (${condicionesSQL}) AND validoCliente = true
+      LIMIT ?, 20
+    `;
+  
+    const results = await conn.query(sql, [salto]);
+
+    console.log("resultado de busqueda justo despues de query a bd: ", results);
+
+    return results.map(clienteData => new Cliente(
+      clienteData.primernombre,
+      clienteData.nombrepila,
+      clienteData.apellido,
+      clienteData.telefono,
+      clienteData.calle,
+      clienteData.calle_numero,
+      clienteData.puntos,
+      clienteData.id_cliente
+    ));
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 
 
@@ -137,5 +186,6 @@ module.exports = {
     deleteClienteById,
     insertCliente,
     Cliente,
-    actualizarPuntosClienteById
+    actualizarPuntosClienteById,
+    get20ClientesBySearchMascotas
 }

@@ -124,7 +124,7 @@ nav a:hover {
 .busqueda {
   position: absolute;
   right: 475px;
-  top: 25px;
+  top: 20px;
 }
 
 #barra-busqueda {
@@ -356,9 +356,9 @@ nav a:hover {
 .btn-borrar:hover {
   z-index: 1;
   animation: bordeNegro 0.3s forwards;
-  -webkit-box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
-  box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 0px 17px 4px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 17px 4px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 17px 4px rgba(0, 0, 0, 0.75);
 }
 
 .btn-editar {
@@ -383,15 +383,16 @@ nav a:hover {
 .btn-editar:hover {
   z-index: 1;
   animation: bordeNegro 0.3s forwards;
-  -webkit-box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
-  box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 0px 17px 4px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 17px 4px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 17px 4px rgba(0, 0, 0, 0.75);
 }
 
 @keyframes bordeNegro {
   0% {
     border-color: transparent;
   }
+
   100% {
     border-color: black;
   }
@@ -446,7 +447,7 @@ nav a:hover {
 }
 
 
-#btnAnterior{
+#btnAnterior {
   position: absolute;
   background-color: transparent;
   color: white;
@@ -465,7 +466,7 @@ nav a:hover {
   left: -5px;
 }
 
-#btnAnterior img{
+#btnAnterior img {
   position: relative;
   top: 8px;
 }
@@ -489,7 +490,7 @@ nav a:hover {
   left: 235px;
 }
 
-#btnSiguiente img{
+#btnSiguiente img {
   position: relative;
   top: 8px;
   color: white;
@@ -513,4 +514,25 @@ nav a:hover {
   transform: translateX(-50%);
   top: -27px;
   color: white;
+}
+
+
+.container-checkBusquedaMascota {
+  position: absolute;
+  left: 40px;
+  top: 64px;
+}
+
+#checkboxBusquedaMascota {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.labelBusquedaMascota {
+  position: relative;
+  top: -4px;
+  left: 195px;
+  font-weight: 600;
+  cursor: pointer;
 }

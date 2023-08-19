@@ -31,9 +31,8 @@ window.addEventListener('scroll', () => {
 
 
 let barra_busqueda = document.getElementById('barra-busqueda');
-barra_busqueda.focus();
 
-
+focusBuscador();
 let salto = 0;
 
 
@@ -73,7 +72,10 @@ function preguntarClienteEditado() {
 
 
 async function get20ClientesConMascotas() {
-  let resultado = await cliente_controller.get20ClientesConMascotasBySearch(barra_busqueda.value, salto);
+
+  let checkboxBusquedaMascota = document.getElementById("checkboxBusquedaMascota");
+
+  let resultado = await cliente_controller.get20ClientesConMascotasBySearch(barra_busqueda.value, salto, checkboxBusquedaMascota.checked);
   if(await verificarUltimaPagina()) {
     document.getElementById('btnSiguiente').style.display = "none";
   }
@@ -281,4 +283,9 @@ async function verificarUltimaPagina() {
   }
 }
 
+
+function focusBuscador() {
+  let barra_busqueda = document.getElementById('barra-busqueda');
+  barra_busqueda.focus();
+}
 

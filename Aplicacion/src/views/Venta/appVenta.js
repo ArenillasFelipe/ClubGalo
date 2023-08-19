@@ -15,10 +15,10 @@ let kilosPrevios = 0;
 let marcaPrevia;
 let calidadPrevia;
 
-let inputCliente = document.getElementById("inputCliente");
-inputCliente.focus();
-
 const formCliente = document.getElementById("form-ingreso");
+let inputCliente = document.getElementById("inputCliente");
+
+focusInputCliente();
 
 
 formCliente.addEventListener('submit', (e) => {
@@ -34,7 +34,10 @@ const MainFunctionVenta = async () => {
     //obtengo el cliente segun lo ingresado en el input
 
     try {
-        cliente = await cliente_controller.getClienteSegunBusqueda(inputCliente.value);
+
+        let checkboxBusquedaMascota = document.getElementById("checkboxBusquedaMascota");
+
+        cliente = await cliente_controller.getClienteSegunBusqueda(inputCliente.value, checkboxBusquedaMascota.checked);
     } catch (error) {
         console.log(error)
         if (error.message == "variosClientes") {
@@ -269,6 +272,7 @@ async function venta(cliente, mascotas) {
         mascotas = mascotas.filter((mascota) =>
             mascotasVenta.includes(mascota.id_mascota)
         );
+
         await venta_controller.insertarVenta(nuevaVenta, mascotas, cliente.puntos, nuevosPuntos);
         await sweetAlerts.sweetAlertVentaExitosa();
         location.reload();
@@ -544,6 +548,7 @@ function botonRestarPuntos() {
 
     divBotonRestarPuntos.innerHTML = "";
     divInputRestarPuntos.innerHTML = `<form id="formRestarPuntos"><input type="number" id="inputRestarPuntos" placeholder="Restar..." required><button type="submit" id="confirmarRestarPuntos"><img src="../../imagenes/tick.png" id="imgTick"></button><button type="reset" id="cancelarRestarPuntos"><img src="../../imagenes/cruz_negra.png" id="imgCruz_negra"></button></form>`;
+    document.getElementById("inputRestarPuntos").focus();
 
     listenerFormRestarPuntos();
     listenerFormCancelarRestarPuntos();
@@ -768,6 +773,12 @@ function desmarcarCheboxesVentasActivas(ventasActivas, idVentaMantener) {
 function quitarVentaActivaPorId(ventasActivas, idVenta) {
     let ventasSeleccionadas = ventasActivas.filter(objeto => objeto.venta.id_venta != idVenta);
     return ventasSeleccionadas;
+}
+
+
+function focusInputCliente() {
+    let inputCliente = document.getElementById("inputCliente");
+    inputCliente.focus();
 }
 
   

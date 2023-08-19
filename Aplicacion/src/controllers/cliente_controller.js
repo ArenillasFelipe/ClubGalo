@@ -3,9 +3,15 @@ const mascotaModel = require('../models/mascotaModel');
 const ventaModel = require('../models/ventaModel');
 
 
-async function getClienteSegunBusqueda(busqueda) {
+async function getClienteSegunBusqueda(busqueda, busquedaPorMascotas) {
     let cliente = [];
-    cliente = await clienteModel.get20ClientesBySearch(busqueda);
+
+    if (busquedaPorMascotas) {
+        cliente = await clienteModel.get20ClientesBySearchMascotas(busqueda);
+    } else {
+        cliente = await clienteModel.get20ClientesBySearch(busqueda);
+    }
+    
     console.log(cliente);
     if (!cliente || cliente.length == 0) {
         throw new Error("noExisteCliente");
@@ -24,13 +30,17 @@ async function getClienteById(id_cliente) {
 }
 
 
-async function get20ClientesConMascotasBySearch(busqueda, salto) {
+async function get20ClientesConMascotasBySearch(busqueda, salto, busquedaPorMascotas) {
     let clientes
     let clientesConMascotas = [];
-    if(busqueda){
-    clientes = await clienteModel.get20ClientesBySearch(busqueda, salto);
-    }else{
-        console.log("salto: ",salto)
+    if (busqueda) {
+        if (busquedaPorMascotas) {
+            clientes = await clienteModel.get20ClientesBySearchMascotas(busqueda, salto);
+        } else {
+            clientes = await clienteModel.get20ClientesBySearch(busqueda, salto);
+        }
+    } else {
+        console.log("salto: ", salto)
         clientes = await clienteModel.get20Clientes(salto);
     }
 
@@ -39,30 +49,30 @@ async function get20ClientesConMascotasBySearch(busqueda, salto) {
         for (let i = 0; i < clientes.length; i++) {
 
             let mascotasCliente = await mascotaModel.getMascotasByIdCliente(clientes[i].id_cliente);
-    
+
             for (let i = 0; i < mascotasCliente.length; i++) {
-                
+
                 dia = mascotasCliente[i].nacimiento;
                 mes = mascotasCliente[i].nacimiento;
                 anio = mascotasCliente[i].nacimiento;
-        
+
                 dia = dia.getDate();
                 mes = mes.getMonth();
                 mes = mes + 1;
                 anio = anio.getFullYear();
-                
+
                 mascotasCliente[i].nacimiento = `${dia}/${mes}/${anio}`;
             }
-    
+
             clientesConMascotas.push({
                 cliente: clientes[i],
                 mascotas: mascotasCliente
             });
-    
-    
+
+
         }
     }
-    
+
 
     return clientesConMascotas;
 }

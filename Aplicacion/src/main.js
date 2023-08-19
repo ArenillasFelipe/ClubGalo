@@ -196,7 +196,7 @@ function createWindowVentasBolsas() {
         width: 900,
         height: 650,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
