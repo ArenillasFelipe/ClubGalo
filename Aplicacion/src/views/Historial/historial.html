@@ -7,16 +7,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Club Galo</title>
   <link rel="stylesheet" href="Estiloshistorial.css" />
+  <link rel="stylesheet" href="../../modals/borrarVentaModal/BorrarVentaModal.css" />
 </head>
 
 <body>
+
   <header>
     <div class="logo slide">
       <img src="../../imagenes/logo-galo.png" width="150" class="img-logo">
     </div>
     <nav>
       <form class="busqueda" id="busqueda">
-        <input placeholder="Buscar..." id="barra-busqueda">
+        <input placeholder="Fecha, bolsa, kilos, precio y ptos. canjeados" id="barra-busqueda">
         <button type="submit" id="boton-lupa"><img src="../../imagenes/lupa.png" width="20px"></button>
       </form>
       <a href="../Seguimiento/seguimiento.html" class="nav-link1">Seguimiento</a>
@@ -33,22 +35,30 @@
 
   </header>
 
+  <div id="modalBorrarVenta"></div>
+
+
   <div class="ventas" id="ventas">
 
   </div>
 
   <div class="container-paginado" id="container-paginado">
-    <button id="btnAnterior" onclick="document.documentElement.scrollTop = 0;"><img src="../../imagenes/pagAnteriorIMG.png" width="30px">Anterior</button>
-    <div class="container-h5Pagina"><h5 id="h5Pagina">1</h5></div>
-    <button id="btnSiguiente" onclick="document.documentElement.scrollTop = 0;">Siguiente<img src="../../imagenes/pagSiguienteIMG.png" width="30px"></button>
-  </div> 
+    <button id="btnAnterior" onclick="document.documentElement.scrollTop = 0;"><img
+        src="../../imagenes/pagAnteriorIMG.png" width="30px">Anterior</button>
+    <div class="container-h5Pagina">
+      <h5 id="h5Pagina">1</h5>
+    </div>
+    <button id="btnSiguiente" onclick="document.documentElement.scrollTop = 0;">Siguiente<img
+        src="../../imagenes/pagSiguienteIMG.png" width="30px"></button>
+  </div>
 
 
   <div class="divFlechaArriba">
-    <button id="flechaArriba" onclick="document.documentElement.scrollTop = 0;"><img src="../../imagenes/flechaArriba.png"
-        id="imgFlechaArriba"></button>
+    <button id="flechaArriba" onclick="document.documentElement.scrollTop = 0;"><img
+        src="../../imagenes/flechaArriba.png" id="imgFlechaArriba"></button>
   </div>
-  
+
+  <script src="../../modals/borrarVentaModal/BorrarVentaModal.js"></script>
   <script src="./appHistorial.js"></script>
 </body>
 

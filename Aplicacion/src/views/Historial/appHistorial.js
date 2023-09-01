@@ -2,25 +2,10 @@ const sweetAlerts = require('../../utils/sweetAlerts');
 const venta_controller = require('../../controllers/venta_controller');
 
 
-
-
-
-
 const doc = document.documentElement;
 
 let flechaArriba = document.getElementById("flechaArriba");
 flechaArriba.style.display = 'none';
-
-// Agrega un eventListener al evento scroll
-window.addEventListener('scroll', () => {
-  const scrollPos = window.pageYOffset || doc.scrollTop;
-
-  if (scrollPos <= 0) {
-    flechaArriba.style.display = 'none';
-  } else {
-    flechaArriba.style.display = 'block';
-  }
-});
 
 
 
@@ -140,20 +125,21 @@ function botonPersona(idCliente) {
 }
 
 
-async function borrar_venta(idVenta) {
-  let resultados = await sweetAlerts.confirmar_borrado_venta();
-  if (resultados.confirma_borrado) {
 
-    if (resultados.confirma_borrar_puntos) {
-      await venta_controller.borrarVenta_RestarPuntos(idVenta, true);
-      location.reload();
-      return
-    }
-    await venta_controller.borrarVenta_RestarPuntos(idVenta, false);
+
+let userDecision = null;
+let isChecked = null;
+async function borrar_venta(idVenta) {
+  userDecision = await deleteSaleModal.show();
+
+  if (userDecision) {
+    // Lógica para borrar la venta
+    await venta_controller.borrarVenta_RestarPuntos(idVenta, isChecked);
     location.reload();
   }
+  userDecision = null;
+  isChecked = null;
 }
-
 
 function listenerBtnSiguiente() {
   let btnSiguiente = document.getElementById('btnSiguiente')

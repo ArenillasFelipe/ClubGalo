@@ -374,7 +374,7 @@ function innerCliente(mascotas, historialVentasConBolsas) {
     </select>
 </div>
 
-<p class="pprecio">Precio de venta: $<input type="number" step="0.01" class="inputprecio" id="inputprecio" required></p>
+<p class="pprecio">Precio Unitario: $<input type="number" step="0.01" class="inputprecio" id="inputprecio" required></p>
 <p class="pcantbolsas">Cantidad de bolsas: <input type="number" class="inputcantbolsas" id="inputcantbolsas" value="1" required></p>
 <button class="btn-borrar" id="btn-borrar-venta" type="reset">Borrar</button>
 <button class="btn-ejecutar" type="submit">Ejecutar</button>

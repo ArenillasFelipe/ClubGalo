@@ -5,6 +5,7 @@ const mascota_controller = require('../../controllers/mascota_controller');
 const sweetAlerts = require('../../utils/sweetAlerts');
 const { calcularEdadMascota } = require('../../utils/calcularFechas');
 const nodemailer = require('nodemailer');
+const { capitalizarPalabras } = require('../../utils/palabras');
 
 
 let cliente;
@@ -194,11 +195,11 @@ async function actualizarMascota(idMascota) {
 
         let indice = mascotasMod.findIndex(mascota => mascota.id_mascota == idMascota);
 
-        mascotasMod[indice].nombremascota = input_nombremascota.value;
+        mascotasMod[indice].nombremascota = capitalizarPalabras(input_nombremascota.value);
         mascotasMod[indice].animal = input_animal.value;
-        mascotasMod[indice].raza = input_raza.value;
+        mascotasMod[indice].raza = capitalizarPalabras(input_raza.value);
         mascotasMod[indice].peso = input_peso.value;
-        mascotasMod[indice].actividad = input_actividad.value;
+        mascotasMod[indice].actividad = capitalizarPalabras(input_actividad.value);
         mascotasMod[indice].afecciones = input_afecciones.value;
         mascotasMod[indice].nacimiento = `${parseInt(input_diacumple.value)}/${parseInt(input_mescumple.value)}/${parseInt(input_aniocumple.value)}`
 
@@ -233,11 +234,11 @@ async function agregarMascotaapp() {
     temporalmascotasIDs -= 1;
     newMascota.id_mascota = temporalmascotasIDs;
 
-    newMascota.nombremascota = input_nombremascota.value;
+    newMascota.nombremascota = capitalizarPalabras(input_nombremascota.value);
     newMascota.animal = input_animal.value;
-    newMascota.raza = input_raza.value;
+    newMascota.raza = capitalizarPalabras(input_raza.value);
     newMascota.peso = input_peso.value;
-    newMascota.actividad = input_actividad.value;
+    newMascota.actividad = capitalizarPalabras(input_actividad.value);
     newMascota.afecciones = input_afecciones.value;
     newMascota.nacimiento = `${parseInt(input_diacumple.value)}/${parseInt(input_mescumple.value)}/${parseInt(input_aniocumple.value)}`
     newMascota.id_cliente = cliente.id_cliente;

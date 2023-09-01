@@ -108,7 +108,7 @@ async function get20VentasBySearch(busqueda, salto) {
     }
   } else {
     let busquedaMod = "%" + busqueda + "%";
-    result = await conn.query(`select venta.* from venta where precio like ? or totalventa like ? or marca_bolsa like ? or kilos_bolsa like ? or calidad_bolsa like ? order by fecha DESC LIMIT ?, 20;`, [busquedaMod, busquedaMod, busquedaMod, busquedaMod, busquedaMod, salto]);
+    result = await conn.query(`select venta.* from venta where precio like ? or totalventa like ? or marca_bolsa like ? or kilos_bolsa like ? or calidad_bolsa like ? or puntos_canjeados = ? order by fecha DESC LIMIT ?, 20;`, [busquedaMod, busquedaMod, busquedaMod, busquedaMod, busquedaMod, busqueda, salto]);
     // conn.release();
   }
 
