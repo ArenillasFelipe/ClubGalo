@@ -1,7 +1,6 @@
 const { remote } = require('electron');
 const main = remote.require('./main');
 const cliente_controller = require('../../controllers/cliente_controller');
-const sweetAlerts = require('../../utils/sweetAlerts');
 const { calcularEdadMascota } = require('../../utils/calcularFechas');
 
 
@@ -205,14 +204,15 @@ function botonEditar(idCliente) {
   main.createWindowEditarCliente();
 }
 
+let userDecision = null;
 async function botonBorrar(idCliente) {
-  let confirma_borrado = await sweetAlerts.sweetAlertBorrarCliente();
-  if (confirma_borrado) {
-
+  userDecision = await BorrarClienteModal.show();
+  if (userDecision) {
     await cliente_controller.borrarClienteById(idCliente);
-    await sweetAlerts.sweetAlertClienteBorradoConExito();
     main.recargarPaginaPrincipal();
   }
+
+  userDecision = null;
 }
 
 

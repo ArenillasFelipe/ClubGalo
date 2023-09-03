@@ -1,5 +1,4 @@
 const bolsa_controller = require('../../controllers/bolsa_controller');
-const sweetAlerts = require('../../utils/sweetAlerts');
 const { remote } = require('electron');
 const main = remote.require('./main');
 
@@ -53,10 +52,10 @@ function preguntarBolsaEditada() {
   let marcaBolsaEditada = localStorage.getItem("marcaBolsaEditada");
   console.log(marcaBolsaEditada);
   localStorage.clear();
-  if (marcaBolsaEditada) {    
+  if (marcaBolsaEditada) {
     barra_busqueda.value = marcaBolsaEditada;
     document.getElementById("boton-lupa").click();
-  }else{
+  } else {
     mainGetYRenderBolsasSegunBusquedaApp();
   }
 }
@@ -69,10 +68,10 @@ async function mainGetYRenderBolsasSegunBusquedaApp() {
   container_paginado.style.display = "none";
 
   let bolsas18 = await bolsa_controller.get18BolsasSegunBusqueda(newBusqueda, salto);
-  if(await verificarUltimaPagina()) {
+  if (await verificarUltimaPagina()) {
     document.getElementById('btnSiguiente').style.display = "none";
   }
-  
+
   for (let indiceBolsa = 0; indiceBolsa < bolsas18.length; indiceBolsa++) {
     const element = bolsas18[indiceBolsa];
 
@@ -166,14 +165,17 @@ function botonEditar(id_bolsa) {
   main.createWindowEditarBolsa();
 }
 
+let userDecision = null;
 async function botonBorrar(id_bolsa) {
 
-  let confirma_borrado = await sweetAlerts.sweetAlert_confirmar_borrado_bolsa();
+  userDecision = await BorrarBolsaModal.show();
 
-  if (confirma_borrado) {
+  if (userDecision) {
     await bolsa_controller.borrarBolsaById(id_bolsa);
     location.reload();
   }
+
+  userDecision = null;
 
 }
 
@@ -238,7 +240,7 @@ async function verificarUltimaPagina() {
   bolsas = await bolsa_controller.get18BolsasSegunBusqueda(newBusqueda, salto + 18);
   if (bolsas.length == 0) {
     return true
-  }else{
+  } else {
     return false
   }
 }

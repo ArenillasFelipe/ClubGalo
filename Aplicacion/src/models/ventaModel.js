@@ -80,41 +80,71 @@ async function getVentaById(id_venta) {
   );
 }
 
-async function get20VentasBySearch(busqueda, salto) {
+async function get20VentasBySearch(cadenaBusqueda, salto) {
   const conn = await getConnection();
-
-  let result;
 
   if (!salto) {
     salto = 0;
   }
 
-  if (busqueda === "" || busqueda === undefined) {
-    result = await conn.query(`select * from venta order by venta.fecha DESC LIMIT ?, 20;`, salto);
-    // conn.release();
+  const palabrasClave = cadenaBusqueda.split(' ');
+
+  const condiciones = palabrasClave.map(palabra => {
+
+
+    if (palabra.includes('/')) {
+      let busqueda = palabra.split("/");
+  
+      if (busqueda.length == 3) {
+        return `(
+          day(venta.fecha) = ${parseInt(busqueda[0])}
+          and month(venta.fecha) = ${parseInt(busqueda[1])}
+          and year(venta.fecha) = ${parseInt(busqueda[2])}
+        )`;
+      }
+      if (busqueda.length == 2) {
+        return `(
+          month(venta.fecha) = ${parseInt(busqueda[0])}
+          and year(venta.fecha) = ${parseInt(busqueda[1])}
+        )`;
+      }
+    }else{
+
+    // Utiliza isNaN para verificar si la palabra no es un número
+    if (!isNaN(palabra)) {
+      return `(
+        precio = ${parseFloat(palabra)}
+        OR cantidad = ${parseInt(palabra)}
+        OR kilos_bolsa = ${parseFloat(palabra)}
+        OR totalventa = ${parseFloat(palabra)}
+        OR puntos_canjeados = ${parseInt(palabra)}
+      )`;
+    } else {
+      return `(
+        marca_bolsa LIKE '%${palabra}%'
+        OR calidad_bolsa LIKE '%${palabra}%'
+      )`;
+    }
+  }
+  });
+
+  const condicionesSQL = condiciones.join(' AND ');
+  console.log(condicionesSQL)
+  const sql = `
+    SELECT *
+    FROM venta
+    WHERE (${condicionesSQL})
+    ORDER BY fecha DESC
+    LIMIT ?, 20
+  `;
+
+  const results = await conn.query(sql, [salto]);
+
+  if (cadenaBusqueda === "" || cadenaBusqueda === undefined) {
+    results = await conn.query(`SELECT * FROM venta ORDER BY fecha DESC LIMIT ?, 20;`, salto);
   }
 
-
-  if (busqueda.includes('/')) {
-    busqueda = busqueda.split("/");
-
-    if (busqueda.length == 3) {
-      result = await conn.query(`select * from venta where (day(venta.fecha) = ? and month(venta.fecha) = ? and year(venta.fecha) = ?) order by venta.fecha DESC LIMIT ?, 20;`, [busqueda[0], busqueda[1], busqueda[2], salto]);
-      // conn.release();
-    }
-    if (busqueda.length == 2) {
-      result = await conn.query(`select * from venta where (month(venta.fecha) = ? and year(venta.fecha) = ?) order by venta.fecha DESC LIMIT ?, 20;`, [busqueda[0], busqueda[1], salto]);
-      // conn.release();
-    }
-  } else {
-    let busquedaMod = "%" + busqueda + "%";
-    result = await conn.query(`select venta.* from venta where precio like ? or totalventa like ? or marca_bolsa like ? or kilos_bolsa like ? or calidad_bolsa like ? or puntos_canjeados = ? order by fecha DESC LIMIT ?, 20;`, [busquedaMod, busquedaMod, busquedaMod, busquedaMod, busquedaMod, busqueda, salto]);
-    // conn.release();
-  }
-
-
-
-  return result.map(ventaData => new Venta(
+  return results.map(ventaData => new Venta(
     ventaData.fecha,
     ventaData.precio,
     ventaData.id_cliente,
@@ -133,6 +163,9 @@ async function get20VentasBySearch(busqueda, salto) {
     ventaData.id_venta
   ));
 }
+
+//////////////////
+
 
 async function insertVenta(newVenta) {
   console.log("newVenta antes de insertar:", newVenta);

@@ -1,6 +1,5 @@
 const venta_controller = require('../../controllers/venta_controller');
 const cliente_controller = require('../../controllers/cliente_controller');
-const sweetAlerts = require('../../utils/sweetAlerts');
 
 
 let salto = 0;
@@ -52,11 +51,17 @@ async function mainFunctionHistorialPersona(newBusqueda) {
   } catch (error) {
     console.log(error)
     if (error.message == "variosClientes") {
-      await sweetAlerts.variosClientes();
+      await variosClientesModal.show();
+      setTimeout(function () {
+        barra_busqueda.focus();
+      }, 100);
       return
     }
     if (error.message == "noExisteCliente") {
-      await sweetAlerts.noSeDetectoCliente();
+      await noSeDetectoClienteModal.show();
+      setTimeout(function () {
+        barra_busqueda.focus();
+      }, 100);
       return
     }
   }
@@ -310,21 +315,21 @@ function listenerScrollParaTopeDePagina() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+let userDecision = null;
+let isChecked = null;
 async function borrar_venta(idVenta) {
-  let resultados = await sweetAlerts.confirmar_borrado_venta();
-  if (resultados.confirma_borrado) {
+  userDecision = await deleteSaleModal.show();
+  if (userDecision) {
 
-    if (resultados.confirma_borrar_puntos) {
-      await venta_controller.borrarVenta_RestarPuntos(idVenta, true);
-      localStorage.setItem("historialCliente", cliente.id_cliente);
-      location.reload();
-      return
-    }
-    await venta_controller.borrarVenta_RestarPuntos(idVenta, false);
+    await venta_controller.borrarVenta_RestarPuntos(idVenta, isChecked);
     localStorage.setItem("historialCliente", cliente.id_cliente);
     location.reload();
+    return
+
   }
+
+  userDecision = null;
+  isChecked = null;
 }
 
 

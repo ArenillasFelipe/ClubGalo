@@ -1,6 +1,6 @@
 
 /* Estilos del modal */
-.modal {
+.modalBorrarVenta {
     display: flex;
     background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
@@ -23,7 +23,7 @@
     }
   }
   
-  .modal-content {
+  .modal-contentBorrarVenta {
     background-color: white;
     width: 500px;
     padding: 20px;
@@ -31,11 +31,12 @@
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     animation: fade-in 0.3s ease-out; /* Agregada animación */
+    border: 3px solid #FFE66D;
   }
   
   /* Estilos de los botones */
   
-  .modal button {
+  .modalBorrarVenta button {
     position: relative;
     top: 30px;
     padding: 8px 16px;
@@ -46,12 +47,12 @@
     outline: none;
   }
   
-  .modal p{
+  .modalBorrarVenta p{
     position: relative;
     top: 30px;
   }
   
-  .modal-content h2 {
+  .modal-contentBorrarVenta h2 {
     position: relative;
     border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
@@ -59,23 +60,23 @@
     top: -20px;
   }
   
-  #confirm-delete-button {
-    background-color: #d9534f;
+  #confirm-delete-buttonBorrarVenta {
+    background-color: #9b0505;
     color: white;
   }
   
-  #cancel-button {
-    background-color: #337ab7;
+  #cancel-buttonBorrarVenta {
+    background-color: #124E78;
     color: white;
   }
 
 
-  .modal label {
+  .modalBorrarVenta label {
     cursor: pointer;
     font-weight: 600;
   }
 
-  .modal input{
+  .modalBorrarVenta input{
     position: relative;
     top: 3px;
     cursor: pointer;

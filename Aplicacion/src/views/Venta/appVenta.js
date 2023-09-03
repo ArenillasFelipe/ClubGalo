@@ -5,7 +5,6 @@ const cliente_controller = require('../../controllers/cliente_controller');
 const { remote } = require('electron');
 const main = remote.require('./main');
 const { Venta } = require('../../models/ventaModel');
-const sweetAlerts = require('../../utils/sweetAlerts');
 const calcularFechas = require('../../utils/calcularFechas');
 
 
@@ -40,14 +39,22 @@ const MainFunctionVenta = async () => {
         cliente = await cliente_controller.getClienteSegunBusqueda(inputCliente.value, checkboxBusquedaMascota.checked);
     } catch (error) {
         console.log(error)
+
         if (error.message == "variosClientes") {
-            await sweetAlerts.variosClientes();
+            await variosClientesModal.show();
+            setTimeout(function() {
+                focusInputCliente();
+              }, 100);
             return
         }
         if (error.message == "noExisteCliente") {
-            await sweetAlerts.noSeDetectoCliente();
+            await noSeDetectoClienteModal.show();
+            setTimeout(function() {
+                focusInputCliente();
+              }, 100);
             return
         }
+
     }
     ///////////////////////////////////////////
 
@@ -263,7 +270,7 @@ async function venta(cliente, mascotas) {
 
         if (mascotasVenta.length == 0) {
 
-            await sweetAlerts.sweetAlertSeleccionMascota();
+            await SeleccionMascotaModal.show();
             return
 
         }
@@ -274,11 +281,19 @@ async function venta(cliente, mascotas) {
         );
 
         await venta_controller.insertarVenta(nuevaVenta, mascotas, cliente.puntos, nuevosPuntos);
-        await sweetAlerts.sweetAlertVentaExitosa();
-        location.reload();
+        VentaExitosaModal.show();
     } catch (error) {
         console.log(error);
-        await sweetAlerts.sweetAlertErrorDesconocidoVenta();
+
+        let previouslyFocusedElement = document.activeElement;
+        previouslyFocusedElement.blur();
+        await ErrorDesconocidoModal.show();
+
+        setTimeout(function() {
+            previouslyFocusedElement.focus();
+          }, 100);
+
+
     }
 
 
@@ -587,7 +602,11 @@ async function confirmarRestarPuntos() {
     let spanPuntos = document.getElementById("spanPuntos");
 
     if (parseInt(inputRestarPuntos.value) > nuevosPuntos) {
-        await sweetAlerts.sweetAlertPuntosNegativos();
+
+        await PuntosNegativosModal.show();
+        setTimeout(function() {
+            inputRestarPuntos.focus();
+          }, 100);
         return
     }
     nuevosPuntos = nuevosPuntos - parseInt(inputRestarPuntos.value);

@@ -1,5 +1,4 @@
 const bolsa_controller = require('../../controllers/bolsa_controller');
-const sweetAlerts = require('../../utils/sweetAlerts');
 const { remote } = require('electron');
 const main = remote.require('./main');
 
@@ -59,9 +58,9 @@ function setInputMarcaValorBolsa() {
     inputMarca.value = bolsa.bolsa.marca_bolsa;
 
     inputMarca.addEventListener('input', function () {
-            cambiosMarca = true;
-            insertBtnGuardar();
-            listenerGuardar();
+        cambiosMarca = true;
+        insertBtnGuardar();
+        listenerGuardar();
     });
 
 }
@@ -249,7 +248,7 @@ function setSelectCalidadEnCalidadActualSegunBolsa() {
         cambiosCalidad = true;
         insertBtnGuardar();
         listenerGuardar();
-});
+    });
 
 
 }
@@ -279,25 +278,22 @@ async function botonAgregarGrande() {
 
 async function borrarTamanio(tamanio) {
 
-    let confirma_borrado = await sweetAlerts.sweetAlert_confirmar_borrado_kilos_bolsa(tamanio);
 
-    if (confirma_borrado) {
-        const index = kilosBolsa.indexOf(tamanio);
-        if (index > -1) {
-            kilosBolsa.splice(index, 1);
-        }
-        setTamaniosBolsa();
-
-        if (!areArraysEqual(kilosBolsa, kilosBolsaOriginal) || cambiosCalidad || cambiosMarca) {
-            console.log("no son iguales los array original y actual");
-            insertBtnGuardar();
-            listenerGuardar();
-        } else {
-            //borro lo del container guardar y para eso uso esta funcion que sirve tambien para eso
-            borrarBtnAgregarGrande();
-        }
-
+    const index = kilosBolsa.indexOf(tamanio);
+    if (index > -1) {
+        kilosBolsa.splice(index, 1);
     }
+    setTamaniosBolsa();
+
+    if (!areArraysEqual(kilosBolsa, kilosBolsaOriginal) || cambiosCalidad || cambiosMarca) {
+        console.log("no son iguales los array original y actual");
+        insertBtnGuardar();
+        listenerGuardar();
+    } else {
+        //borro lo del container guardar y para eso uso esta funcion que sirve tambien para eso
+        borrarBtnAgregarGrande();
+    }
+
 
 
 }
@@ -305,12 +301,15 @@ async function borrarTamanio(tamanio) {
 async function actualizarDatosBolsaApp() {
 
     if ((document.getElementById("inputMarca").value) === "") {
-        await sweetAlerts.sweetAlertAgregarMarcaBolsa();
+        await AgregarMarcaBolsaModal.show();
+        setTimeout(function () {
+            document.getElementById("inputMarca").focus();
+        }, 100);
         return;
     }
 
     if (kilosBolsa.length == 0) {
-        sweetAlerts.sweetAlertAgregarTamanioBolsa();
+        await AgregarTamanioBolsaModal.show();
         return;
     }
 
@@ -331,7 +330,7 @@ async function actualizarDatosBolsaApp() {
         main.cerrarVentanasEmergentes();
     } catch (error) {
         if (error.message == "bolsaRepetida") {
-            await sweetAlerts.sweetAlertBolsaRepetida();
+            await BolsaRepetidaModal.show();
         }
         console.log(error);
     }
@@ -350,7 +349,7 @@ function crearListenerAgregarGrande() {
         if (inputAgregarTamanio.value != "") {
             botonAgregarGrande();
         } else {
-            sweetAlerts.sweetAlertCompletarInputTamanio();
+            CompletarInputTamanioModal.show();
         }
 
 

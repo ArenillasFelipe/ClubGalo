@@ -1,30 +1,58 @@
 function iniciarModalBorrarVenta() {
-  document.getElementById("modalBorrarVenta").innerHTML = `<div id="custom-modal" class="modal">
-    <div class="modal-content">
+  document.getElementById("container-modal").innerHTML = `<div id="custom-modalBorrarVenta" class="modalBorrarVenta">
+    <div class="modal-contentBorrarVenta">
       <h2>¿Seguro que desea borrar la venta?</h2>
-      <label for="delete-options">
-        <input type="checkbox" id="delete-options" name="delete-options">
+      <label for="delete-optionsBorrarVenta">
+        <input type="checkbox" id="delete-optionsBorrarVenta" name="delete-optionsBorrarVenta" checked>
         Borrar puntos otorgados y devolver ptos. canjeados
       </label>
-      <button id="confirm-delete-button">Sí, borrar</button>
-      <button id="cancel-button">Cancelar</button>
-      <p>No se podrán revertir los cambios.</p>
+      <button id="confirm-delete-buttonBorrarVenta">Sí, borrar</button>
+      <button id="cancel-buttonBorrarVenta">Cancelar</button>
+      <p>No se podrán revertir los cambios</p>
     </div>
   </div>`;
 
-  const confirmDeleteButton = document.getElementById("confirm-delete-button");
-  const cancelButton = document.getElementById("cancel-button");
+  let previouslyFocusedElement = document.activeElement;
+  previouslyFocusedElement.blur();
 
-  confirmDeleteButton.addEventListener("click", function () {
-    isChecked = document.getElementById("delete-options").checked; // Verifica si el checkbox está marcado
-    userDecision = true; // Almacena la decisión y el estado del checkbox
-    deleteSaleModal.hide();
-  });
+  const confirmDeleteButton = document.getElementById("confirm-delete-buttonBorrarVenta");
+  const cancelButton = document.getElementById("cancel-buttonBorrarVenta");
 
-  cancelButton.addEventListener("click", function () {
+// Definir las funciones de los eventListeners
+function listenerClickAceptarBorrarVenta() {
+  isChecked = document.getElementById("delete-optionsBorrarVenta").checked;
+  userDecision = true;
+  deleteSaleModal.hide();
+  confirmDeleteButton.removeEventListener("click", listenerClickAceptarBorrarVenta);
+  previouslyFocusedElement.focus();
+}
+
+function listenerClickCancelarBorrarVenta() {
+  userDecision = false;
+  deleteSaleModal.hide();
+  cancelButton.removeEventListener("click", listenerClickCancelarBorrarVenta);
+  previouslyFocusedElement.focus();
+}
+
+function listenerEnterBorrarVenta(event) {
+  if (event.key === "Enter") {
     userDecision = false;
     deleteSaleModal.hide();
-  });
+    document.removeEventListener("keydown", listenerEnterBorrarVenta);
+    
+    requestAnimationFrame(() => {
+      previouslyFocusedElement.focus();
+    });
+  }
+}
+
+
+confirmDeleteButton.addEventListener("click", listenerClickAceptarBorrarVenta);
+cancelButton.addEventListener("click", listenerClickCancelarBorrarVenta);
+document.addEventListener("keydown", listenerEnterBorrarVenta);
+
+
+
 }
 
 const deleteSaleModal = {
@@ -42,7 +70,7 @@ const deleteSaleModal = {
   },
   hide() {
     // Oculta el modal
-    const modal = document.getElementById("custom-modal");
+    const modal = document.getElementById("custom-modalBorrarVenta");
     modal.style.display = "none";
   }
 };

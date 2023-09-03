@@ -56,7 +56,7 @@ function createWindowEditarCliente() {
         width: 900,
         height: 570,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -91,7 +91,7 @@ function createWindowAgregarCliente() {
         width: 900,
         height: 570,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -127,7 +127,7 @@ function createWindowEditarBolsa() {
         width: 550,
         height: 450,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: true,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -162,7 +162,7 @@ function createWindowAgregarBolsa() {
         width: 550,
         height: 450,
         alwaysOnTop: true,
-        frame: false,
+        frame: true,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {

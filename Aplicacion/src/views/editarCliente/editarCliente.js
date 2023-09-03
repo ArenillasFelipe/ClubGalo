@@ -2,7 +2,6 @@ const { remote } = require('electron');
 const main = remote.require('./main');
 const cliente_controller = require('../../controllers/cliente_controller');
 const mascota_controller = require('../../controllers/mascota_controller');
-const sweetAlerts = require('../../utils/sweetAlerts');
 const { calcularEdadMascota } = require('../../utils/calcularFechas');
 const nodemailer = require('nodemailer');
 const { capitalizarPalabras } = require('../../utils/palabras');
@@ -165,17 +164,17 @@ function listenerActualizarMascota(idMascota) {
 async function eliminarMascota(idMascota) {
 
 
-    let confirma_borrado = await sweetAlerts.sweetAlertBorrarMascota();
+    userDecision = await BorrarMascotaModal.show();
 
-    if (confirma_borrado) {
+    if (userDecision) {
         mascotasMod = mascotasMod.filter(mascota => mascota.id_mascota != idMascota);
 
         btnGuardar.style.display = 'block'; // Mostramos el botón al hacer cambios
 
-        await sweetAlerts.sweetAlertGuardadoConExito();
         llenarInputsMascotas();
     }
 
+    userDecision = null;
 
 }
 
@@ -185,7 +184,7 @@ async function actualizarMascota(idMascota) {
 
 
     if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
-        sweetAlerts.sweetAlertCamposSinCompletar();
+        CompletarCamposModal.show();
         return
     }
 
@@ -203,7 +202,6 @@ async function actualizarMascota(idMascota) {
         mascotasMod[indice].afecciones = input_afecciones.value;
         mascotasMod[indice].nacimiento = `${parseInt(input_diacumple.value)}/${parseInt(input_mescumple.value)}/${parseInt(input_aniocumple.value)}`
 
-        await sweetAlerts.sweetAlertGuardadoConExito();
 
         llenarInputsMascotas();
         select_mascota.value = mascotasMod[indice].id_mascota;
@@ -244,7 +242,6 @@ async function agregarMascotaapp() {
     newMascota.id_cliente = cliente.id_cliente;
 
     mascotasMod.push(newMascota);
-    await sweetAlerts.sweetAlertGuardadoConExito();
     llenarInputsMascotas();
     select_mascota.value = newMascota.id_mascota;
     cambiarInputsMascota(newMascota.id_mascota);
@@ -285,12 +282,12 @@ function listenerGuardar() {
         e.preventDefault();
 
         if (mascotasMod.length == 0) {
-            sweetAlerts.sweetAlertSinMascotas();
+            SinMascotasModal.show();
             return
         }
 
         if (input_primernombre.value === "" || input_nombrepila.value === "" || input_apellido.value === "" || input_calle.value === "" || input_numero.value === "" || input_telefono.value === "" || input_puntos.value === "") {
-            sweetAlerts.sweetAlertCamposSinCompletar();
+            CompletarCamposModal.show();
         } else {
             guardarClienteConMascotas();
         }
@@ -331,7 +328,7 @@ function listenerGuardarNewMascota() {
     btnGuardarNewMascota.addEventListener('click', (e) => {
         e.preventDefault();
         if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
-            sweetAlerts.sweetAlertCamposSinCompletar();
+            CompletarCamposModal.show();
         } else {
             actualizarMascota();
         }

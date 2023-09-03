@@ -1,4 +1,3 @@
-const sweetAlerts = require('../../utils/sweetAlerts');
 const venta_controller = require('../../controllers/venta_controller');
 
 
