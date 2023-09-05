@@ -113,7 +113,7 @@ async function get20VentasBySearch(cadenaBusqueda, salto) {
     // Utiliza isNaN para verificar si la palabra no es un número
     if (!isNaN(palabra)) {
       return `(
-        precio = ${parseFloat(palabra)}
+        precio like '%${parseFloat(palabra)}%'
         OR cantidad = ${parseInt(palabra)}
         OR kilos_bolsa = ${parseFloat(palabra)}
         OR totalventa = ${parseFloat(palabra)}

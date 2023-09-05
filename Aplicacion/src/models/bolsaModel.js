@@ -50,19 +50,40 @@ async function getBolsaById(id_bolsa) {
 }
 
 
-async function get18BolsasBySearch(busqueda, salto) {
+async function get18BolsasBySearch(cadenaBusqueda, salto) {
     const conn = await getConnection();
-    busqueda = "%" + busqueda + "%";
-    const result = await conn.query('SELECT * FROM bolsas WHERE (marca_bolsa like ? or calidad_bolsa like ?) and validoBolsa = true LIMIT ?, 18;', [busqueda, busqueda, salto]);
-    // conn.release();
-    if (!result[0]) {
-        return null;
-    }
-    return result.map(bolsaData => new Bolsa(
+
+///////
+
+const palabrasClave = cadenaBusqueda.split(' ');
+  
+    const condiciones = palabrasClave.map(palabra => {
+      return `(
+        bolsas.marca_bolsa LIKE '%${palabra}%'
+        OR bolsas.calidad_bolsa like '%${palabra}%'
+        OR bolsas_kilos.kilos_bolsa = '${parseFloat(palabra)}'
+      )`;
+    });
+  
+    const condicionesSQL = condiciones.join(' AND ');
+    console.log(condicionesSQL);
+    const sql = `
+      SELECT *
+      FROM bolsas
+      inner join bolsas_kilos on bolsas_kilos.id_bolsa = bolsas.id_bolsa
+      WHERE (${condicionesSQL}) AND bolsas.validoBolsa = true AND bolsas_kilos.validoBolsaKilo = true
+      LIMIT ?, 18
+    `;
+  
+    const results = await conn.query(sql, [salto]);
+
+    return results.map(bolsaData => new Bolsa(
         bolsaData.id_bolsa,
         bolsaData.marca_bolsa,
         bolsaData.calidad_bolsa
       ));
+
+//////////
 }
 
 async function updateBolsaById(newBolsa) {

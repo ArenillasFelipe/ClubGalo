@@ -27,6 +27,17 @@ formCliente.addEventListener('submit', (e) => {
 
 })
 
+let checkboxBusquedaMascota = document.getElementById('checkboxBusquedaMascota');
+
+// Agrega un listener al checkbox para escuchar el evento 'click'
+checkboxBusquedaMascota.addEventListener('click', function() {
+  if (checkboxBusquedaMascota.checked) {
+    inputCliente.placeholder = 'Nombre de la mascota';
+  } else {
+    inputCliente.placeholder = 'Nº, nombre, direccion o telefono';
+  }
+});
+
 const MainFunctionVenta = async () => {
 
 

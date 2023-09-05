@@ -35,8 +35,16 @@ focusBuscador();
 let salto = 0;
 
 
+let checkboxBusquedaMascota = document.getElementById('checkboxBusquedaMascota');
 
-
+// Agrega un listener al checkbox para escuchar el evento 'click'
+checkboxBusquedaMascota.addEventListener('click', function() {
+  if (checkboxBusquedaMascota.checked) {
+    barra_busqueda.placeholder = 'Nombre de la mascota';
+  } else {
+    barra_busqueda.placeholder = 'Nº, nombre, direccion o telefono';
+  }
+});
 
 
 formBuscador = document.getElementById("busqueda");
