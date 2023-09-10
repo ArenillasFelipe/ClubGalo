@@ -337,8 +337,15 @@ function listenerBotonExportar() {
   let btnExportar = document.getElementById("btnExportar");
   btnExportar.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log("CLick!")
-    let nombreArchivo;
+    exportarExcel();
+  });
+}
+
+
+function exportarExcel() {
+
+
+  let nombreArchivo;
     let intervaloTiempo
     if (selectfiltrado.value == "elegir") {
 
@@ -362,14 +369,17 @@ function listenerBotonExportar() {
       intervaloTiempo = "En este año";
     }
 
-    nombreArchivo = `Historial de Compras ${cliente.primernombre} ${cliente.nombrepila} ${cliente.apellido} (${intervaloTiempo})`;
-
-    exportTableToExcel("tablaprincipal", nombreArchivo);
-  });
-}
+    nombreArchivo = `Historial de Compras ${cliente.primernombre} ${cliente.nombrepila} ${cliente.apellido} (${intervaloTiempo}).`;
 
 
-function exportTableToExcel(tableID, filename = '') {
-  var table2excel = new Table2Excel();
-  table2excel.export(document.querySelectorAll(`#${tableID}`), filename);
+
+  let fileName = nombreArchivo + 'xlsx';
+// Obtén la tabla por su ID
+var table = document.getElementById("tablaprincipal");
+            
+// Crea un objeto de libro de Excel
+var wb = XLSX.utils.table_to_book(table, { sheet: "Hoja1" });
+
+// Crea un archivo XLSX y lo descarga
+XLSX.writeFile(wb, "tabla.xlsx");
 }

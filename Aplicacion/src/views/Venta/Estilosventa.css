@@ -534,7 +534,7 @@ select {
 .btn-ejecutar {
     position: relative;
     left: 340px;
-    top: 125px;
+    top: 100px;
     height: 30px;
     width: 90px;
     background: #2f9b05;
@@ -557,7 +557,7 @@ select {
 .btn-borrar {
     position: relative;
     left: 330px;
-    top: 125px;
+    top: 100px;
     height: 30px;
     width: 90px;
     background: #9b0505;
@@ -1028,6 +1028,30 @@ b {
     position: relative;
     top: -4px;
     left: 195px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+
+#container-checkboxSeguimiento{
+    position: relative;
+    top: 123px;
+    left: -20px;
+}
+
+#checkboxSeguimiento {
+    position: relative;
+    left: -92px;
+    top: 3px;
+    cursor: pointer;
+    width: 17px;
+    height: 17px;
+}
+
+#container-checkboxSeguimiento label{
+    position: relative;
+    left: 92px;
     font-weight: 600;
     cursor: pointer;
 }

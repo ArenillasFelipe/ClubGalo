@@ -19,6 +19,7 @@
     "electron-reload": "^2.0.0-alpha.1",
     "excel4node": "^1.8.2",
     "nodemailer": "^6.9.2",
-    "promise-mysql": "^5.2.0"
+    "promise-mysql": "^5.2.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
   }
 }

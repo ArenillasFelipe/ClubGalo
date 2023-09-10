@@ -30,12 +30,12 @@ formCliente.addEventListener('submit', (e) => {
 let checkboxBusquedaMascota = document.getElementById('checkboxBusquedaMascota');
 
 // Agrega un listener al checkbox para escuchar el evento 'click'
-checkboxBusquedaMascota.addEventListener('click', function() {
-  if (checkboxBusquedaMascota.checked) {
-    inputCliente.placeholder = 'Nombre de la mascota';
-  } else {
-    inputCliente.placeholder = 'Nº, nombre, direccion o telefono';
-  }
+checkboxBusquedaMascota.addEventListener('click', function () {
+    if (checkboxBusquedaMascota.checked) {
+        inputCliente.placeholder = 'Nombre de la mascota';
+    } else {
+        inputCliente.placeholder = 'Nº, nombre, direccion o telefono';
+    }
 });
 
 const MainFunctionVenta = async () => {
@@ -53,16 +53,16 @@ const MainFunctionVenta = async () => {
 
         if (error.message == "variosClientes") {
             await variosClientesModal.show();
-            setTimeout(function() {
+            setTimeout(function () {
                 focusInputCliente();
-              }, 100);
+            }, 100);
             return
         }
         if (error.message == "noExisteCliente") {
             await noSeDetectoClienteModal.show();
-            setTimeout(function() {
+            setTimeout(function () {
                 focusInputCliente();
-              }, 100);
+            }, 100);
             return
         }
 
@@ -216,6 +216,7 @@ function mostrarDatos(mascotas) {
 
 async function venta(cliente, mascotas) {
     try {
+        let checkboxSeguimiento = document.getElementById("checkboxSeguimiento");
         precio = document.getElementById("inputprecio");
         marca_bolsa = document.getElementById('input-marca');
         if (bolsaSeleccionada.marca_bolsa != marca_bolsa.value) throw new Error();
@@ -224,7 +225,7 @@ async function venta(cliente, mascotas) {
         console.log(bolsaSeleccionada);
 
 
-        console.log("logs que me importan: ", bolsaSeleccionada.calidad_bolsa, );
+        console.log("logs que me importan: ", bolsaSeleccionada.calidad_bolsa,);
 
 
         let nuevaVenta = {
@@ -256,7 +257,7 @@ async function venta(cliente, mascotas) {
         nuevaVenta.marca_previa = marcaPrevia;
         nuevaVenta.kilos_previos = kilosPrevios;
         nuevaVenta.calidad_previa = calidadPrevia;
-        nuevaVenta.activo = true;
+        nuevaVenta.activo = checkboxSeguimiento.checked;
         nuevaVenta.totalventa = "";
         nuevaVenta.puntos_obtenidos = "";
         nuevaVenta.puntos_canjeados = "";
@@ -300,9 +301,9 @@ async function venta(cliente, mascotas) {
         previouslyFocusedElement.blur();
         await ErrorDesconocidoModal.show();
 
-        setTimeout(function() {
+        setTimeout(function () {
             previouslyFocusedElement.focus();
-          }, 100);
+        }, 100);
 
 
     }
@@ -402,6 +403,7 @@ function innerCliente(mascotas, historialVentasConBolsas) {
 
 <p class="pprecio">Precio Unitario: $<input type="number" step="0.01" class="inputprecio" id="inputprecio" required></p>
 <p class="pcantbolsas">Cantidad de bolsas: <input type="number" class="inputcantbolsas" id="inputcantbolsas" value="1" required></p>
+<div id="container-checkboxSeguimiento"><label for="checkboxSeguimiento">Realizar seguimiento</label><input type="checkbox" id="checkboxSeguimiento" checked></div>
 <button class="btn-borrar" id="btn-borrar-venta" type="reset">Borrar</button>
 <button class="btn-ejecutar" type="submit">Ejecutar</button>
 
@@ -615,9 +617,9 @@ async function confirmarRestarPuntos() {
     if (parseInt(inputRestarPuntos.value) > nuevosPuntos) {
 
         await PuntosNegativosModal.show();
-        setTimeout(function() {
+        setTimeout(function () {
             inputRestarPuntos.focus();
-          }, 100);
+        }, 100);
         return
     }
     nuevosPuntos = nuevosPuntos - parseInt(inputRestarPuntos.value);
@@ -733,57 +735,57 @@ function editarCliente() {
 
 function listenerCheckboxesVentasActivas(ventasActivas) {
     ventasActivas.forEach(function (ventaActiva) {
-      let mascotasVentaActiva = ventaActiva.mascotas;
-      let kilosRestantes = calcularFechas.calcularKilosRestantesBolsa(mascotasVentaActiva, ventaActiva.venta);
-  
-      // Crear el listener para el checkbox de la venta activa
-      let checkboxVentaActiva = document.getElementById(`checkboxVentaActiva${ventaActiva.venta.id_venta}`);
-      checkboxVentaActiva.addEventListener('change', function (e) {
-        if (checkboxVentaActiva.checked) {
-          desmarcarCheboxesVentasActivas(ventasActivas, ventaActiva.venta.id_venta);
-            
-          //descmarco todos los checkboxes de mascotas para despues mas abajo volver a marcar el que es
-          let checkboxesMascotas = document.querySelectorAll(".checkbox");
-          checkboxesMascotas.forEach(element => {
-            console.log("desmarco checkbox");
-            element.checked = false;
-          });
+        let mascotasVentaActiva = ventaActiva.mascotas;
+        let kilosRestantes = calcularFechas.calcularKilosRestantesBolsa(mascotasVentaActiva, ventaActiva.venta);
 
-          kilosPrevios = kilosRestantes;
-          marcaPrevia = ventaActiva.venta.marca_bolsa;
-          calidadPrevia = ventaActiva.venta.calidad_bolsa;
-          console.log("kilosPrevios: ", kilosPrevios);
-          console.log("marcaPrevia: ", marcaPrevia);
-          console.log("calidadPrevia: ",  calidadPrevia);
-        
+        // Crear el listener para el checkbox de la venta activa
+        let checkboxVentaActiva = document.getElementById(`checkboxVentaActiva${ventaActiva.venta.id_venta}`);
+        checkboxVentaActiva.addEventListener('change', function (e) {
+            if (checkboxVentaActiva.checked) {
+                desmarcarCheboxesVentasActivas(ventasActivas, ventaActiva.venta.id_venta);
 
-          //marco los checkboxes de las mascotas de la venta activa
-          mascotasVentaActiva.forEach(function (mascota) {
-            let checkboxMascota = document.getElementById(`checkbox${mascota.nombremascota}`);
-            checkboxMascota.checked = true;
-          });
-        } else {
-          mascotasVentaActiva.forEach(function (mascota) {
-            let checkboxMascota = document.getElementById(`checkbox${mascota.nombremascota}`);
-            checkboxMascota.checked = false;
-            console.log("entro a no checked");
-            kilosPrevios = 0;
-            marcaPrevia = undefined;
-            calidadPrevia = undefined;
-            console.log("kilosPrevios: ", kilosPrevios);
-            console.log("marcaPrevia: ", marcaPrevia);
-            console.log("calidadPrevia: ",  calidadPrevia);
-          });
-        }
-      });
+                //descmarco todos los checkboxes de mascotas para despues mas abajo volver a marcar el que es
+                let checkboxesMascotas = document.querySelectorAll(".checkbox");
+                checkboxesMascotas.forEach(element => {
+                    console.log("desmarco checkbox");
+                    element.checked = false;
+                });
+
+                kilosPrevios = kilosRestantes;
+                marcaPrevia = ventaActiva.venta.marca_bolsa;
+                calidadPrevia = ventaActiva.venta.calidad_bolsa;
+                console.log("kilosPrevios: ", kilosPrevios);
+                console.log("marcaPrevia: ", marcaPrevia);
+                console.log("calidadPrevia: ", calidadPrevia);
+
+
+                //marco los checkboxes de las mascotas de la venta activa
+                mascotasVentaActiva.forEach(function (mascota) {
+                    let checkboxMascota = document.getElementById(`checkbox${mascota.nombremascota}`);
+                    checkboxMascota.checked = true;
+                });
+            } else {
+                mascotasVentaActiva.forEach(function (mascota) {
+                    let checkboxMascota = document.getElementById(`checkbox${mascota.nombremascota}`);
+                    checkboxMascota.checked = false;
+                    console.log("entro a no checked");
+                    kilosPrevios = 0;
+                    marcaPrevia = undefined;
+                    calidadPrevia = undefined;
+                    console.log("kilosPrevios: ", kilosPrevios);
+                    console.log("marcaPrevia: ", marcaPrevia);
+                    console.log("calidadPrevia: ", calidadPrevia);
+                });
+            }
+        });
     });
-  }
-  
+}
+
 
 function desmarcarCheboxesVentasActivas(ventasActivas, idVentaMantener) {
-   console.log(ventasActivas); 
-  ventasActivas = quitarVentaActivaPorId(ventasActivas, idVentaMantener);
-  console.log(ventasActivas); 
+    console.log(ventasActivas);
+    ventasActivas = quitarVentaActivaPorId(ventasActivas, idVentaMantener);
+    console.log(ventasActivas);
     console.log("funcion desmarcar checkboxes");
     //desmarco todos los checkbox de ventas activas y los de sus respectivas mascotas
     ventasActivas.forEach(function (element, index) {
@@ -811,6 +813,6 @@ function focusInputCliente() {
     inputCliente.focus();
 }
 
-  
+
 
 
