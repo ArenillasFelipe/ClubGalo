@@ -14,6 +14,19 @@ function capitalizarPalabras(str) {
     return resultado.join(' ');
 }
 
+function reemplazarComa(event) {
+    // Verificar si la tecla presionada es una coma
+    if (event.key === ',') {
+      // Prevenir la acción predeterminada (insertar la coma)
+      event.preventDefault();
+
+      // Obtener el valor actual del input
+      let input = event.target;
+
+     input.value += '.'
+    }
+  }
 
 
-module.exports = { capitalizarPalabras, convertirMayusculas }
+
+module.exports = { capitalizarPalabras, convertirMayusculas, reemplazarComa }

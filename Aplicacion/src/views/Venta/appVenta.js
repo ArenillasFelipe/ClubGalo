@@ -6,6 +6,7 @@ const { remote } = require('electron');
 const main = remote.require('./main');
 const { Venta } = require('../../models/ventaModel');
 const calcularFechas = require('../../utils/calcularFechas');
+const { reemplazarComa } = require('../../utils/palabras');
 
 
 let cliente;
@@ -227,6 +228,10 @@ async function venta(cliente, mascotas) {
 
         console.log("logs que me importan: ", bolsaSeleccionada.calidad_bolsa,);
 
+        let nosequeeeMarca = marcaPrevia;
+        let nosequeeeCalidad = calidadPrevia;
+        let nosequeeekilos = kilosPrevios;
+
 
         let nuevaVenta = {
             fecha: "",
@@ -247,16 +252,28 @@ async function venta(cliente, mascotas) {
             id_venta: ""
         }
 
+        console.log("marca previa:", marcaPrevia, "kilosprevios: ", kilosPrevios, "calidad previa: ", calidadPrevia)
+
+        let bolsasVenta = {
+            marcaActual: bolsaSeleccionada.marca_bolsa,
+            calidadActual: bolsaSeleccionada.calidad_bolsa,
+            kilosActuales: bolsaSeleccionada.kilos_bolsa,
+            cantidadActual: parseInt(cantbolsas.value),
+            marcaPrevia: marcaPrevia,
+            calidadPrevia: calidadPrevia,
+            kilosPrevios: kilosPrevios
+        }
+
         nuevaVenta.fecha = new Date();
         nuevaVenta.precio = parseFloat(precio.value);
         nuevaVenta.id_cliente = cliente.id_cliente;
         nuevaVenta.cantidad = parseInt(cantbolsas.value);
-        nuevaVenta.marca_bolsa = bolsaSeleccionada.marca_bolsa;
-        nuevaVenta.kilos_bolsa = bolsaSeleccionada.kilos_bolsa;
-        nuevaVenta.calidad_bolsa = bolsaSeleccionada.calidad_bolsa;
-        nuevaVenta.marca_previa = marcaPrevia;
-        nuevaVenta.kilos_previos = kilosPrevios;
-        nuevaVenta.calidad_previa = calidadPrevia;
+        nuevaVenta.marca_bolsa = bolsasVenta.marcaActual;
+        nuevaVenta.kilos_bolsa = bolsasVenta.kilosActuales;
+        nuevaVenta.calidad_bolsa = bolsasVenta.calidadActual;
+        nuevaVenta.marca_previa = bolsasVenta.marcaPrevia;
+        nuevaVenta.kilos_previos = bolsasVenta.kilosPrevios;
+        nuevaVenta.calidad_previa = bolsasVenta.calidadPrevia;
         nuevaVenta.activo = checkboxSeguimiento.checked;
         nuevaVenta.totalventa = "";
         nuevaVenta.puntos_obtenidos = "";
@@ -269,6 +286,9 @@ async function venta(cliente, mascotas) {
 
 
         console.log("nuevaVenta justo cuando lo creo: ", nuevaVenta);
+
+        console.log("array bolsasVenta:", bolsasVenta);
+
         console.log("log desdepues del log que quiero")
         mascotas.forEach(element => {
 
@@ -292,7 +312,7 @@ async function venta(cliente, mascotas) {
             mascotasVenta.includes(mascota.id_mascota)
         );
 
-        await venta_controller.insertarVenta(nuevaVenta, mascotas, cliente.puntos, nuevosPuntos);
+        await venta_controller.insertarVenta(nuevaVenta, bolsasVenta, mascotas, cliente.puntos, nuevosPuntos);
         VentaExitosaModal.show();
     } catch (error) {
         console.log(error);
@@ -401,8 +421,8 @@ function innerCliente(mascotas, historialVentasConBolsas) {
     </select>
 </div>
 
-<p class="pprecio">Precio Unitario: $<input type="number" step="0.01" class="inputprecio" id="inputprecio" required></p>
-<p class="pcantbolsas">Cantidad de bolsas: <input type="number" class="inputcantbolsas" id="inputcantbolsas" value="1" required></p>
+<p class="pprecio">Precio Unitario: $<input class="inputprecio" id="inputprecio" required type="text" pattern="^[0-9]+(\.[0-9]+)?$" onkeypress="reemplazarComa(event)"></p>
+<p class="pcantbolsas">Cantidad de bolsas: <input class="inputcantbolsas" id="inputcantbolsas" value="1" required type="text" pattern="^[1-9]*$"></p>
 <div id="container-checkboxSeguimiento"><label for="checkboxSeguimiento">Realizar seguimiento</label><input type="checkbox" id="checkboxSeguimiento" checked></div>
 <button class="btn-borrar" id="btn-borrar-venta" type="reset">Borrar</button>
 <button class="btn-ejecutar" type="submit">Ejecutar</button>
@@ -812,7 +832,5 @@ function focusInputCliente() {
     let inputCliente = document.getElementById("inputCliente");
     inputCliente.focus();
 }
-
-
 
 

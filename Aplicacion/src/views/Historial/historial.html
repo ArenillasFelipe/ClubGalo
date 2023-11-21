@@ -18,7 +18,7 @@
     </div>
     <nav>
       <form class="busqueda" id="busqueda">
-        <input placeholder="Fecha, bolsa, kilos, precio o ptos. canjeados" id="barra-busqueda">
+        <input placeholder="Fecha, bolsa, kilos, precio o ptos. canjeados" id="barra-busqueda" onkeypress="reemplazarComa(event)">
         <button type="submit" id="boton-lupa"><img src="../../imagenes/lupa.png" width="20px"></button>
       </form>
       <a href="../Seguimiento/seguimiento.html" class="nav-link1">Seguimiento</a>
@@ -60,6 +60,7 @@
 
   <script src="../../modals/borrarVentaModal/BorrarVentaModal.js"></script>
   <script src="./appHistorial.js"></script>
+  <script src="../../utils/palabras.js"></script>
 </body>
 
 </html>

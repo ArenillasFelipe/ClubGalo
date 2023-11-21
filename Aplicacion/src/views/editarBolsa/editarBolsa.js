@@ -1,7 +1,7 @@
 const bolsa_controller = require('../../controllers/bolsa_controller');
 const { remote } = require('electron');
 const main = remote.require('./main');
-
+const { reemplazarComa } = require('../../utils/palabras');
 
 let bolsa;
 let kilosBolsa = [];
@@ -10,6 +10,21 @@ let cambiosCalidad = false;
 let cambiosMarca = false;
 
 document.getElementById("inputMarca").focus();
+
+document.getElementById("inputMarca").addEventListener("focus", function() {
+
+    borrarInputTamanio();
+    borrarBtnAgregarGrande();
+    agregarBotonAgregar();
+    borrarBotonCancelar();
+    listenerAgregarTamanio();
+
+    if (!areArraysEqual(kilosBolsa, kilosBolsaOriginal) || cambiosCalidad || cambiosMarca) {
+        console.log("no son iguales los array original y actual")
+        insertBtnGuardar();
+        listenerGuardar();
+    }
+});
 
 mainFunctionEditarBolsa();
 async function mainFunctionEditarBolsa() {
@@ -216,7 +231,7 @@ function borrarBotonCancelar() {
 
 function agregarInputTamanio() {
     container_inputTamanio = document.getElementById("container-inputTamanio");
-    container_inputTamanio.innerHTML = `<label>Agregar Tamaño:</label> <input type="number" id="inputAgregarTamanio"><b>Kg</b>`
+    container_inputTamanio.innerHTML = `<label>Agregar Tamaño:</label> <input type="text" pattern="^[0-9]+(\.[0-9]+)?$" onkeypress="reemplazarComa(event)" id="inputAgregarTamanio"><b>Kg</b>`
     document.getElementById("inputAgregarTamanio").focus();
 
 }
@@ -347,7 +362,12 @@ function crearListenerAgregarGrande() {
 
         let inputAgregarTamanio = document.getElementById("inputAgregarTamanio");
         if (inputAgregarTamanio.value != "") {
-            botonAgregarGrande();
+            let regex = /[^0-9.]/;
+            if (regex.test(inputAgregarTamanio.value)) {
+                FormatoNumericoModal.show();
+              } else {
+                botonAgregarGrande();
+              }
         } else {
             CompletarInputTamanioModal.show();
         }

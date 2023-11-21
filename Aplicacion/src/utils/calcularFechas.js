@@ -43,23 +43,31 @@ function calcularEdadMascota(fechaNacimiento) {
 
 
 
-function calcularDuracionBolsa(mascotasVenta, venta) {
+function calcularDuracionBolsa(mascotasVenta, bolsasVenta) {
 
   mascotasVenta.forEach(mascota => {
     mascota.peso = Math.round(mascota.peso);
   });
 
-  let diasDuracion = calculosDuracionBolsa(mascotasVenta, venta);
+  let ventaActual = {
+    marca_bolsa: bolsasVenta.marcaActual,
+    calidad_bolsa: bolsasVenta.calidadActual,
+    kilos_bolsa: bolsasVenta.kilosActuales,
+    cantidad: bolsasVenta.cantidadActual
+  }
 
-  if (venta.calidad_previa && venta.kilos_previos) {
+  let diasDuracion = calculosDuracionBolsa(mascotasVenta, ventaActual);
 
-    let ventaMod = venta;
+  if (bolsasVenta.calidadPrevia && (bolsasVenta.kilosPrevios != undefined || bolsasVenta.kilosPrevios != null || bolsasVenta.kilosPrevios != 0)) {
 
-    ventaMod.calidad_bolsa = venta.calidad_previa;
-    ventaMod.kilos_bolsa = venta.kilos_previos;
-    ventaMod.cantidad = 1;
+    let ventaPrevia = {
+      marca_bolsa: bolsasVenta.marcaPrevia,
+      calidad_bolsa: bolsasVenta.calidadPrevia,
+      kilos_bolsa: bolsasVenta.kilosPrevios,
+      cantidad: 1
+    }
   
-    diasDuracion += calculosDuracionBolsa(mascotasVenta, ventaMod);
+    diasDuracion += calculosDuracionBolsa(mascotasVenta, ventaPrevia);
   }
 
 
@@ -69,6 +77,9 @@ function calcularDuracionBolsa(mascotasVenta, venta) {
 
 
 function calculosDuracionBolsa(mascotasVenta, venta) {
+
+  console.log("CALCULANDO VENCIMIENTO PARA: ", venta);
+
   if(mascotasVenta[0].animal == "Perro"){
 
     if (venta.calidad_bolsa == "BAJA") {
@@ -108,10 +119,10 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
         let rangoPeso = null;
   
         for (let rango in PerroBajaValores) {
-          console.log("rango: ", rango);
+          // console.log("rango: ", rango);
           let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
   
-          console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+          // console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
           if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
             rangoPeso = rango;
             break;
@@ -120,7 +131,7 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
   
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
-          console.log("rangopeso de la mascota: ", rangoPeso);
+          // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = PerroBajaValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
         }
@@ -174,10 +185,10 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
         let rangoPeso = null;
   
         for (let rango in PerroIntermediaValores) {
-          console.log("rango: ", rango);
+          // console.log("rango: ", rango);
           let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
   
-          console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+          // console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
           if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
             rangoPeso = rango;
             break;
@@ -186,7 +197,7 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
   
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
-          console.log("rangopeso de la mascota: ", rangoPeso);
+          // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = PerroIntermediaValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
         }
@@ -254,10 +265,10 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
         let rangoPeso = null;
   
         for (let rango in PerroPremiumValores) {
-          console.log("rango: ", rango);
+          // console.log("rango: ", rango);
           let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
   
-          console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+          // console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
           if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
             rangoPeso = rango;
             break;
@@ -266,7 +277,7 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
   
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
-          console.log("rangopeso de la mascota: ", rangoPeso);
+          // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = PerroPremiumValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
         }
@@ -333,10 +344,10 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
         let rangoPeso = null;
   
         for (let rango in PerroSuperPremiumValores) {
-          console.log("rango: ", rango);
+          // console.log("rango: ", rango);
           let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
   
-          console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+          // console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
           if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
             rangoPeso = rango;
             break;
@@ -345,7 +356,7 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
   
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
-          console.log("rangopeso de la mascota: ", rangoPeso);
+          // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = PerroSuperPremiumValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
         }
@@ -395,15 +406,15 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
     
           // Sumar el consumo diario individual al consumo diario total
           if (rangoPeso) {
-            console.log("rangopeso de la mascota: ", rangoPeso);
+            // console.log("rangopeso de la mascota: ", rangoPeso);
             let consumoDiarioIndividual = GatoBajaValores[rangoPeso];
             consumoDiarioTotal += consumoDiarioIndividual;
-            console.log("consumo diario individual :", consumoDiarioIndividual);
+            // console.log("consumo diario individual :", consumoDiarioIndividual);
           }
         });
     
         // Calcular los días que durará la bolsa de comida
-        console.log("consumo diario total: ", consumoDiarioTotal);
+        // console.log("consumo diario total: ", consumoDiarioTotal);
         let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
     
         return diasDuracion;
@@ -445,7 +456,7 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
     
           // Sumar el consumo diario individual al consumo diario total
           if (rangoPeso) {
-            console.log("rangopeso de la mascota: ", rangoPeso);
+            // console.log("rangopeso de la mascota: ", rangoPeso);
             let consumoDiarioIndividual = GatoIntermediaValores[rangoPeso];
             consumoDiarioTotal += consumoDiarioIndividual;
           }
@@ -489,7 +500,7 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
     
           // Sumar el consumo diario individual al consumo diario total
           if (rangoPeso) {
-            console.log("rangopeso de la mascota: ", rangoPeso);
+            // console.log("rangopeso de la mascota: ", rangoPeso);
             let consumoDiarioIndividual = GatoPremiumValores[rangoPeso];
             consumoDiarioTotal += consumoDiarioIndividual;
           }
@@ -532,7 +543,7 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
     
           // Sumar el consumo diario individual al consumo diario total
           if (rangoPeso) {
-            console.log("rangopeso de la mascota: ", rangoPeso);
+            // console.log("rangopeso de la mascota: ", rangoPeso);
             let consumoDiarioIndividual = GatoSuperPremiumValores[rangoPeso];
             consumoDiarioTotal += consumoDiarioIndividual;
           }
@@ -600,10 +611,10 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
       let rangoPeso = null;
 
       for (let rango in PerroBajaValores) {
-        console.log("rango: ", rango);
+        // console.log("rango: ", rango);
         let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
 
-        console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+        // console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
         if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
           rangoPeso = rango;
           break;
@@ -612,7 +623,7 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
 
       // Sumar el consumo diario individual al consumo diario total
       if (rangoPeso) {
-        console.log("rangopeso de la mascota: ", rangoPeso);
+        // console.log("rangopeso de la mascota: ", rangoPeso);
         let consumoDiarioIndividual = PerroBajaValores[rangoPeso];
         consumoDiarioTotal += consumoDiarioIndividual;
       }
@@ -667,10 +678,10 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
       let rangoPeso = null;
 
       for (let rango in PerroIntermediaValores) {
-        console.log("rango: ", rango);
+        // console.log("rango: ", rango);
         let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
 
-        console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+        // console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
         if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
           rangoPeso = rango;
           break;
@@ -679,7 +690,7 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
 
       // Sumar el consumo diario individual al consumo diario total
       if (rangoPeso) {
-        console.log("rangopeso de la mascota: ", rangoPeso);
+        // console.log("rangopeso de la mascota: ", rangoPeso);
         let consumoDiarioIndividual = PerroIntermediaValores[rangoPeso];
         consumoDiarioTotal += consumoDiarioIndividual;
       }
@@ -749,10 +760,10 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
       let rangoPeso = null;
 
       for (let rango in PerroPremiumValores) {
-        console.log("rango: ", rango);
+        // console.log("rango: ", rango);
         let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
 
-        console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+        // console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
         if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
           rangoPeso = rango;
           break;
@@ -761,7 +772,7 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
 
       // Sumar el consumo diario individual al consumo diario total
       if (rangoPeso) {
-        console.log("rangopeso de la mascota: ", rangoPeso);
+        // console.log("rangopeso de la mascota: ", rangoPeso);
         let consumoDiarioIndividual = PerroPremiumValores[rangoPeso];
         consumoDiarioTotal += consumoDiarioIndividual;
       }
@@ -830,10 +841,10 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
       let rangoPeso = null;
 
       for (let rango in PerroSuperPremiumValores) {
-        console.log("rango: ", rango);
+        // console.log("rango: ", rango);
         let [rangoMin, rangoMax] = rango.split('_').map((valor) => parseFloat(valor.replace(/[^\d.-]/g, '')));
 
-        console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
+        // console.log("log antes de if, rangoMin:", rangoMin, "rangoMax: ", rangoMax);
         if (pesoMascota >= rangoMin && pesoMascota <= rangoMax) {
           rangoPeso = rango;
           break;
@@ -842,7 +853,7 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
 
       // Sumar el consumo diario individual al consumo diario total
       if (rangoPeso) {
-        console.log("rangopeso de la mascota: ", rangoPeso);
+        // console.log("rangopeso de la mascota: ", rangoPeso);
         let consumoDiarioIndividual = PerroSuperPremiumValores[rangoPeso];
         consumoDiarioTotal += consumoDiarioIndividual;
       }
@@ -894,10 +905,10 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
   
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
-          console.log("rangopeso de la mascota: ", rangoPeso);
+          // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = GatoBajaValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
-          console.log("consumo diario individual :", consumoDiarioIndividual);
+          // console.log("consumo diario individual :", consumoDiarioIndividual);
         }
       });
   
@@ -944,7 +955,7 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
   
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
-          console.log("rangopeso de la mascota: ", rangoPeso);
+          // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = GatoIntermediaValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
         }
@@ -990,7 +1001,7 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
   
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
-          console.log("rangopeso de la mascota: ", rangoPeso);
+          // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = GatoPremiumValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
         }
@@ -1035,7 +1046,7 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
   
         // Sumar el consumo diario individual al consumo diario total
         if (rangoPeso) {
-          console.log("rangopeso de la mascota: ", rangoPeso);
+          // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = GatoSuperPremiumValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
         }

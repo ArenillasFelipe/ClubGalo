@@ -5,9 +5,17 @@ const mascota_controller = require('../../controllers/mascota_controller');
 const { calcularEdadMascota } = require('../../utils/calcularFechas');
 const nodemailer = require('nodemailer');
 const { capitalizarPalabras } = require('../../utils/palabras');
+const { reemplazarComa } = require('../../utils/palabras');
 
 let mascotas = [];
 let temporalmascotasIDs = 0;
+
+
+
+
+
+
+
 
 
 
@@ -150,6 +158,12 @@ async function actualizarMascota(idMascota) {
         CompletarCamposModal.show();
         return
     }
+
+    let regex = /[^0-9.]/;
+    if (regex.test(input_aniocumple) || regex.test(input_diacumple) || regex.test(input_mescumple) || regex.test(input_peso)) {
+        FormatoNumericoModal.show();
+        return
+      }
 
     if (select_mascota.value === "agregar") {
         agregarMascotaapp();

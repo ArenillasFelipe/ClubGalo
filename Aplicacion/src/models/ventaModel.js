@@ -167,11 +167,12 @@ async function get20VentasBySearch(cadenaBusqueda, salto) {
 //////////////////
 
 
-async function insertVenta(newVenta) {
+async function insertVenta(newVenta, bolsasVenta) {
   console.log("newVenta antes de insertar:", newVenta);
+  console.log("bolsasVenta antes de insertar: ", bolsasVenta);
   const conn = await getConnection();
   newVenta.marca_bolsa = convertirMayusculas(newVenta.marca_bolsa);
-  result = await conn.query('INSERT INTO venta(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, marca_previa, kilos_previos, calidad_previa, activo, puntos_obtenidos, puntos_canjeados, vencimiento) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [newVenta.fecha, newVenta.precio, newVenta.id_cliente, newVenta.cantidad, newVenta.marca_bolsa, newVenta.kilos_bolsa, newVenta.calidad_bolsa, newVenta.marca_previa, newVenta.kilos_previos, newVenta.calidad_previa, newVenta.activo, newVenta.puntos_obtenidos, newVenta.puntos_canjeados, newVenta.vencimiento]);
+  result = await conn.query('INSERT INTO venta(fecha, precio, id_cliente, cantidad, marca_bolsa, kilos_bolsa, calidad_bolsa, marca_previa, kilos_previos, calidad_previa, activo, puntos_obtenidos, puntos_canjeados, vencimiento) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [newVenta.fecha, newVenta.precio, newVenta.id_cliente, bolsasVenta.cantidadActual, bolsasVenta.marcaActual, bolsasVenta.kilosActuales, bolsasVenta.calidadActual, bolsasVenta.marcaPrevia, bolsasVenta.kilosPrevios, bolsasVenta.calidadPrevia, newVenta.activo, newVenta.puntos_obtenidos, newVenta.puntos_canjeados, newVenta.vencimiento]);
   // conn.release();
   return result;
 }

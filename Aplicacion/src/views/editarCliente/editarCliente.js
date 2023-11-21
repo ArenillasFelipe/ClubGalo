@@ -13,6 +13,73 @@ let mascotasMod;
 let temporalmascotasIDs = 0;
 
 
+
+agregarListenerGuardarEnter();
+function agregarListenerGuardarEnter() {
+    console.log("activado el listener")
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            console.log("se presiono enter")
+            guardarEnter();
+        }
+    });
+}
+
+function quitarListenerGuardarEnter() {
+    console.log("DESactivado el listener")
+    document.removeEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            guardarEnter();
+        }
+    });
+}
+
+
+
+function guardarEnter() {
+    console.log("funcion guardar enter");
+    let btnGuardarNewMascota = document.getElementById("btnGuardarNewMascota");
+    console.log("btnGuardarNewMascota: ", btnGuardarNewMascota);
+    if (btnGuardarNewMascota) {
+        let estilo = window.getComputedStyle(btnGuardarNewMascota);
+        let display = estilo.getPropertyValue("display");
+        console.log(display);
+        if (display == "block") {
+            btnGuardarNewMascota.click();
+            return;
+        }
+    }
+
+
+
+    let btnActualizarMascota = document.getElementById("btnActualizarMascota");
+    console.log("btnActualizarMascota: ", btnActualizarMascota);
+    if (btnActualizarMascota) {
+        let estilo = window.getComputedStyle(btnActualizarMascota);
+        let display = estilo.getPropertyValue("display");
+        console.log("display: ", display);
+        console.log(btnActualizarMascota);
+        if (display == "block") {
+            btnActualizarMascota.click();
+            return;
+        }
+    }
+
+
+    let btnGuardar = document.getElementById("btnGuardar");
+
+    estilo = window.getComputedStyle(btnGuardar);
+    display = estilo.getPropertyValue("display");
+    console.log("display de btnGuardar:", display);
+    if (display == "block") {
+        btnGuardar.click();
+    }
+}
+
+
+
+
+
 async function getClienteAEditar() {
     let idCliente = localStorage.getItem("ClienteAEditar");
     localStorage.clear();
@@ -184,7 +251,7 @@ async function actualizarMascota(idMascota) {
 
 
     if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
-        CompletarCamposModal.show();
+        mostrarModalCompletarCampos();
         return
     }
 
@@ -287,7 +354,7 @@ function listenerGuardar() {
         }
 
         if (input_primernombre.value === "" || input_nombrepila.value === "" || input_apellido.value === "" || input_calle.value === "" || input_numero.value === "" || input_telefono.value === "" || input_puntos.value === "") {
-            CompletarCamposModal.show();
+            mostrarModalCompletarCampos();
         } else {
             guardarClienteConMascotas();
         }
@@ -308,8 +375,8 @@ async function guardarClienteConMascotas() {
     await guardarClienteapp();
     await guardarMascotasApp();
     localStorage.setItem("ClienteVenta", cliente.id_cliente);
-    main.recargarPaginaPrincipal();
-    main.cerrarVentanasEmergentes();
+    // main.recargarPaginaPrincipal();
+    // main.cerrarVentanasEmergentes();
 }
 
 
@@ -327,8 +394,9 @@ function listenerGuardarNewMascota() {
 
     btnGuardarNewMascota.addEventListener('click', (e) => {
         e.preventDefault();
+        console.log("se dio click a btnAgregar");
         if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
-            CompletarCamposModal.show();
+            mostrarModalCompletarCampos();
         } else {
             actualizarMascota();
         }
@@ -336,6 +404,15 @@ function listenerGuardarNewMascota() {
 
 
 }
+
+
+async function mostrarModalCompletarCampos() {
+    quitarListenerGuardarEnter();
+    await CompletarCamposModal.show();
+    agregarListenerGuardarEnter();
+}
+
+
 
 function listenerCruz() {
     btnCruz = document.getElementById("btnCruz");

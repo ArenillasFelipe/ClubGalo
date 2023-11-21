@@ -119,7 +119,7 @@ async function getVentasActivasByIdCliente(id_cliente) {
 
 
 
-async function insertarVenta(newVenta, mascotasVenta, puntosActualesCliente, nuevosPuntosCliente) {
+async function insertarVenta(newVenta, bolsasVenta, mascotasVenta, puntosActualesCliente, nuevosPuntosCliente) {
     console.log("Mascotas seleccionadas: ", mascotasVenta);
         
 
@@ -127,18 +127,18 @@ async function insertarVenta(newVenta, mascotasVenta, puntosActualesCliente, nue
         // newVenta.precio = parseFloat(newVenta.precio);
 
 
-        switch (newVenta.calidad_bolsa) {
+        switch (bolsasVenta.calidadActual) {
             case "BAJA":
-                newVenta.puntos_obtenidos = newVenta.kilos_bolsa * newVenta.cantidad
+                newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual
                 break;
             case "INTERMEDIA":
-                newVenta.puntos_obtenidos = newVenta.kilos_bolsa * newVenta.cantidad * 2
+                newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual * 2
                 break;
             case "PREMIUM":
-                newVenta.puntos_obtenidos = newVenta.kilos_bolsa * newVenta.cantidad * 3
+                newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual * 3
                 break;
             case "SUPER PREMIUM":
-                newVenta.puntos_obtenidos = newVenta.kilos_bolsa * newVenta.cantidad * 4
+                newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual * 4
                 break;
             default:
                 break;
@@ -162,11 +162,11 @@ async function insertarVenta(newVenta, mascotasVenta, puntosActualesCliente, nue
         }
     }
 
-    let duracionBolsa = calcularDuracionBolsa(mascotasVenta, newVenta);
+    let duracionBolsa = calcularDuracionBolsa(mascotasVenta, bolsasVenta);
     let vencimientoVenta = sumarDiasAFechaActual(duracionBolsa);
     newVenta.vencimiento = vencimientoVenta;
     console.log("duracion bolsa: ", duracionBolsa);
-    resultInsert = await ventaModel.insertVenta(newVenta);
+    resultInsert = await ventaModel.insertVenta(newVenta, bolsasVenta);
 
 
     console.log("id con el que se guardo: ", resultInsert.insertId);
