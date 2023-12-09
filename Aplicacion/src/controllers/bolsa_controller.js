@@ -34,6 +34,8 @@ async function get18BolsasSegunBusqueda(busqueda, salto) {
   }
 
   let bolsasConKilos = [];
+
+  console.log("bolsas traidas por controller: ", bolsas)
   if (bolsas) {
 
 
@@ -41,7 +43,7 @@ async function get18BolsasSegunBusqueda(busqueda, salto) {
       const element = bolsas[i];
 
       kilos_bolsa = await bolsaKiloModel.getKilosBolsaByIdBolsa(element.id_bolsa);
-
+      console.log("kilos_bolsa pusheados: ", kilos_bolsa)
       bolsasConKilos.push({
         bolsa: element,
         kilosBolsa: kilos_bolsa

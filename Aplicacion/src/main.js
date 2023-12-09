@@ -1,4 +1,4 @@
-const { BrowserWindow, app } = require('electron');
+const { BrowserWindow, app, Menu } = require('electron');
 const { actualizarVentasVencidas } = require('./models/ventaModel');
 
 
@@ -8,6 +8,7 @@ let windowAgregarCliente;
 let windowEditarBolsa;
 let windowAgregarBolsa;
 let windowVentasBolsas;
+let windowModificarMultiplicador;
 
 
 
@@ -29,6 +30,9 @@ function createWindow() {
         }
     })
 
+    const mainMenu = Menu.buildFromTemplate(templateMenu);
+    Menu.setApplicationMenu(mainMenu);
+
     window.on('closed', () => {
         app.quit();
     });
@@ -36,6 +40,70 @@ function createWindow() {
 
     window.loadFile('src/views/historial/historial.html'); //indica el archivo que se cargara en la ventana
 }
+
+
+const templateMenu = [
+    {
+        label: 'Config',
+        submenu: [
+            {
+                label: 'Multiplicador de puntos',
+                click() {
+                    createWindowMultiplicadorPuntos();
+                }
+            }
+        ]
+    },
+    {
+        label: 'Desarrollador',
+        submenu: [
+          { label: 'Abrir Herramientas de Desarrollador', role: 'toggleDevTools' }
+        ]
+      }
+]
+
+const onlyDevMenu = [
+    {
+        label: 'Desarrollador',
+        submenu: [
+          { label: 'Abrir Herramientas de Desarrollador', role: 'toggleDevTools' }
+        ]
+      }
+]
+
+function createWindowMultiplicadorPuntos() {
+
+    cerrarVentanasEmergentes();
+    windows = BrowserWindow.getAllWindows();
+    console.log(`Hay ${windows.length} ventanas abiertas.`);
+    console.log(windows[0].BrowserWindow);
+    mainDocument = windows[0].webContents;
+
+    console.log(mainDocument);
+
+    // Establecer la propiedad opacity del body de la ventana principal
+    mainDocument.executeJavaScript(`document.body.style.opacity = ${0.1};`);
+    mainDocument.executeJavaScript(`document.body.style.pointerEvents = 'none';`);
+
+    windowModificarMultiplicador = new BrowserWindow({
+        width: 400,
+        height: 200,
+        alwaysOnTop: true,
+        frame: true,
+        resizable: false,
+        icon: __dirname + './imagenes/favicon.png',
+        webPreferences: {
+            nodeIntegration: true
+        }
+    })
+
+    windowModificarMultiplicador.on('closed', () => {
+        cerrarVentanasEmergentes();
+    });
+
+    windowModificarMultiplicador.loadFile('src/views/modMultiplicador/modMultiplicador.html'); //indica el archivo que se cargara en la ventana
+}
+
 
 function createWindowEditarCliente() {
 
@@ -223,6 +291,13 @@ function cerrarVentanasEmergentes() {
     }
 
 
+    if (windowModificarMultiplicador != undefined) {
+        try {
+            windowModificarMultiplicador.close();
+        } catch (e) {
+            //no hace nada
+        }
+    }
     if (windowAgregarCliente != undefined) {
         try {
             windowAgregarCliente.close();

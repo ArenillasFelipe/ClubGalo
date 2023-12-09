@@ -159,11 +159,27 @@ async function actualizarMascota(idMascota) {
         return
     }
 
-    let regex = /[^0-9.]/;
-    if (regex.test(input_aniocumple) || regex.test(input_diacumple) || regex.test(input_mescumple) || regex.test(input_peso)) {
+let regex = /^[.\d]+$/;
+
+    //compueba que no contenga letras
+    if (!regex.test(input_diacumple.value) || !regex.test(input_mescumple.value) || !regex.test(input_aniocumple.value) || !regex.test(input_peso.value)) {
+        FormatoNumericoModal.show();
+        return;
+    }
+
+
+    if (parseFloat(input_diacumple.value) <= 0 || parseFloat(input_mescumple.value) <= 0 || parseFloat(input_aniocumple.value) <= 0 || parseFloat(input_peso.value) <= 0) {
         FormatoNumericoModal.show();
         return
-      }
+    }
+
+    regex = /\./;
+
+    if (regex.test(input_aniocumple.value) || regex.test(input_diacumple.value) || regex.test(input_mescumple.value)) {
+        FormatoNumericoModal.show();
+        return;
+    }
+
 
     if (select_mascota.value === "agregar") {
         agregarMascotaapp();

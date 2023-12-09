@@ -68,6 +68,7 @@ async function mainGetYRenderBolsasSegunBusquedaApp() {
   container_paginado.style.display = "none";
 
   let bolsas18 = await bolsa_controller.get18BolsasSegunBusqueda(newBusqueda, salto);
+  console.log("salto:", salto, "bolsas que trajo: ", bolsas18);
   if (await verificarUltimaPagina()) {
     document.getElementById('btnSiguiente').style.display = "none";
   }

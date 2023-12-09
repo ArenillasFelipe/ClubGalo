@@ -5,7 +5,7 @@ const mascota_controller = require('../../controllers/mascota_controller');
 const { calcularEdadMascota } = require('../../utils/calcularFechas');
 const nodemailer = require('nodemailer');
 const { capitalizarPalabras } = require('../../utils/palabras');
-
+const { reemplazarComa } = require('../../utils/palabras');
 
 let cliente;
 let mascotasOriginal;
@@ -255,6 +255,26 @@ async function actualizarMascota(idMascota) {
         return
     }
 
+    let regex = /^[.\d]+$/;
+
+    //compueba que no contenga letras
+    if (!regex.test(input_diacumple.value) || !regex.test(input_mescumple.value) || !regex.test(input_aniocumple.value) || !regex.test(input_peso.value)) {
+        FormatoNumericoModal.show();
+        return;
+    }
+
+    if (parseFloat(input_diacumple.value) <= 0 || parseFloat(input_mescumple.value) <= 0 || parseFloat(input_aniocumple.value) <= 0 || parseFloat(input_peso.value) <= 0) {
+        FormatoNumericoModal.show();
+        return
+    }
+
+    regex = /\./;
+
+    if (regex.test(input_aniocumple.value) || regex.test(input_diacumple.value) || regex.test(input_mescumple.value)) {
+        FormatoNumericoModal.show();
+        return;
+    }
+
     if (select_mascota.value === "agregar") {
         agregarMascotaapp();
     } else {
@@ -375,8 +395,8 @@ async function guardarClienteConMascotas() {
     await guardarClienteapp();
     await guardarMascotasApp();
     localStorage.setItem("ClienteVenta", cliente.id_cliente);
-    // main.recargarPaginaPrincipal();
-    // main.cerrarVentanasEmergentes();
+    main.recargarPaginaPrincipal();
+    main.cerrarVentanasEmergentes();
 }
 
 
@@ -490,9 +510,9 @@ function enviarEmailCambioDePuntos() {
 
 function listenersCambiosInputsPersona() {
     const inputsPersona = document.querySelectorAll('.inputPersona');
-
     inputsPersona.forEach(function (input) {
         input.addEventListener('input', function () {
+            console.log("listener cambios inputs persona")
             btnGuardar.style.display = 'block'; // Mostramos el botón al hacer cambios en cualquier input con la clase inputPersona
         });
     });

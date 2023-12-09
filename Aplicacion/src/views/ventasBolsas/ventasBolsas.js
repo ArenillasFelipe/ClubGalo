@@ -160,17 +160,17 @@ function crearListenerFormMonth() {
 // }
 
 function exportTableToExcel(tableID, filename = '') {
-  var table2excel = new Table2Excel();
-  table2excel.export(document.querySelectorAll(`#${tableID}`), filename);
+  // var table2excel = new Table2Excel();
+  // table2excel.export(document.querySelectorAll(`#${tableID}`), filename);
 }
 
 
 function listenerBotonExportar() {
-  let btnExportar = document.getElementById("btnExportar");
-  btnExportar.addEventListener('click', (e) => {
-    e.preventDefault();
-    var nombreArchivo = 'Ventas de bolsas';
-    exportTableToExcel("tablaprincipal", nombreArchivo);
-  });
+  // let btnExportar = document.getElementById("btnExportar");
+  // btnExportar.addEventListener('click', (e) => {
+  //   e.preventDefault();
+  //   var nombreArchivo = 'Ventas de bolsas';
+  //   exportTableToExcel("tablaprincipal", nombreArchivo);
+  // });
 }
 

@@ -2,7 +2,7 @@ const { getConnection } = require('../database');
 const { capitalizarPalabras } = require('../utils/palabras');
 
 class Cliente {
-    constructor(primernombre, nombrepila, apellido, telefono, calle, calle_numero, puntos, id_cliente) {
+    constructor(primernombre, nombrepila, apellido, telefono, calle, calle_numero, puntos, id_cliente, validoCliente) {
         this.primernombre = primernombre;
         this.nombrepila = nombrepila;
         this.apellido = apellido;
@@ -11,6 +11,7 @@ class Cliente {
         this.calle_numero = calle_numero;
         this.puntos = puntos;
         this.id_cliente = id_cliente;
+        this.validoCliente = validoCliente
     }
 }
 
@@ -27,24 +28,26 @@ async function get20Clientes(salto) {
         clienteData.calle,
         clienteData.calle_numero,
         clienteData.puntos,
-        clienteData.id_cliente));
+        clienteData.id_cliente,
+        clienteData.validoCliente));
 }
 
 async function getClienteById(id_cliente) {
     const conn = await getConnection();
-    const result = await conn.query('SELECT * FROM clientes WHERE id_cliente = ? and validoCliente = true', [id_cliente]);
+    const result = await conn.query('SELECT * FROM clientes WHERE id_cliente = ?', [id_cliente]);
     // conn.release();
     if (!result[0]) return null; // devuelve `null` si no se encuentra ningún cliente
     const clienteData = result[0];
     return new Cliente(
-        clienteData.primernombre,
-        clienteData.nombrepila,
-        clienteData.apellido,
-        clienteData.telefono,
-        clienteData.calle,
-        clienteData.calle_numero,
-        clienteData.puntos,
-        clienteData.id_cliente);
+      clienteData.primernombre,
+      clienteData.nombrepila,
+      clienteData.apellido,
+      clienteData.telefono,
+      clienteData.calle,
+      clienteData.calle_numero,
+      clienteData.puntos,
+      clienteData.id_cliente,
+      clienteData.validoCliente);
 }
 
 
@@ -83,7 +86,8 @@ async function get20ClientesBySearchMascotas(cadenaBusqueda, salto) {
       clienteData.calle,
       clienteData.calle_numero,
       clienteData.puntos,
-      clienteData.id_cliente
+      clienteData.id_cliente,
+      clienteData.validoCliente
     ));
   } catch (error) {
     throw error;
@@ -133,7 +137,8 @@ async function get20ClientesBySearch(cadenaBusqueda, salto) {
       clienteData.calle,
       clienteData.calle_numero,
       clienteData.puntos,
-      clienteData.id_cliente
+      clienteData.id_cliente,
+      clienteData.validoCliente
     ));
   } catch (error) {
     throw error;

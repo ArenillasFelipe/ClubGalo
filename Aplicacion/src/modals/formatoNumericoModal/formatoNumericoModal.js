@@ -2,7 +2,7 @@ function iniciarFormatoNumericoModal() {
   return new Promise((resolve) => {
   document.getElementById("container-modal").innerHTML = `<div id="custom-modalFormatoNumerico" class="modalFormatoNumerico">
     <div class="modal-contentFormatoNumerico" id="modal-contentFormatoNumerico">
-      <h2>Debes completar el campo con numeros positivos</h2>
+      <h2>Los datos numericos no tienen el formato correcto</h2>
       <button id="aceptar-buttonFormatoNumerico">Aceptar</button>
     </div>
   </div>`;

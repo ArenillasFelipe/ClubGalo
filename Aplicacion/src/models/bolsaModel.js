@@ -68,13 +68,13 @@ const palabrasClave = cadenaBusqueda.split(' ');
     const condicionesSQL = condiciones.join(' AND ');
     console.log(condicionesSQL);
     const sql = `
-      SELECT *
+      SELECT DISTINCT bolsas.id_bolsa, bolsas.marca_bolsa, bolsas.calidad_bolsa
       FROM bolsas
       inner join bolsas_kilos on bolsas_kilos.id_bolsa = bolsas.id_bolsa
       WHERE (${condicionesSQL}) AND bolsas.validoBolsa = true AND bolsas_kilos.validoBolsaKilo = true
       LIMIT ?, 18
     `;
-  
+
     const results = await conn.query(sql, [salto]);
 
     return results.map(bolsaData => new Bolsa(

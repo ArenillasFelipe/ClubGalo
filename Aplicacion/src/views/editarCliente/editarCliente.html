@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="../../modals/completarCamposModal/completarCamposModal.css" />
         <link rel="stylesheet" href="../../modals/sinMascotasModal/sinMascotasModal.css" />
         <link rel="stylesheet" href="../../modals/borrarMascotaModal/borrarMascotaModal.css" />
+        <link rel="stylesheet" href="../../modals/formatoNumericoModal/formatoNumericoModal.css" />
 </head>
 
 <body>
@@ -22,23 +23,22 @@
                 <h1 class="tituloCentro" id="tituloCentro">Edicion de Cliente</h1>
         </div>
         <form id="formGrande">
-                <div class="datos-cliente" id="containerDatosCliente">
+                <div class="datos-cliente">
                         <h1>Datos del Cliente</h1>
                         <p><span style="font-weight: 800;">Primer Nombre:</span> <input required type="text"
                                         class="input-primernombre inputPersona" id="input-primernombre"></p>
                         <p><span style="font-weight: 800;">Nombre de pila:<span style="font-weight: 800;"></span> <input
-                                                required type="text" class="input-nombrepila inputPersona"
-                                                id="input-nombrepila"></p>
+                                                required type="text" class="input-nombrepila inputPersona" id="input-nombrepila"></p>
                         <p><span style="font-weight: 800;">Apellido:</span> <input required type="text"
                                         class="input-apellido inputPersona" id="input-apellido"></p>
                         <p><span style="font-weight: 800;">Direccion(Calle):</span> <input required type="text"
                                         class="input-calle inputPersona" id="input-calle"> <span
-                                        style="font-weight: 800;">Nro:</span> <input required type="number"
+                                        style="font-weight: 800;">Nro:</span> <input required type="text"
                                         class="input-numero inputPersona" id="input-numero"></p>
-                        <p><span style="font-weight: 800;">Telefono:</span> <input required type="number"
+                        <p><span style="font-weight: 800;">Telefono:</span> <input required type="text"
                                         class="input-telefono inputPersona" id="input-telefono"></p>
-                        <p><span style="font-weight: 800;">Puntos:</span> <input required type="number"
-                                        class="input-telefono inputPersona" id="input-puntos"></p>
+                        <p><span style="font-weight: 800;">Puntos:</span> <input required type="text"
+                                        class="input-telefono inputPersona" id="input-puntos" value="0"></p>
                 </div>
 
                 <div class="datos-mascota">
@@ -47,8 +47,7 @@
                         </div>
                         <div class="mostrar-datos">
                                 <form>
-                                        <label for="selectmascota"><span style="font-weight: 800;">Mostrando
-                                                        datos
+                                        <label for="selectmascota"><span style="font-weight: 800;">Mostrando datos
                                                         de:</span></label>
                                         <select name="selectmascota" class="select-mascota" id="select-mascota">
                                         </select>
@@ -61,23 +60,25 @@
                                                 class="inputMascota">
                                                 <option value="Perro">Perro</option>
                                                 <option value="Gato">Gato</option>
-                                        </select><span style="font-weight: 800;">Raza:</span> <input required
-                                                type="text" class="input-raza inputMascota" id="input-raza"></p>
-                                <p><span style="font-weight: 800;">Peso:</span> <input required type="number"
-                                                class="input-peso inputMascota" id="input-peso" step="0.01"><span
+                                        </select>
+                                        <span style="font-weight: 800;">Raza:</span> <input required type="text"
+                                                class="input-raza inputMascota" id="input-raza">
+                                </p>
+                                <p><span style="font-weight: 800;">Peso:</span> <input required type="text"
+                                                class="input-peso inputMascota" id="input-peso" onkeypress="reemplazarComa(event)"><span
                                                 style="margin-right: 30px; font-weight: 800; ">Kg</span><span
                                                 style="font-weight: 800;">Edad:<span id="spanEdad"></span></span></p>
                                 <p><span style="font-weight: 800;">Actividad:</span> <input required type="text"
                                                 class="input-actividad inputMascota" id="input-actividad"></p>
                                 <p><span style="font-weight: 800;">Afecciones:</span> <input required type="text"
                                                 class="input-afecciones inputMascota" id="input-afecciones"></p>
-                                <p><span style="font-weight: 800;">Nacimiento: <input required type="number"
+                                <p><span style="font-weight: 800;">Nacimiento: <input required type="text"
                                                         class="input-diacumple inputMascota"
-                                                        id="input-diacumple">/<input required type="number"
+                                                        id="input-diacumple" onkeypress="reemplazarComa(event)">/<input required type="text"
                                                         class="input-mescumple inputMascota"
-                                                        id="input-mescumple">/<input required type="number"
+                                                        id="input-mescumple" onkeypress="reemplazarComa(event)">/<input required type="text"
                                                         class="input-aniocumple inputMascota"
-                                                        id="input-aniocumple"></span></p>
+                                                        id="input-aniocumple" onkeypress="reemplazarComa(event)"></span></p>
                                 <div id="boton-guardarmascota"></div>
                                 <div id="boton-eliminar"></div>
                         </div>
@@ -90,6 +91,7 @@
         <script src="../../modals/completarCamposModal/completarCamposModal.js"></script>
         <script src="../../modals/sinMascotasModal/sinMascotasModal.js"></script>
         <script src="../../modals/borrarMascotaModal/borrarMascotaModal.js"></script>
+        <script src="../../modals/formatoNumericoModal/formatoNumericoModal.js"></script>
 </body>
 
 </html>

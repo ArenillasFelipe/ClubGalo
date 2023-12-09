@@ -52,7 +52,7 @@ async function getMascotas() {
 
 async function getMascotaById(id_mascota) {
     const conn = await getConnection();
-    const result = await conn.query('SELECT * FROM mascotas WHERE id_mascota = ? and validoMascota = true', id_mascota);
+    const result = await conn.query('SELECT * FROM mascotas WHERE id_mascota = ?', id_mascota);
     // conn.release();
     if (!result[0]) return null; // devuelve `null` si no se encuentra ninguna mascota
     const mascotaData = result[0];

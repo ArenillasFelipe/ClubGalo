@@ -2,6 +2,7 @@ const clienteModel = require('../models/clienteModel');
 const ventaModel = require('../models/ventaModel');
 const mascotaModel = require('../models/mascotaModel');
 const venta_mascotaModel = require('../models/venta_mascotaModel');
+const configModel = require('../models/configModel');
 const { calcularDuracionBolsa, sumarDiasAFechaActual, calcularDiasEntreFechas } = require('../utils/calcularFechas');
 
 
@@ -144,6 +145,8 @@ async function insertarVenta(newVenta, bolsasVenta, mascotasVenta, puntosActuale
                 break;
         }
 
+    let multiplicadorPuntos = await configModel.getMultiplicadorPuntos();  
+    newVenta.puntos_obtenidos = newVenta.puntos_obtenidos * multiplicadorPuntos.valor_config;
 
     newVenta.puntos_canjeados = puntosActualesCliente - nuevosPuntosCliente;
 
@@ -187,6 +190,8 @@ async function get20VentasPorVencerConMascotas(salto) {
 
         let cliente = await clienteModel.getClienteById(ventas[i].id_cliente);
 
+        console.log(cliente);
+
         ventas[i].vencimiento = Math.round(calcularDiasEntreFechas(new Date(), ventas[i].vencimiento));
 
         let idMascotasVenta = await venta_mascotaModel.getVenta_MascotasByIdVenta(ventas[i].id_venta);
@@ -196,6 +201,8 @@ async function get20VentasPorVencerConMascotas(salto) {
             mascotas.push(mascota);
         }
 
+        console.log(mascotas);
+
         // Agregar la información del cliente a la venta correspondiente
         ventasConMascotas.push({
             venta: ventas[i],
@@ -204,7 +211,7 @@ async function get20VentasPorVencerConMascotas(salto) {
         });
     }
 
-
+    
     return ventasConMascotas;
 }
 
