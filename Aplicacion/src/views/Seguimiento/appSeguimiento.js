@@ -31,8 +31,15 @@ function renderVentasPorVencer(ventasConClienteMascotas) {
   divAvisos = document.getElementById("avisos");
   divAvisos.innerHTML = "";
 
+  let direccion;
+
   ventasConClienteMascotas.forEach(element => {
 
+    if (element.cliente.dpto) {
+      direccion = element.cliente.calle + ` ` + element.cliente.calle_numero + ` (Dpto: ${element.cliente.dpto})`;
+    }else{
+      direccion = element.cliente.calle + ` ` + element.cliente.calle_numero;
+    }
 
     let claseParaCss = "dia" + element.venta.vencimiento;
     let tituloAviso = element.venta.vencimiento == 1 ? `Queda ${element.venta.vencimiento} dia o menos` : `Quedan ${element.venta.vencimiento} dias`;
@@ -54,7 +61,7 @@ function renderVentasPorVencer(ventasConClienteMascotas) {
       <img src="../../imagenes/persona.png" class="img-persona">
       <p class="pnombre"><b>Nombre:</b> ${element.cliente.primernombre + " " + element.cliente.nombrepila + " " + element.cliente.apellido}</p>
       <p class="ptelefono"><b>Tel:</b> ${element.cliente.telefono}</p>
-      <p class="pdireccion"><b>Direccion:</b> ${element.cliente.calle + " " + element.cliente.calle_numero}</p>
+      <p class="pdireccion"><b>Direccion:</b> ${direccion}</p>
       <p class="ppuntos"><b>Puntos:</b> ${element.cliente.puntos}</p>
       <button onclick="btnVenta(${element.cliente.id_cliente})" class="btnVenta">Venta</button>
     </div>`

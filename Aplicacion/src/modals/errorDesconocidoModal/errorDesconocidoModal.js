@@ -2,8 +2,7 @@ function iniciarErrorDesconocidoModal() {
   return new Promise((resolve) => {
   document.getElementById("container-modal").innerHTML = `<div id="custom-modalErrorDesconocido" class="modalErrorDesconocido">
     <div class="modal-contentErrorDesconocido">
-      <h2>Ha ocurrido un error desconocido</h2>
-      <p>Verifique haber escrito correctamente el nombre de la bolsa y haber completado todos los campos</p>
+      <h2>No puedes seleccionar gatos y perros a la vez</h2>
       <button id="aceptar-buttonErrorDesconocido">Aceptar</button>
     </div>
   </div>`;

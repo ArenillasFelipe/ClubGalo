@@ -55,6 +55,10 @@ input {
     width: 120px;
 }
 
+.input-dpto{
+    width: 40px;
+}
+
 .datos-mascota {
     position: absolute;
     left: 465px;

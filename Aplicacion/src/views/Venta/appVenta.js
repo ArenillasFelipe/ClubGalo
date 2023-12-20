@@ -39,7 +39,14 @@ checkboxBusquedaMascota.addEventListener('click', function () {
     }
 });
 
+async function actualizarVentasVencidas() {
+    await venta_controller.actualizarVentasVencidas();
+}
+
+
 const MainFunctionVenta = async () => {
+
+    await actualizarVentasVencidas();
 
 
     //obtengo el cliente segun lo ingresado en el input
@@ -94,6 +101,10 @@ const MainFunctionVenta = async () => {
     //llamo a la funcion para rellenar la pantalla a partir de los datos obtenidos
     innerCliente(mascotas, historialVentasConBolsas);
     //////////////////////////////////////////////////////////////
+
+    //creo el listener para que no te deje seleccionar gatos y perros para comer de la misma bolsa
+    listenerCheckboxesMascotas(mascotas);
+    ///////////////////////////////////////////////////////
 
 
     //creo el listener del select para ver los datos de las mascotas
@@ -312,7 +323,10 @@ async function venta(cliente, mascotas) {
             mascotasVenta.includes(mascota.id_mascota)
         );
 
-        await venta_controller.insertarVenta(nuevaVenta, bolsasVenta, mascotas, cliente.puntos, nuevosPuntos);
+        for (let i = 0; i < 20; i++) {
+            await venta_controller.insertarVenta(nuevaVenta, bolsasVenta, mascotas, cliente.puntos, nuevosPuntos);
+        }
+
         VentaExitosaModal.show();
     } catch (error) {
         console.log(error);
@@ -344,6 +358,12 @@ function innerCliente(mascotas, historialVentasConBolsas) {
     agregado = document.getElementById("agregado");
     ingreso = document.getElementById("mascota");
 
+    let direccion;
+    if (cliente.dpto) {
+        direccion = cliente.calle + ` ` + cliente.calle_numero + ` (Dpto: ${cliente.dpto})`;
+    } else {
+        direccion = cliente.calle + ` ` + cliente.calle_numero;
+    }
 
     ingreso.innerHTML = "";
     ingreso.innerHTML +=
@@ -381,7 +401,7 @@ function innerCliente(mascotas, historialVentasConBolsas) {
 <h2 class="h2cliente">Datos del Cliente</h2>
 <p><b>Nombre:</b><span id="spanNombreCliente" onclick="editarCliente()"> ${cliente.primernombre} ${cliente.nombrepila} ${cliente.apellido}</span></p>
 <p><b>Telefono:</b> ` + cliente.telefono + `</p>
-<p><b>Direccion:</b> ` + cliente.calle + ` ` + cliente.calle_numero + `</p>
+<p><b>Direccion:</b> ` + direccion + `</p>
 <p><b>Puntos:</b><span id="spanPuntos"> ` + cliente.puntos + `<div id="divBotonRestarPuntos"><button id="btnRestarPuntos" onclick="botonRestarPuntos()"><img src="../../imagenes/signoMenos.png" id="imgSignoMenos"></button></div></span></p>
 <div id="divInputRestarPuntos"></div>
 <br>
@@ -462,7 +482,7 @@ function rellenarDatos(mascotas, historialVentasConBolsas) {
     mascotas.forEach(element => {
         select.innerHTML += `<option value="${element.id_mascota}">${element.nombremascota}</option>`;
         seleccionMascota.innerHTML += `
-        <input type="checkbox" value="1" class="checkbox" id="checkbox${element.nombremascota}">
+        <input type="checkbox" value="1" class="checkbox checkboxMascota" id="checkbox${element.nombremascota}">
         <label for="checkbox${element.nombremascota}" class="labelCheckboxMascota">${element.nombremascota}</label>
         <br>
       `;
@@ -800,6 +820,40 @@ function listenerCheckboxesVentasActivas(ventasActivas) {
         });
     });
 }
+
+
+function listenerCheckboxesMascotas(mascotas) {
+    let checkboxesMascotas = document.getElementsByClassName("checkboxMascota");
+
+    for (let checkbox of checkboxesMascotas) {
+        checkbox.addEventListener('change', function (e) {
+            let perroSeleccionado = false;
+            let gatoSeleccionado = false;
+
+            for (let i = 0; i < checkboxesMascotas.length; i++) {
+                if (checkboxesMascotas[i].checked) {
+                    if (mascotas[i].animal === "Perro") {
+                        perroSeleccionado = true;
+                    } else if (mascotas[i].animal === "Gato") {
+                        gatoSeleccionado = true;
+                    }
+                }
+            }
+
+            if (perroSeleccionado && gatoSeleccionado) {
+                let previouslyFocusedElement = document.activeElement;
+                previouslyFocusedElement.blur();
+                seleccionGatoPerroModal.show();
+
+                setTimeout(function () {
+                    previouslyFocusedElement.focus();
+                }, 100);
+                checkbox.checked = false; // Desmarcar el checkbox que causó el conflicto.
+            }
+        });
+    }
+}
+
 
 
 function desmarcarCheboxesVentasActivas(ventasActivas, idVentaMantener) {

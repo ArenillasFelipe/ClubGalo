@@ -4,7 +4,7 @@ const cliente_controller = require('../../controllers/cliente_controller');
 const mascota_controller = require('../../controllers/mascota_controller');
 const { calcularEdadMascota } = require('../../utils/calcularFechas');
 const nodemailer = require('nodemailer');
-const { capitalizarPalabras } = require('../../utils/palabras');
+const { capitalizarPalabras, quitarTildes } = require('../../utils/palabras');
 const { reemplazarComa } = require('../../utils/palabras');
 
 let mascotas = [];
@@ -28,6 +28,7 @@ let input_calle = document.getElementById("input-calle");
 let input_numero = document.getElementById("input-numero");
 let input_telefono = document.getElementById("input-telefono");
 let input_puntos = document.getElementById("input-puntos");
+let input_dpto = document.getElementById("input-dpto");
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 let select_mascota = document.getElementById("select-mascota");
 let input_nombremascota = document.getElementById("input-nombremascota");
@@ -155,7 +156,7 @@ async function eliminarMascota(idMascota) {
 async function actualizarMascota(idMascota) {
 
     if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
-        CompletarCamposModal.show();
+        await CompletarCamposModal.show();
         return
     }
 
@@ -163,23 +164,28 @@ let regex = /^[.\d]+$/;
 
     //compueba que no contenga letras
     if (!regex.test(input_diacumple.value) || !regex.test(input_mescumple.value) || !regex.test(input_aniocumple.value) || !regex.test(input_peso.value)) {
-        FormatoNumericoModal.show();
+        await FormatoNumericoModal.show();
         return;
     }
 
 
     if (parseFloat(input_diacumple.value) <= 0 || parseFloat(input_mescumple.value) <= 0 || parseFloat(input_aniocumple.value) <= 0 || parseFloat(input_peso.value) <= 0) {
-        FormatoNumericoModal.show();
+        await FormatoNumericoModal.show();
         return
     }
 
     regex = /\./;
 
     if (regex.test(input_aniocumple.value) || regex.test(input_diacumple.value) || regex.test(input_mescumple.value)) {
-        FormatoNumericoModal.show();
+        await FormatoNumericoModal.show();
         return;
     }
 
+    //compruebo que las fechas sean validas
+    if (!esFechaDeNacimientoValida(input_aniocumple.value, input_mescumple.value, input_diacumple.value)) {
+        await FormatoNumericoModal.show();
+        return;
+    }
 
     if (select_mascota.value === "agregar") {
         agregarMascotaapp();
@@ -192,7 +198,7 @@ let regex = /^[.\d]+$/;
         mascotas[indice].raza = capitalizarPalabras(input_raza.value);
         mascotas[indice].peso = input_peso.value;
         mascotas[indice].actividad = capitalizarPalabras(input_actividad.value);
-        mascotas[indice].afecciones = input_afecciones.value;
+        mascotas[indice].afecciones = quitarTildes(input_afecciones.value);
         mascotas[indice].nacimiento = `${parseInt(input_diacumple.value)}/${parseInt(input_mescumple.value)}/${parseInt(input_aniocumple.value)}`
 
 
@@ -208,6 +214,13 @@ let regex = /^[.\d]+$/;
 
 
 async function agregarMascotaapp() {
+
+    let existeNombreRepetido = mascotas.some(mascota => mascota.nombremascota.toLowerCase() == input_nombremascota.value.toLowerCase());
+
+    if (existeNombreRepetido) {
+        await NombreMascotaRepetidoModal.show();
+        return;
+    }
 
     let newMascota = {
         id_mascota: "",
@@ -229,7 +242,7 @@ async function agregarMascotaapp() {
     newMascota.raza = capitalizarPalabras(input_raza.value);
     newMascota.peso = input_peso.value;
     newMascota.actividad = capitalizarPalabras(input_actividad.value);
-    newMascota.afecciones = input_afecciones.value;
+    newMascota.afecciones = quitarTildes(input_afecciones.value);
     newMascota.nacimiento = `${parseInt(input_diacumple.value)}/${parseInt(input_mescumple.value)}/${parseInt(input_aniocumple.value)}`
 
     mascotas.push(newMascota);
@@ -248,6 +261,7 @@ async function guardarClienteapp() {
         apellido: "",
         calle: "",
         calle_numero: "",
+        dpto: "",
         puntos: "",
         telefono: ""
     }
@@ -257,6 +271,7 @@ async function guardarClienteapp() {
     newCliente.apellido = input_apellido.value
     newCliente.calle = input_calle.value
     newCliente.calle_numero = input_numero.value
+    newCliente.dpto = (input_dpto.value).toUpperCase();
     newCliente.telefono = input_telefono.value
     newCliente.puntos = input_puntos.value
 
@@ -425,3 +440,35 @@ function listenersCambiosInputsMascota() {
         });
     });
 }
+
+
+function esFechaDeNacimientoValida(anio, mes, dia) {
+    // Obtener la fecha actual
+    const fechaActual = new Date();
+  
+    // Verificar que el año no sea mayor al actual
+    if (anio > fechaActual.getFullYear()) {
+      return false;
+    }
+  
+    // Verificar que el mes esté en el rango de 1 a 12
+    if (mes < 1 || mes > 12) {
+      return false;
+    }
+  
+    // Verificar que el día esté en el rango de 1 a 31
+    if (dia < 1 || dia > 31) {
+      return false;
+    }
+  
+    // Crear un objeto Date con la fecha proporcionada
+    const fechaIngresada = new Date(anio, mes - 1, dia);
+  
+    // Verificar que la fecha ingresada no sea futura a la fecha actual
+    if (fechaIngresada > fechaActual) {
+      return false;
+    }
+  
+    // Si pasa todas las verificaciones, la fecha es válida
+    return true;
+  }

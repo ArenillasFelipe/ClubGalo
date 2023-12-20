@@ -4,7 +4,7 @@ const cliente_controller = require('../../controllers/cliente_controller');
 const mascota_controller = require('../../controllers/mascota_controller');
 const { calcularEdadMascota } = require('../../utils/calcularFechas');
 const nodemailer = require('nodemailer');
-const { capitalizarPalabras } = require('../../utils/palabras');
+const { capitalizarPalabras, quitarTildes } = require('../../utils/palabras');
 const { reemplazarComa } = require('../../utils/palabras');
 
 let cliente;
@@ -17,7 +17,7 @@ let temporalmascotasIDs = 0;
 agregarListenerGuardarEnter();
 function agregarListenerGuardarEnter() {
     console.log("activado el listener")
-    document.addEventListener("keydown", function(event) {
+    document.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             console.log("se presiono enter")
             guardarEnter();
@@ -27,7 +27,7 @@ function agregarListenerGuardarEnter() {
 
 function quitarListenerGuardarEnter() {
     console.log("DESactivado el listener")
-    document.removeEventListener("keydown", function(event) {
+    document.removeEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             guardarEnter();
         }
@@ -101,7 +101,7 @@ let input_calle = document.getElementById("input-calle");
 let input_numero = document.getElementById("input-numero");
 let input_telefono = document.getElementById("input-telefono");
 let input_puntos = document.getElementById("input-puntos");
-
+let input_dpto = document.getElementById("input-dpto");
 // input_primernombre.value === "" || input_nombrepila.value === "" || input_apellido.value === "" || input_calle.value === "" || input_numero.value === "" || input_telefono.value === ""
 // input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_edad.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === ""
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,6 +137,7 @@ function llenarInputsCliente() {
     input_apellido.value = cliente.apellido
     input_calle.value = cliente.calle
     input_numero.value = cliente.calle_numero
+    input_dpto.value = cliente.dpto
     input_telefono.value = cliente.telefono
     input_puntos.value = cliente.puntos
 }
@@ -251,7 +252,7 @@ async function actualizarMascota(idMascota) {
 
 
     if (input_nombremascota.value === "" || input_animal.value === "" || input_raza.value === "" || input_peso.value === "" || input_actividad.value === "" || input_afecciones.value === "" || input_diacumple.value === "" || input_mescumple.value === "" || input_aniocumple.value === "") {
-        mostrarModalCompletarCampos();
+        await mostrarModalCompletarCampos();
         return
     }
 
@@ -259,19 +260,25 @@ async function actualizarMascota(idMascota) {
 
     //compueba que no contenga letras
     if (!regex.test(input_diacumple.value) || !regex.test(input_mescumple.value) || !regex.test(input_aniocumple.value) || !regex.test(input_peso.value)) {
-        FormatoNumericoModal.show();
+        await FormatoNumericoModal.show();
         return;
     }
 
     if (parseFloat(input_diacumple.value) <= 0 || parseFloat(input_mescumple.value) <= 0 || parseFloat(input_aniocumple.value) <= 0 || parseFloat(input_peso.value) <= 0) {
-        FormatoNumericoModal.show();
+        await FormatoNumericoModal.show();
         return
     }
 
     regex = /\./;
 
     if (regex.test(input_aniocumple.value) || regex.test(input_diacumple.value) || regex.test(input_mescumple.value)) {
-        FormatoNumericoModal.show();
+        await FormatoNumericoModal.show();
+        return;
+    }
+
+    //compruebo que las fechas sean validas
+    if (!esFechaDeNacimientoValida(input_aniocumple.value, input_mescumple.value, input_diacumple.value)) {
+        await FormatoNumericoModal.show();
         return;
     }
 
@@ -286,7 +293,7 @@ async function actualizarMascota(idMascota) {
         mascotasMod[indice].raza = capitalizarPalabras(input_raza.value);
         mascotasMod[indice].peso = input_peso.value;
         mascotasMod[indice].actividad = capitalizarPalabras(input_actividad.value);
-        mascotasMod[indice].afecciones = input_afecciones.value;
+        mascotasMod[indice].afecciones = quitarTildes(input_afecciones.value);
         mascotasMod[indice].nacimiento = `${parseInt(input_diacumple.value)}/${parseInt(input_mescumple.value)}/${parseInt(input_aniocumple.value)}`
 
 
@@ -302,6 +309,13 @@ async function actualizarMascota(idMascota) {
 
 
 async function agregarMascotaapp() {
+
+    let existeNombreRepetido = mascotasMod.some(mascota => mascota.nombremascota.toLowerCase() == input_nombremascota.value.toLowerCase());
+
+    if (existeNombreRepetido) {
+        await NombreMascotaRepetidoModal.show();
+        return;
+    }
 
     let newMascota = {
         id_mascota: "",
@@ -324,7 +338,7 @@ async function agregarMascotaapp() {
     newMascota.raza = capitalizarPalabras(input_raza.value);
     newMascota.peso = input_peso.value;
     newMascota.actividad = capitalizarPalabras(input_actividad.value);
-    newMascota.afecciones = input_afecciones.value;
+    newMascota.afecciones = quitarTildes(input_afecciones.value);
     newMascota.nacimiento = `${parseInt(input_diacumple.value)}/${parseInt(input_mescumple.value)}/${parseInt(input_aniocumple.value)}`
     newMascota.id_cliente = cliente.id_cliente;
 
@@ -345,6 +359,7 @@ async function guardarClienteapp() {
         apellido: "",
         calle: "",
         calle_numero: "",
+        dpto: "",
         puntos: "",
         telefono: ""
     }
@@ -355,6 +370,7 @@ async function guardarClienteapp() {
     newCliente.apellido = input_apellido.value
     newCliente.calle = input_calle.value
     newCliente.calle_numero = input_numero.value
+    newCliente.dpto = (input_dpto.value).toUpperCase();
     newCliente.telefono = input_telefono.value
     newCliente.puntos = input_puntos.value
 
@@ -389,7 +405,12 @@ async function guardarMascotasApp() {
 
 async function guardarClienteConMascotas() {
     if (parseInt(cliente.puntos) < parseInt(input_puntos.value)) {
-        await enviarEmailCambioDePuntos();
+        try {
+            await enviarEmailCambioDePuntos();
+        } catch (error) {
+            console.log(error)
+            //significa que no hay internet, lo dejo para la otra entrega
+        }
     }
 
     await guardarClienteapp();
@@ -532,4 +553,36 @@ function listenersCambiosInputsMascota() {
             btnActualizarMascota.style.display = "block";
         });
     });
+}
+
+
+function esFechaDeNacimientoValida(anio, mes, dia) {
+    // Obtener la fecha actual
+    const fechaActual = new Date();
+
+    // Verificar que el año no sea mayor al actual
+    if (anio > fechaActual.getFullYear()) {
+        return false;
+    }
+
+    // Verificar que el mes esté en el rango de 1 a 12
+    if (mes < 1 || mes > 12) {
+        return false;
+    }
+
+    // Verificar que el día esté en el rango de 1 a 31
+    if (dia < 1 || dia > 31) {
+        return false;
+    }
+
+    // Crear un objeto Date con la fecha proporcionada
+    const fechaIngresada = new Date(anio, mes - 1, dia);
+
+    // Verificar que la fecha ingresada no sea futura a la fecha actual
+    if (fechaIngresada > fechaActual) {
+        return false;
+    }
+
+    // Si pasa todas las verificaciones, la fecha es válida
+    return true;
 }

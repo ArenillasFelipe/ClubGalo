@@ -52,7 +52,16 @@ function renderVentas() {
   container_paginado.style.display = "none";
 
   listaVentas.innerHTML = "";
+  let direccion;
   ventasConDatos.forEach(element => {
+
+    if (element.cliente.dpto) {
+      direccion = element.cliente.calle + ` ` + element.cliente.calle_numero + ` (Dpto: ${element.cliente.dpto})`;
+    }else{
+      direccion = element.cliente.calle + ` ` + element.cliente.calle_numero;
+    }
+
+
     listaVentas.innerHTML +=
       `<div class="proto-venta">
     
@@ -67,7 +76,7 @@ function renderVentas() {
         <div class="datos-persona">
         <p><b>Nombre: </b><button class="btn-nombre" onclick="botonPersona(${element.cliente.id_cliente})"><h3>${element.cliente.primernombre} ${element.cliente.nombrepila} ${element.cliente.apellido} (Nº:${element.cliente.id_cliente})</h3></button></p>
           <h3 class="h3persona"><b>Tel:</b> ${element.cliente.telefono}</h3>
-          <h3 class="h3persona"><b>Direccion:</b> ${element.cliente.calle} ${element.cliente.calle_numero}</h3>
+          <h3 class="h3persona"><b>Direccion:</b> ${direccion}</h3>
         </div>
         <div class="datos-venta">
           <h3 class="h3Bolsa"><b>Bolsa:</b> ${element.venta.marca_bolsa}</h3>

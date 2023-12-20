@@ -1,5 +1,6 @@
 const bolsaModel = require('../models/bolsaModel');
 const bolsaKiloModel = require('../models/bolsa_kiloModel');
+const { quitarTildes } = require('../utils/palabras')
 
 
 
@@ -78,7 +79,7 @@ async function actualizarDatosBolsa(newBolsa, kilosBolsa) {
   if ((bolsasConMismoNombre) && (bolsasConMismoNombre.id_bolsa != newBolsa.id_bolsa)) {
     throw new Error("bolsaRepetida");
   }
-
+  newBolsa.marca_bolsa = quitarTildes(newBolsa.marca_bolsa);
   newBolsa.marca_bolsa = (newBolsa.marca_bolsa).toUpperCase();
 
 
@@ -109,7 +110,7 @@ async function insertBolsa(newBolsa, kilosBolsa) {
   if (bolsasConMismoNombre) {
     throw new Error("bolsaRepetida");
   }
-
+  newBolsa.marca_bolsa = quitarTildes(newBolsa.marca_bolsa);
   newBolsa.marca_bolsa = (newBolsa.marca_bolsa).toUpperCase();
 
   let result = await bolsaModel.insertBolsa(newBolsa);
