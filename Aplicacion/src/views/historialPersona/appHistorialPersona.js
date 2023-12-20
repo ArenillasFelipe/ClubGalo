@@ -80,6 +80,13 @@ async function mainFunctionHistorialPersona(newBusqueda) {
 function renderTablaCliente(cliente) {
   divTablaCliente = document.getElementById("divTablaCliente");
 
+  let direccion;
+  if (cliente.dpto) {
+    direccion = cliente.calle + ` ` + cliente.calle_numero + ` (Dpto: ${cliente.dpto})`;
+  }else{
+    direccion = cliente.calle + ` ` + cliente.calle_numero;
+  }
+
   divTablaCliente.innerHTML = `    <TABLE class="tabla1">
   <TR>
     <TH id="thnombre">Nombre:</TH>
@@ -91,7 +98,7 @@ function renderTablaCliente(cliente) {
   </TR>
   <TR>
     <TH id="thdireccion">Direccion:</TH>
-    <TD id="tddireccion">${cliente.calle} ${cliente.calle_numero}</TD>
+    <TD id="tddireccion">${direccion}</TD>
   </TR>
   <TR>
   <TH id="thdireccion">Puntos:</TH>
@@ -133,7 +140,8 @@ function crearListenerFiltrado() {
     salto = 0;
     importeTotal = 0;
     totalBolsas = 0;
-    document.getElementById("btnExportar").style.display = "none";
+    //QUITAR COMENTADO DE LA LINEA DE ABAJO CUANDO SE SOLUCIONE EXPORTACION A EXCEL EN SIGUIENTE ENTREGA
+    //document.getElementById("btnExportar").style.display = "none";
     /////////////////////////////////////////////
     if (selectFiltrado.value == "elegir") {
       insertInputMonth();
@@ -265,7 +273,8 @@ async function mainCrearTablaPrincipalSegunFiltros(newBusqueda, filtradoPrincipa
 
   if (ventas.length === 0 || ventas.length < 20) {
     CrearTablaTotales();
-    document.getElementById("btnExportar").style.display = "block";
+    //QUITAR COMENTADO DE LA LINEA DE ABAJO CUANDO SE SOLUCIONE EXPORTACION A EXCEL EN SIGUIENTE ENTREGA
+    //document.getElementById("btnExportar").style.display = "block";
   }
 
   if (ventas.length != 0) {

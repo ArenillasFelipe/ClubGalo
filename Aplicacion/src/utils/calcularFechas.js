@@ -47,6 +47,9 @@ function calcularDuracionBolsa(mascotasVenta, bolsasVenta) {
 
   mascotasVenta.forEach(mascota => {
     mascota.peso = Math.round(mascota.peso);
+    if (mascota.peso == 0) {
+      mascota.peso = 1
+    }
   });
 
   let ventaActual = {
@@ -134,10 +137,16 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
           // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = PerroBajaValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
+        }else{
+          //significa que la mascota pesa mas que lo que se contempla en PerroBajaValores
+          //hago regla de 3 simple
+          let consumoDiarioIndividual = (pesoMascota * PerroBajaValores.P44_45)/45;
+          consumoDiarioTotal += consumoDiarioIndividual;
         }
       });
   
       // Calcular los días que durará la bolsa de comida
+      console.log("consumo diario total: ", consumoDiarioTotal);
       let diasDuracion = (venta.kilos_bolsa * venta.cantidad) / consumoDiarioTotal;
   
       return diasDuracion;
@@ -199,6 +208,11 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
         if (rangoPeso) {
           // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = PerroIntermediaValores[rangoPeso];
+          consumoDiarioTotal += consumoDiarioIndividual;
+        }else{
+          //significa que la mascota pesa mas que lo que se contempla en PerroBajaValores
+          //hago regla de 3 simple
+          let consumoDiarioIndividual = (pesoMascota * PerroIntermediaValores.P49_50)/50;
           consumoDiarioTotal += consumoDiarioIndividual;
         }
       });
@@ -280,6 +294,11 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
           // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = PerroPremiumValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
+        }else{
+          //significa que la mascota pesa mas que lo que se contempla en PerroBajaValores
+          //hago regla de 3 simple
+          let consumoDiarioIndividual = (pesoMascota * PerroPremiumValores.P79_80)/80;
+          consumoDiarioTotal += consumoDiarioIndividual;
         }
       });
   
@@ -359,6 +378,11 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
           // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = PerroSuperPremiumValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
+        }else{
+          //significa que la mascota pesa mas que lo que se contempla en PerroBajaValores
+          //hago regla de 3 simple
+          let consumoDiarioIndividual = (pesoMascota * PerroSuperPremiumValores.P79_80)/80;
+          consumoDiarioTotal += consumoDiarioIndividual;
         }
       });
   
@@ -410,6 +434,11 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
             let consumoDiarioIndividual = GatoBajaValores[rangoPeso];
             consumoDiarioTotal += consumoDiarioIndividual;
             // console.log("consumo diario individual :", consumoDiarioIndividual);
+          }else{
+            //significa que la mascota pesa mas que lo que se contempla
+            //hago regla de 3 simple
+            let consumoDiarioIndividual = (pesoMascota * GatoBajaValores.P6)/6;
+            consumoDiarioTotal += consumoDiarioIndividual;
           }
         });
     
@@ -427,6 +456,7 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
     
       if (venta.calidad_bolsa == "INTERMEDIA") {
         let GatoIntermediaValores = {
+          P1: 0.025,
           P2: 0.050,
           P3: 0.065,
           P4: 0.080,
@@ -459,6 +489,11 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
             // console.log("rangopeso de la mascota: ", rangoPeso);
             let consumoDiarioIndividual = GatoIntermediaValores[rangoPeso];
             consumoDiarioTotal += consumoDiarioIndividual;
+          }else{
+            //significa que la mascota pesa mas que lo que se contempla
+            //hago regla de 3 simple
+            let consumoDiarioIndividual = (pesoMascota * GatoIntermediaValores.P6)/6;
+            consumoDiarioTotal += consumoDiarioIndividual;
           }
         });
     
@@ -471,6 +506,7 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
     
       if (venta.calidad_bolsa == "PREMIUM") {
         let GatoPremiumValores = {
+          P1: 0.015,
           P2: 0.030,
           P3: 0.050,
           P4: 0.060,
@@ -503,6 +539,11 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
             // console.log("rangopeso de la mascota: ", rangoPeso);
             let consumoDiarioIndividual = GatoPremiumValores[rangoPeso];
             consumoDiarioTotal += consumoDiarioIndividual;
+          }else{
+            //significa que la mascota pesa mas que lo que se contempla
+            //hago regla de 3 simple
+            let consumoDiarioIndividual = (pesoMascota * GatoPremiumValores.P6)/6;
+            consumoDiarioTotal += consumoDiarioIndividual;
           }
         });
     
@@ -514,6 +555,7 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
     
       if (venta.calidad_bolsa == "SUPER PREMIUM") {
         let GatoSuperPremiumValores = {
+          P1: 0.015,
           P2: 0.030,
           P3: 0.045,
           P4: 0.060,
@@ -545,6 +587,11 @@ function calculosDuracionBolsa(mascotasVenta, venta) {
           if (rangoPeso) {
             // console.log("rangopeso de la mascota: ", rangoPeso);
             let consumoDiarioIndividual = GatoSuperPremiumValores[rangoPeso];
+            consumoDiarioTotal += consumoDiarioIndividual;
+          }else{
+            //significa que la mascota pesa mas que lo que se contempla
+            //hago regla de 3 simple
+            let consumoDiarioIndividual = (pesoMascota * GatoSuperPremiumValores.P6)/6;
             consumoDiarioTotal += consumoDiarioIndividual;
           }
         });
@@ -626,6 +673,11 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
         // console.log("rangopeso de la mascota: ", rangoPeso);
         let consumoDiarioIndividual = PerroBajaValores[rangoPeso];
         consumoDiarioTotal += consumoDiarioIndividual;
+      }else{
+        //significa que la mascota pesa mas que lo que se contempla
+        //hago regla de 3 simple
+        let consumoDiarioIndividual = (pesoMascota * PerroBajaValores.P44_45)/45;
+        consumoDiarioTotal += consumoDiarioIndividual;
       }
     });
 
@@ -692,6 +744,11 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
       if (rangoPeso) {
         // console.log("rangopeso de la mascota: ", rangoPeso);
         let consumoDiarioIndividual = PerroIntermediaValores[rangoPeso];
+        consumoDiarioTotal += consumoDiarioIndividual;
+      }else{
+        //significa que la mascota pesa mas que lo que se contempla
+        //hago regla de 3 simple
+        let consumoDiarioIndividual = (pesoMascota * PerroIntermediaValores.P49_50)/50;
         consumoDiarioTotal += consumoDiarioIndividual;
       }
     });
@@ -775,6 +832,11 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
         // console.log("rangopeso de la mascota: ", rangoPeso);
         let consumoDiarioIndividual = PerroPremiumValores[rangoPeso];
         consumoDiarioTotal += consumoDiarioIndividual;
+      }else{
+        //significa que la mascota pesa mas que lo que se contempla
+        //hago regla de 3 simple
+        let consumoDiarioIndividual = (pesoMascota * PerroPremiumValores.P79_80)/80;
+        consumoDiarioTotal += consumoDiarioIndividual;
       }
     });
 
@@ -856,6 +918,11 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
         // console.log("rangopeso de la mascota: ", rangoPeso);
         let consumoDiarioIndividual = PerroSuperPremiumValores[rangoPeso];
         consumoDiarioTotal += consumoDiarioIndividual;
+      }else{
+        //significa que la mascota pesa mas que lo que se contempla
+        //hago regla de 3 simple
+        let consumoDiarioIndividual = (pesoMascota * PerroSuperPremiumValores.P79_80)/80;
+        consumoDiarioTotal += consumoDiarioIndividual;
       }
     });
 
@@ -909,7 +976,13 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
           let consumoDiarioIndividual = GatoBajaValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
           // console.log("consumo diario individual :", consumoDiarioIndividual);
+        }else{
+          //significa que la mascota pesa mas que lo que se contempla
+          //hago regla de 3 simple
+          let consumoDiarioIndividual = (pesoMascota * GatoBajaValores.P6)/6;
+          consumoDiarioTotal += consumoDiarioIndividual;
         }
+        
       });
   
       let diasTranscurridos = calcularDiasEntreFechas(venta.fecha, new Date());
@@ -926,6 +999,7 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
   
     if (venta.calidad_bolsa == "INTERMEDIA") {
       let GatoIntermediaValores = {
+        P1: 0.025,
         P2: 0.050,
         P3: 0.065,
         P4: 0.080,
@@ -958,6 +1032,11 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
           // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = GatoIntermediaValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
+        }else{
+          //significa que la mascota pesa mas que lo que se contempla
+          //hago regla de 3 simple
+          let consumoDiarioIndividual = (pesoMascota * GatoIntermediaValores.P6)/6;
+          consumoDiarioTotal += consumoDiarioIndividual;
         }
       });
   
@@ -972,6 +1051,7 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
   
     if (venta.calidad_bolsa == "PREMIUM") {
       let GatoPremiumValores = {
+        P1: 0.015,
         P2: 0.030,
         P3: 0.050,
         P4: 0.060,
@@ -1004,6 +1084,11 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
           // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = GatoPremiumValores[rangoPeso];
           consumoDiarioTotal += consumoDiarioIndividual;
+        }else{
+          //significa que la mascota pesa mas que lo que se contempla
+          //hago regla de 3 simple
+          let consumoDiarioIndividual = (pesoMascota * GatoPremiumValores.P6)/6;
+          consumoDiarioTotal += consumoDiarioIndividual;
         }
       });
   
@@ -1017,6 +1102,7 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
   
     if (venta.calidad_bolsa == "SUPER PREMIUM") {
       let GatoSuperPremiumValores = {
+        P1: 0.015,
         P2: 0.030,
         P3: 0.045,
         P4: 0.060,
@@ -1048,6 +1134,11 @@ function calcularKilosRestantesBolsa(mascotasVenta, venta) {
         if (rangoPeso) {
           // console.log("rangopeso de la mascota: ", rangoPeso);
           let consumoDiarioIndividual = GatoSuperPremiumValores[rangoPeso];
+          consumoDiarioTotal += consumoDiarioIndividual;
+        }else{
+          //significa que la mascota pesa mas que lo que se contempla
+          //hago regla de 3 simple
+          let consumoDiarioIndividual = (pesoMascota * GatoSuperPremiumValores.P6)/6;
           consumoDiarioTotal += consumoDiarioIndividual;
         }
       });

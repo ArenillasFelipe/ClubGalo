@@ -116,7 +116,7 @@ async function get20VentasBySearch(cadenaBusqueda, salto) {
         precio like '%${parseFloat(palabra)}%'
         OR cantidad = ${parseInt(palabra)}
         OR kilos_bolsa = ${parseFloat(palabra)}
-        OR totalventa = ${parseFloat(palabra)}
+        OR totalventa like '%${parseFloat(palabra)}%'
         OR puntos_canjeados = ${parseInt(palabra)}
       )`;
     } else {
@@ -345,6 +345,39 @@ fechaAyer.setHours(23, 59, 59, 999);
 }
 
 
+async function getUltimaVentaByIdMascota(id_mascota) {
+  const conn = await getConnection();
+  const result = await conn.query('SELECT venta.* FROM venta inner join venta_mascota on venta.id_venta = venta_mascota.id_venta WHERE venta_mascota.id_mascota = ? order by venta.fecha DESC limit 1', id_mascota);
+  // conn.release();
+  if (!result[0]) return null; // devuelve `null` si no se encuentra ninguna mascota
+  const ventaData = result[0];
+  return new Venta(
+    ventaData.fecha,
+    ventaData.precio,
+    ventaData.id_cliente,
+    ventaData.cantidad,
+    ventaData.marca_bolsa,
+    ventaData.kilos_bolsa,
+    ventaData.calidad_bolsa,
+    ventaData.marca_previa,
+    ventaData.kilos_previos,
+    ventaData.calidad_previa,
+    ventaData.activo,
+    ventaData.totalventa,
+    ventaData.puntos_obtenidos,
+    ventaData.puntos_canjeados,
+    ventaData.vencimiento,
+    ventaData.id_venta
+  );
+}
+
+
+async function activarVentaById(id_venta) {
+  const conn = await getConnection();
+  await conn.query('UPDATE venta SET activo = true WHERE id_venta = ?', id_venta);
+}
+
+
 
 
 
@@ -361,5 +394,7 @@ module.exports = {
   actualizarVentaAInactivaById,
   actualizarVentasClienteAInactivas,
   get20VentasPorVencer,
-  actualizarVentasVencidas
+  actualizarVentasVencidas,
+  getUltimaVentaByIdMascota,
+  activarVentaById
 }

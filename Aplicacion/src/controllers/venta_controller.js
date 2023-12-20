@@ -71,15 +71,38 @@ async function borrarVenta_RestarPuntos(id_venta, confirmaRestarPuntos) {
         let venta = await ventaModel.getVentaById(id_venta);
         let cliente = await clienteModel.getClienteById(venta.id_cliente);
 
-
         let nuevosPuntosCliente = cliente.puntos - venta.puntos_obtenidos + venta.puntos_canjeados;
         console.log(nuevosPuntosCliente);
+
+        if (nuevosPuntosCliente < 0) {
+            nuevosPuntosCliente = 0;
+            console.log(nuevosPuntosCliente);
+        }
 
         await clienteModel.actualizarPuntosClienteById(venta.id_cliente, nuevosPuntosCliente);
     }
 
+    let ventas_mascota = await venta_mascotaModel.getVenta_MascotasByIdVenta(id_venta);
+
     await venta_mascotaModel.deleteVenta_MascotaByIdVenta(id_venta);
     await ventaModel.deleteVentaById(id_venta);
+
+
+
+    let ventaInactiva;
+    //este for es para volver a activar todas las ventas en donde aparezcan las mascotas de la venta borrada
+    for (let i = 0; i < ventas_mascota.length; i++) {
+        const element = ventas_mascota[i];
+
+        //traigo las ventas en donde haya salido la mascota para volverlas a poner en activas (despues se volveran a inactivas si ya esta vencida)
+        ventaInactiva = await ventaModel.getUltimaVentaByIdMascota(element.id_mascota);
+        console.log("venta para activar: ", ventaInactiva);
+
+        if (ventaInactiva) {
+            await ventaModel.activarVentaById(ventaInactiva.id_venta);
+        }
+    }
+
 }
 
 
@@ -122,30 +145,30 @@ async function getVentasActivasByIdCliente(id_cliente) {
 
 async function insertarVenta(newVenta, bolsasVenta, mascotasVenta, puntosActualesCliente, nuevosPuntosCliente) {
     console.log("Mascotas seleccionadas: ", mascotasVenta);
-        
-
-        // newVenta.precio = (newVenta.precio).replace(/,/g, '.');
-        // newVenta.precio = parseFloat(newVenta.precio);
 
 
-        switch (bolsasVenta.calidadActual) {
-            case "BAJA":
-                newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual
-                break;
-            case "INTERMEDIA":
-                newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual * 2
-                break;
-            case "PREMIUM":
-                newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual * 3
-                break;
-            case "SUPER PREMIUM":
-                newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual * 4
-                break;
-            default:
-                break;
-        }
+    // newVenta.precio = (newVenta.precio).replace(/,/g, '.');
+    // newVenta.precio = parseFloat(newVenta.precio);
 
-    let multiplicadorPuntos = await configModel.getMultiplicadorPuntos();  
+
+    switch (bolsasVenta.calidadActual) {
+        case "BAJA":
+            newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual
+            break;
+        case "INTERMEDIA":
+            newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual * 2
+            break;
+        case "PREMIUM":
+            newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual * 3
+            break;
+        case "SUPER PREMIUM":
+            newVenta.puntos_obtenidos = bolsasVenta.kilosActuales * bolsasVenta.cantidadActual * 4
+            break;
+        default:
+            break;
+    }
+
+    let multiplicadorPuntos = await configModel.getMultiplicadorPuntos();
     newVenta.puntos_obtenidos = newVenta.puntos_obtenidos * multiplicadorPuntos.valor_config;
 
     newVenta.puntos_canjeados = puntosActualesCliente - nuevosPuntosCliente;
@@ -183,7 +206,7 @@ async function insertarVenta(newVenta, bolsasVenta, mascotasVenta, puntosActuale
 async function get20VentasPorVencerConMascotas(salto) {
     let ventas = [];
     ventas = await ventaModel.get20VentasPorVencer(salto);
-    console.log("ventas:" ,ventas);
+    console.log("ventas:", ventas);
 
     let ventasConMascotas = [];
     for (let i = 0; i < ventas.length; i++) {
@@ -211,7 +234,7 @@ async function get20VentasPorVencerConMascotas(salto) {
         });
     }
 
-    
+
     return ventasConMascotas;
 }
 

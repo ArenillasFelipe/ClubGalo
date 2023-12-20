@@ -3,6 +3,7 @@ function convertirMayusculas(str) {
 }
 
 function capitalizarPalabras(str) {
+    str = quitarTildes(str);
     const palabras = str.split(' ');
     const resultado = [];
 
@@ -17,16 +18,21 @@ function capitalizarPalabras(str) {
 function reemplazarComa(event) {
     // Verificar si la tecla presionada es una coma
     if (event.key === ',') {
-      // Prevenir la acción predeterminada (insertar la coma)
-      event.preventDefault();
+        // Prevenir la acción predeterminada (insertar la coma)
+        event.preventDefault();
 
-      // Obtener el valor actual del input
-      let input = event.target;
+        // Obtener el valor actual del input
+        let input = event.target;
 
-     input.value += '.'
+        input.value += '.'
     }
-  }
+}
+
+
+function quitarTildes(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 
 
 
-module.exports = { capitalizarPalabras, convertirMayusculas, reemplazarComa }
+module.exports = { capitalizarPalabras, convertirMayusculas, reemplazarComa, quitarTildes }

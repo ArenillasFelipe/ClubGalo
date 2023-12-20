@@ -19,11 +19,17 @@ input::-webkit-inner-spin-button {
   cursor: pointer;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
   transition: transform 0.1s, box-shadow 0.1s;
+    /*QUITAR CUANDO SE SOLUCIONE EXPORTACION A EXCEL EN SIGUIENTE ENTREGA*/
+    display: none;
+    /*=====================================*/
 }
 
 #btnExportar:hover {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
   transform: translateY(-1px);
+    /*QUITAR CUANDO SE SOLUCIONE EXPORTACION A EXCEL EN SIGUIENTE ENTREGA*/
+    display: none;
+    /*=====================================*/
 }
 
 

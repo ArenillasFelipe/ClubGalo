@@ -20,17 +20,6 @@ function iniciarModalVariosClientes() {
   }
   
   aceptarButton.addEventListener("click", listenerClickAceptarVariosClientes);
-
-
-
-
-  function listenerClickAceptarVariosClientes(event) {
-    if (event.key === "Enter") {
-      variosClientesModal.hide();
-      document.removeEventListener("keydown", listenerClickAceptarVariosClientes); // Elimina el eventListener
-      resolve();
-    }
-  }
   
   document.addEventListener("keydown", listenerClickAceptarVariosClientes);
 

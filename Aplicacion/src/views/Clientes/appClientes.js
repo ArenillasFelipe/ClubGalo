@@ -94,20 +94,26 @@ divClientes = document.getElementById("divClientes");
 
 /////////////////////////////////INNERS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function renderClientes(clientesConMascotas) {
+function renderClientes(clientesConMascotas) {
   divClientes.innerHTML = "";
   let container_paginado = document.getElementById("container-paginado");
   container_paginado.style.display = "none";
 
-
+  let direccion;
   for (let index = 0; index < clientesConMascotas.length; index++) {
     const element = clientesConMascotas[index];
     console.log(element);
+    
+    if (element.cliente.dpto) {
+      direccion = element.cliente.calle + ` ` + element.cliente.calle_numero + ` (Dpto: ${element.cliente.dpto})`;
+    }else{
+      direccion = element.cliente.calle + ` ` + element.cliente.calle_numero;
+    }
 
     divClientes.innerHTML += `<div class="container-cliente">
         <div class="container-datoscliente">
           <div class="datos-persona" id="datos-persona">
-            <p class="pdireccion"><span style="font-weight: 800;">Direccion:</span> ${element.cliente.calle} ${element.cliente.calle_numero}</p>
+            <p class="pdireccion"><span style="font-weight: 800;">Direccion:</span> ${direccion}</p>
             <p class="ptelefono"><span style="font-weight: 800;">Telefono:</span> ${element.cliente.telefono}</p>
             <p class="pmascotas" id="pmascotas${element.cliente.id_cliente}"><span style="font-weight: 800;">Mascotas:</span></p>
           </div>
@@ -185,7 +191,7 @@ async function renderClientes(clientesConMascotas) {
   container_paginado.style.display = "block";
 }
 
-async function cambiarDatosMascota(idMascota, clienteConMascotas) {
+function cambiarDatosMascota(idMascota, clienteConMascotas) {
 
   let mascotas = clienteConMascotas.mascotas;
 

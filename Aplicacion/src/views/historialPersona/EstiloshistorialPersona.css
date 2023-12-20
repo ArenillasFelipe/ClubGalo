@@ -311,7 +311,7 @@ table{
 }
 
 #tdnombre, #tddireccion, #tdtelefono{
-  width: 250px;
+  width: 310px;
 }
 
 .container-filtrar{
@@ -432,10 +432,16 @@ table{
   display: none;
   margin-bottom: 20px;
   border-color: black;
+  /*QUITAR CUANDO SE SOLUCIONE EXPORTACION A EXCEL EN SIGUIENTE ENTREGA*/
+  display: none;
+  /*=====================================*/
 }
 
 #btnExportar:hover {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
   top: 34px;
   margin-bottom: 21px;
+    /*QUITAR CUANDO SE SOLUCIONE EXPORTACION A EXCEL EN SIGUIENTE ENTREGA*/
+    display: none;
+    /*=====================================*/
 }

@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="../../modals/sinMascotasModal/sinMascotasModal.css" />
         <link rel="stylesheet" href="../../modals/borrarMascotaModal/borrarMascotaModal.css" />
         <link rel="stylesheet" href="../../modals/formatoNumericoModal/formatoNumericoModal.css" />
+        <link rel="stylesheet" href="../../modals/nombreMascotaRepetido/nombreMascotaRepetido.css" />
 </head>
 
 <body>
@@ -28,13 +29,16 @@
                         <p><span style="font-weight: 800;">Primer Nombre:</span> <input required type="text"
                                         class="input-primernombre inputPersona" id="input-primernombre"></p>
                         <p><span style="font-weight: 800;">Nombre de pila:<span style="font-weight: 800;"></span> <input
-                                                required type="text" class="input-nombrepila inputPersona" id="input-nombrepila"></p>
+                                                required type="text" class="input-nombrepila inputPersona"
+                                                id="input-nombrepila"></p>
                         <p><span style="font-weight: 800;">Apellido:</span> <input required type="text"
                                         class="input-apellido inputPersona" id="input-apellido"></p>
                         <p><span style="font-weight: 800;">Direccion(Calle):</span> <input required type="text"
                                         class="input-calle inputPersona" id="input-calle"> <span
                                         style="font-weight: 800;">Nro:</span> <input required type="text"
                                         class="input-numero inputPersona" id="input-numero"></p>
+                        <p><span style="font-weight: 800;">Dpto(Opcional):</span> <input type="text" class="input-dpto inputPersona"
+                                        id="input-dpto"></p>
                         <p><span style="font-weight: 800;">Telefono:</span> <input required type="text"
                                         class="input-telefono inputPersona" id="input-telefono"></p>
                         <p><span style="font-weight: 800;">Puntos:</span> <input required type="text"
@@ -65,7 +69,8 @@
                                                 class="input-raza inputMascota" id="input-raza">
                                 </p>
                                 <p><span style="font-weight: 800;">Peso:</span> <input required type="text"
-                                                class="input-peso inputMascota" id="input-peso" onkeypress="reemplazarComa(event)"><span
+                                                class="input-peso inputMascota" id="input-peso"
+                                                onkeypress="reemplazarComa(event)"><span
                                                 style="margin-right: 30px; font-weight: 800; ">Kg</span><span
                                                 style="font-weight: 800;">Edad:<span id="spanEdad"></span></span></p>
                                 <p><span style="font-weight: 800;">Actividad:</span> <input required type="text"
@@ -73,12 +78,12 @@
                                 <p><span style="font-weight: 800;">Afecciones:</span> <input required type="text"
                                                 class="input-afecciones inputMascota" id="input-afecciones"></p>
                                 <p><span style="font-weight: 800;">Nacimiento: <input required type="text"
-                                                        class="input-diacumple inputMascota"
-                                                        id="input-diacumple" onkeypress="reemplazarComa(event)">/<input required type="text"
-                                                        class="input-mescumple inputMascota"
-                                                        id="input-mescumple" onkeypress="reemplazarComa(event)">/<input required type="text"
-                                                        class="input-aniocumple inputMascota"
-                                                        id="input-aniocumple" onkeypress="reemplazarComa(event)"></span></p>
+                                                        class="input-diacumple inputMascota" id="input-diacumple"
+                                                        onkeypress="reemplazarComa(event)">/<input required type="text"
+                                                        class="input-mescumple inputMascota" id="input-mescumple"
+                                                        onkeypress="reemplazarComa(event)">/<input required type="text"
+                                                        class="input-aniocumple inputMascota" id="input-aniocumple"
+                                                        onkeypress="reemplazarComa(event)"></span></p>
                                 <div id="boton-guardarmascota"></div>
                                 <div id="boton-eliminar"></div>
                         </div>
@@ -92,6 +97,7 @@
         <script src="../../modals/sinMascotasModal/sinMascotasModal.js"></script>
         <script src="../../modals/borrarMascotaModal/borrarMascotaModal.js"></script>
         <script src="../../modals/formatoNumericoModal/formatoNumericoModal.js"></script>
+        <script src="../../modals/nombreMascotaRepetido/nombreMascotaRepetido.js"></script>
 </body>
 
 </html>

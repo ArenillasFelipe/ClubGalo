@@ -2,13 +2,14 @@ const { getConnection } = require('../database');
 const { capitalizarPalabras } = require('../utils/palabras');
 
 class Cliente {
-    constructor(primernombre, nombrepila, apellido, telefono, calle, calle_numero, puntos, id_cliente, validoCliente) {
+    constructor(primernombre, nombrepila, apellido, telefono, calle, calle_numero, dpto, puntos, id_cliente, validoCliente) {
         this.primernombre = primernombre;
         this.nombrepila = nombrepila;
         this.apellido = apellido;
         this.telefono = telefono;
         this.calle = calle;
         this.calle_numero = calle_numero;
+        this.dpto = dpto;
         this.puntos = puntos;
         this.id_cliente = id_cliente;
         this.validoCliente = validoCliente
@@ -27,6 +28,7 @@ async function get20Clientes(salto) {
         clienteData.telefono,
         clienteData.calle,
         clienteData.calle_numero,
+        clienteData.dpto,
         clienteData.puntos,
         clienteData.id_cliente,
         clienteData.validoCliente));
@@ -45,6 +47,7 @@ async function getClienteById(id_cliente) {
       clienteData.telefono,
       clienteData.calle,
       clienteData.calle_numero,
+      clienteData.dpto,
       clienteData.puntos,
       clienteData.id_cliente,
       clienteData.validoCliente);
@@ -85,6 +88,7 @@ async function get20ClientesBySearchMascotas(cadenaBusqueda, salto) {
       clienteData.telefono,
       clienteData.calle,
       clienteData.calle_numero,
+      clienteData.dpto,
       clienteData.puntos,
       clienteData.id_cliente,
       clienteData.validoCliente
@@ -112,6 +116,7 @@ async function get20ClientesBySearch(cadenaBusqueda, salto) {
         OR clientes.calle LIKE '%${palabra}%'
         OR clientes.id_cliente = '${palabra}'
         OR clientes.calle_numero = '${palabra}'
+        OR clientes.dpto = '${palabra}'
         OR clientes.telefono = '${palabra}'
       )`;
     });
@@ -136,6 +141,7 @@ async function get20ClientesBySearch(cadenaBusqueda, salto) {
       clienteData.telefono,
       clienteData.calle,
       clienteData.calle_numero,
+      clienteData.dpto,
       clienteData.puntos,
       clienteData.id_cliente,
       clienteData.validoCliente
@@ -155,7 +161,7 @@ async function updateClienteById(newCliente) {
     newCliente.calle = capitalizarPalabras(newCliente.calle);
 
     const conn = await getConnection();
-    await conn.query('update clientes set clientes.primernombre = ?, clientes.nombrepila = ?, clientes.apellido = ?, clientes.telefono = ?, clientes.calle = ?, clientes.calle_numero = ?, clientes.puntos = ? where clientes.id_cliente = ? and validoCliente = true', [newCliente.primernombre, newCliente.nombrepila, newCliente.apellido, newCliente.telefono, newCliente.calle, newCliente.calle_numero, newCliente.puntos, newCliente.id_cliente]);
+    await conn.query('update clientes set clientes.primernombre = ?, clientes.nombrepila = ?, clientes.apellido = ?, clientes.telefono = ?, clientes.calle = ?, clientes.calle_numero = ?, clientes.dpto = ?, clientes.puntos = ? where clientes.id_cliente = ? and validoCliente = true', [newCliente.primernombre, newCliente.nombrepila, newCliente.apellido, newCliente.telefono, newCliente.calle, newCliente.calle_numero, newCliente.dpto, newCliente.puntos, newCliente.id_cliente]);
     // conn.release();
 }
 
@@ -166,7 +172,7 @@ async function insertCliente(newCliente) {
     newCliente.calle = capitalizarPalabras(newCliente.calle);
 
     const conn = await getConnection();
-    let resultado = await conn.query('insert into clientes(primernombre, nombrepila, apellido, telefono, calle, calle_numero, puntos) values(?, ?, ?, ?, ?, ?, ?)', [newCliente.primernombre, newCliente.nombrepila, newCliente.apellido, newCliente.telefono, newCliente.calle, newCliente.calle_numero, newCliente.puntos]);
+    let resultado = await conn.query('insert into clientes(primernombre, nombrepila, apellido, telefono, calle, calle_numero, dpto, puntos) values(?, ?, ?, ?, ?, ?, ?, ?)', [newCliente.primernombre, newCliente.nombrepila, newCliente.apellido, newCliente.telefono, newCliente.calle, newCliente.calle_numero, newCliente.dpto, newCliente.puntos]);
     // conn.release();
     return resultado;
 }
