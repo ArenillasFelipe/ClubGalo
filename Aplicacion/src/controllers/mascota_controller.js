@@ -42,7 +42,7 @@ async function actualizarMascotasCliente(mascotasMod, mascotasOriginal) {
     let mascotasBorradas = mascotasOriginal.filter(original => !mascotasMod.some(modificada => modificada.id_mascota == original.id_mascota));
     for (let i = 0; i < mascotasBorradas.length; i++) {
         const element = mascotasBorradas[i];
-        mascotaModel.deleteMascotaById(element.id_mascota);
+        await mascotaModel.deleteMascotaById(element.id_mascota);
     }
 
 

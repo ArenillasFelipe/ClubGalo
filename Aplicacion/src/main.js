@@ -1,6 +1,7 @@
 const { BrowserWindow, app, Menu } = require('electron');
 const { actualizarVentasVencidas } = require('./models/ventaModel');
-
+const url = require('url');
+const path = require('path');
 
 let window;
 let windowEditarCliente;
@@ -24,6 +25,7 @@ function createWindow() {
         width: 1100,
         height: 820,
         autoHideMenuBar: false,
+        resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
             nodeIntegration: true
@@ -33,12 +35,17 @@ function createWindow() {
     const mainMenu = Menu.buildFromTemplate(templateMenu);
     Menu.setApplicationMenu(mainMenu);
 
+
+    window.loadURL(url.format({
+        pathname: path.join(__dirname, "views/Seguimiento/seguimiento.html"),
+        protocol: 'file',
+        slashes: true
+    }))
+
     window.on('closed', () => {
         app.quit();
     });
 
-
-    window.loadFile('src/views/historial/historial.html'); //indica el archivo que se cargara en la ventana
 }
 
 
@@ -124,7 +131,7 @@ function createWindowEditarCliente() {
         width: 900,
         height: 570,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -159,7 +166,7 @@ function createWindowAgregarCliente() {
         width: 900,
         height: 570,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -195,7 +202,7 @@ function createWindowEditarBolsa() {
         width: 550,
         height: 450,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: true,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -230,7 +237,7 @@ function createWindowAgregarBolsa() {
         width: 550,
         height: 450,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {
@@ -264,7 +271,7 @@ function createWindowVentasBolsas() {
         width: 900,
         height: 650,
         alwaysOnTop: true,
-        frame: true,
+        frame: false,
         resizable: false,
         icon: __dirname + './imagenes/favicon.png',
         webPreferences: {

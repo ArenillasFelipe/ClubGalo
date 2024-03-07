@@ -264,6 +264,11 @@ async function actualizarMascota(idMascota) {
         return;
     }
 
+    if ((input_aniocumple.value).length != 4 || (input_diacumple.value).length > 2 || (input_mescumple.value).length > 2) {
+        await FormatoNumericoModal.show();
+        return;
+    }
+
     if (parseFloat(input_diacumple.value) <= 0 || parseFloat(input_mescumple.value) <= 0 || parseFloat(input_aniocumple.value) <= 0 || parseFloat(input_peso.value) <= 0) {
         await FormatoNumericoModal.show();
         return
@@ -500,7 +505,7 @@ function enviarEmailCambioDePuntos() {
         // Definir el contenido del correo electrónico
         const mailOptions = {
             from: 'felipearenillas02@gmail.com', // Dirección de correo del remitente
-            to: 'fgiarde@gmail.com', // Dirección de correo del destinatario
+            to: 'forrajeriagallo@gmail.com', // Dirección de correo del destinatario
             subject: 'Aviso modificacion de puntos Club Galo',
             html: `
     <p>Los puntos del cliente ${cliente.primernombre} ${cliente.nombrepila} ${cliente.apellido}(Nº: ${cliente.id_cliente}) han sido modificados de ${cliente.puntos} a ${input_puntos.value} el dia ${dia}/${mes}/${anio} a las ${hora}:${minutos}hs</p>

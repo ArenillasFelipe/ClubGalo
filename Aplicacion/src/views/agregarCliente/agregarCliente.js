@@ -168,6 +168,11 @@ let regex = /^[.\d]+$/;
         return;
     }
 
+    if ((input_aniocumple.value).length != 4 || (input_diacumple.value).length > 2 || (input_mescumple.value).length > 2) {
+        await FormatoNumericoModal.show();
+        return;
+    }
+
 
     if (parseFloat(input_diacumple.value) <= 0 || parseFloat(input_mescumple.value) <= 0 || parseFloat(input_aniocumple.value) <= 0 || parseFloat(input_peso.value) <= 0) {
         await FormatoNumericoModal.show();
@@ -400,7 +405,7 @@ function enviarEmailPuntos(newCliente) {
         // Definir el contenido del correo electrónico
         const mailOptions = {
             from: 'felipearenillas02@gmail.com', // Dirección de correo del remitente
-            to: 'fgiarde@gmail.com', // Dirección de correo del destinatario
+            to: 'forrajeriagallo@gmail.com', // Dirección de correo del destinatario
             subject: 'Aviso creacion de cliente con puntos Club Galo',
             html: `
     <p>Se ha creado un nuevo cliente llamado ${newCliente.primernombre} ${newCliente.nombrepila} ${newCliente.apellido}(Nº: ${newCliente.id_cliente}) con ${newCliente.puntos} puntos el dia ${dia}/${mes}/${anio} a las ${hora}:${minutos}hs</p>

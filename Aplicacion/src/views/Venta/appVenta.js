@@ -323,9 +323,7 @@ async function venta(cliente, mascotas) {
             mascotasVenta.includes(mascota.id_mascota)
         );
 
-        for (let i = 0; i < 20; i++) {
-            await venta_controller.insertarVenta(nuevaVenta, bolsasVenta, mascotas, cliente.puntos, nuevosPuntos);
-        }
+        await venta_controller.insertarVenta(nuevaVenta, bolsasVenta, mascotas, cliente.puntos, nuevosPuntos);
 
         VentaExitosaModal.show();
     } catch (error) {

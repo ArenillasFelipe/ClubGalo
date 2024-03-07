@@ -158,13 +158,12 @@ nav a:hover {
 
 .busqueda {
   position: absolute;
-  right: 475px;
+  right: 525px;
   top: 25px;
 }
 
 #barra-busqueda {
   width: 300px;
-  right: 50px;
   position: relative;
   border-color: #404198;
   border-radius: 10px;
@@ -174,7 +173,6 @@ nav a:hover {
 
 #boton-lupa {
   top: 5px;
-  right: 50px;
   position: relative;
   outline: none;
   cursor: pointer;

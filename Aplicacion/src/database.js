@@ -5,15 +5,14 @@ const connection = mysql.createConnection({
     user: 'root',
     password: 'root',
     database: 'mascotas'
-})
-//hace la conexion con la bd
+});
+
+// Hace la conexión con la base de datos
 function getConnection() {
     return connection;
 }
-module.exports = {getConnection}
 
-
-
+module.exports = { getConnection };
 
 
 
