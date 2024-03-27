@@ -1,4 +1,5 @@
 const venta_controller = require('../../controllers/venta_controller');
+const { diasParaCumpleaños } = require('../../utils/calcularFechas');
 
 let salto = 0;
 
@@ -94,8 +95,18 @@ function renderVentasPorVencer(ventasConClienteMascotas) {
     let mascotas = element.mascotas;
 
     mascotas.forEach(element => {
-      pmascotas.innerHTML += ` ` + element.nombremascota + ` -`;
-      
+      let diasParaCumple = diasParaCumpleaños(element.nacimiento)
+      console.log(diasParaCumple);
+      if (diasParaCumple <= 8 && diasParaCumple >= 0) {
+        if (diasParaCumple == 0) {
+        pmascotas.innerHTML += `<span style="font-weight: 600; color: red;">${element.nombremascota}(Hoy🎉)</span> - `;
+        }else{
+          pmascotas.innerHTML += `<span style="font-weight: 600; color: red;">${element.nombremascota}(${diasParaCumple} dias🎉)</span> - `;
+        }
+    } else {
+        pmascotas.innerHTML += `<span>${element.nombremascota}</span> - `;
+    }    
+
     });
 
 
@@ -103,6 +114,7 @@ function renderVentasPorVencer(ventasConClienteMascotas) {
   });
 
 }
+
 
 
 
@@ -171,3 +183,5 @@ function btnVenta(id_cliente) {
   localStorage.setItem("ClienteVenta",  id_cliente);
   location.href="../Venta/venta.html";
 }
+
+

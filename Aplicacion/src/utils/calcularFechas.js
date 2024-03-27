@@ -16,6 +16,47 @@ function calcularDiasEntreFechas(fechaInicial, fechaFinal) {
   return dias;
 }
 
+function diasParaCumpleaños(fechaNacimiento) {
+  var fechaNacimientoObj;
+  
+  // Comprobar si fechaNacimiento es una cadena
+  if (typeof fechaNacimiento === 'string') {
+    // Convertir la cadena de fecha al objeto Date
+    var partes = fechaNacimiento.split('/');
+    var dia = parseInt(partes[0], 10);
+    var mes = parseInt(partes[1], 10) - 1; // Los meses en JavaScript van de 0 a 11
+    var año = parseInt(partes[2], 10);
+    fechaNacimientoObj = new Date(año, mes, dia);
+  } else if (fechaNacimiento instanceof Date) {
+    // Si fechaNacimiento es un objeto Date, simplemente asignarlo
+    fechaNacimientoObj = fechaNacimiento;
+  } else {
+    // Manejar otros tipos de entrada
+    console.error('El parámetro debe ser un objeto Date o una cadena de fecha en formato "DD/MM/AAAA".');
+    return;
+  }
+
+  console.log("fecha de nacimiento: ", fechaNacimientoObj);
+  var fechaActual = new Date();
+  var añoActual = fechaActual.getFullYear();
+  var añoNacimiento = fechaNacimientoObj.getFullYear();
+  var proximoCumpleaños = new Date(añoActual, fechaNacimientoObj.getMonth(), fechaNacimientoObj.getDate());
+
+  // Si el próximo cumpleaños es hoy, devolver 0
+  if (fechaActual.toDateString() === proximoCumpleaños.toDateString()) {
+      return 0;
+  }
+
+  if (fechaActual > proximoCumpleaños) {
+      proximoCumpleaños.setFullYear(añoActual + 1);
+  }
+
+  var diferencia = proximoCumpleaños.getTime() - fechaActual.getTime();
+  var diasParaCumpleaños = Math.ceil(diferencia / (1000 * 60 * 60 * 24));
+
+  return diasParaCumpleaños;
+}
+
 
 function calcularEdadMascota(fechaNacimiento) {
   const partesFecha = fechaNacimiento.split("/"); // Separar la fecha en tres partes
@@ -1206,4 +1247,4 @@ function sumarDiasAFechaActual(diasASumar) {
 
 
 
-module.exports = { calcularDiasEntreFechas, calcularEdadMascota, calcularDuracionBolsa, sumarDiasAFechaActual, calcularKilosRestantesBolsa }
+module.exports = { calcularDiasEntreFechas, calcularEdadMascota, calcularDuracionBolsa, sumarDiasAFechaActual, calcularKilosRestantesBolsa, diasParaCumpleaños }

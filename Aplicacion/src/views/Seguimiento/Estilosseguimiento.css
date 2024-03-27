@@ -87,8 +87,8 @@ nav a:hover{
 }
 
 .container-aviso{
-    height: 130px;
-    width: 1000px;
+    height: 125px;
+    width: 995px;
     box-shadow: 3px 3px 10px;
     border-radius: 10px;
     margin: 20px auto;
@@ -98,21 +98,24 @@ nav a:hover{
 }
 
 .dia1, .dia2, .dia3, .dia0{
-    background-color: #F1555A;
+    background-color: whitesmoke;
     animation-name: slide1;
     animation-duration:  0.5s;
+    border: 5px solid #F1555A;
 }
 
 .dia4, .dia5{
-    background-color: #F0A203;
+    background-color: whitesmoke;
     animation-name: slide1;
     animation-duration:  0.5s;
+    border: 5px solid #F0A203;
 }
 
 .dia6, .dia7, .dia8{
-    background-color: #009900;
+    background-color: whitesmoke;
     animation-name: slide1;
     animation-duration:  0.5s;
+    border: 5px solid #009900;;
 }
 
 
@@ -137,7 +140,7 @@ h1{
     position: relative;
     width: 95px;
     height: 95px;
-    left: 150px;
+    left: 50px;
     top: 28px;
 }
 
@@ -161,8 +164,8 @@ b{
 
 .panimal{
     position: absolute;
-    left: 250px;
-    top: 65px;
+    left: 150px;
+    top: 85px;
 }
 
 .pcumple{
@@ -200,11 +203,11 @@ top: 53px;
 }
 
 .container-mascotas{
-    width: 330px;
-    height: 40px;
+    width: 430px;
+    height: 80px;
     position: absolute;
-    left: 250px;
-    top: 30px;
+    left: 150px;
+    top: 20px;
 }
 
 .btn-aviso{
@@ -313,8 +316,8 @@ top: 53px;
   .btnVenta {
     z-index: 1;
     position: relative;
-    left: 0px;
-    top: 100px;
+    left: 10px;
+    top: 105px;
     height: 30px;
     width: 70px;
     border-radius: 0px 0px 10px 0px;
@@ -328,11 +331,14 @@ top: 53px;
     transition: .3s ease all;
     outline: none;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.75);
   }
   
   .btnVenta:hover {
     animation: bordeNegro 0.3s forwards;
-    -webkit-box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 17px 4px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 25px 4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 25px 4px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 25px 4px rgba(0,0,0,0.75);
   }

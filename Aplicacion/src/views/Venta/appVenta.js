@@ -114,8 +114,8 @@ const MainFunctionVenta = async () => {
     });
     ////////////////////////////////////////////////////////////
 
-
-
+    //funcion para que si una de las mascotas cumple anios se muestre primero
+    comprobarCumpleanios(mascotas);
 
 
     //Creo el listener para cuando se presiona ejecutar la venta
@@ -132,6 +132,20 @@ const MainFunctionVenta = async () => {
 
     mainVentasActivasCliente(cliente.id_cliente);
 
+
+}
+
+function comprobarCumpleanios(mascotas) {
+
+    mascotas.forEach(mascota => {
+
+        let diasParaCumple = calcularFechas.diasParaCumpleaños(mascota.nacimiento);
+        console.log(diasParaCumple);
+        if (diasParaCumple <= 8 && diasParaCumple >= 0) {
+            document.getElementById("select-mascota").value = mascota.id_mascota;
+            mostrarDatos(mascotas);
+        }
+    });
 
 }
 
@@ -195,27 +209,18 @@ function mostrarDatos(mascotas) {
     <p><b>Edad:</b> ` + edadMascota + `</p>
     <p><b>Actividad:</b> ` + mascota.actividad + `</p>
     <p><b>Afecciones:</b> ` + mascota.afecciones + `</p>`
-
-
-    let fechaActual = new Date();
-
-    let diaActual = fechaActual.getDate();
-    let mesActual = fechaActual.getMonth() + 1;
-
-    const partesFecha = mascota.nacimiento.split("/"); // Separar la fecha en tres partes
-
-    let diaMascota = parseInt(partesFecha[0]);
-    let mesMascota = parseInt(partesFecha[1]);
-
-    console.log(diaActual, diaMascota, mesActual, mesMascota)
-
-    if (diaActual == diaMascota && mesActual == mesMascota) {
-        mostrandoDatos.innerHTML += `<p style="color: firebrick;"><b>Nacimiento:</b> ` + mascota.nacimiento + `</p>`
+    console.log(mascota.nacimiento);
+    let diasParaCumple = calcularFechas.diasParaCumpleaños(mascota.nacimiento)
+    console.log(diasParaCumple);
+    if (diasParaCumple <= 8 && diasParaCumple >= 0) {
+        if (diasParaCumple == 0) {
+            mostrandoDatos.innerHTML += `<p><span style="font-weight: 600; color: red;"><b>Cumpleaños: </b>Hoy🎉</span></p>`;
+        } else {
+            mostrandoDatos.innerHTML += `<p><span style="font-weight: 600; color: red;"><b>Cumpleaños: </b>${diasParaCumple} dias🎉</span></p>`;
+        }
     } else {
-        mostrandoDatos.innerHTML += `<p><b>Nacimiento:</b> ` + mascota.nacimiento + `</p>`
+        mostrandoDatos.innerHTML += `<p><b>Cumpleaños: </b>${diasParaCumple} dias🎉</p>`;
     }
-
-
 
 
 
@@ -884,5 +889,8 @@ function focusInputCliente() {
     let inputCliente = document.getElementById("inputCliente");
     inputCliente.focus();
 }
+
+
+
 
 
