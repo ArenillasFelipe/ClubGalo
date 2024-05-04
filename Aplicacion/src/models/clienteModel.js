@@ -61,20 +61,14 @@ async function get20ClientesBySearchMascotas(cadenaBusqueda, salto) {
 
   try {
     const conn = await getConnection();
-    const palabrasClave = cadenaBusqueda.split(' ');
-
-    const condicionesMascotas = palabrasClave.map(palabra => {
-      return `mascotas.nombremascota LIKE '%${palabra}%'`;
-    });
 
     const sql = `
       SELECT clientes.*
       FROM clientes
       INNER JOIN mascotas ON mascotas.id_cliente = clientes.id_cliente
       WHERE validoCliente = true
-      AND (${condicionesMascotas.join(' OR ')})
+      AND (mascotas.nombremascota LIKE '%${cadenaBusqueda}%')
       GROUP BY clientes.id_cliente
-      HAVING COUNT(DISTINCT mascotas.nombremascota) >= ${palabrasClave.length}
       LIMIT ?, 20
     `;
 
@@ -107,28 +101,55 @@ async function get20ClientesBySearch(cadenaBusqueda, salto) {
   try {
     const conn = await getConnection();
     const palabrasClave = cadenaBusqueda.split(' ');
+    console.log("palabras clave length: ", palabrasClave.length);
+
+    let condiciones;
+    let condicionesSQL;
+    let sql;
+
+    if (palabrasClave.length == 1 && !isNaN(palabrasClave[0]) && palabrasClave[0].length <= 4) {
+      console.log("entro al if");
+
+      condiciones = `(
+        clientes.id_cliente = '${palabrasClave[0]}'
+      )`
+
+    }else{
+
+      console.log("entro al else");
+      condiciones = palabrasClave.map(palabra => {
+        return `(
+          clientes.primernombre LIKE '%${palabra}%'
+          OR clientes.nombrepila LIKE '%${palabra}%'
+          OR clientes.apellido LIKE '%${palabra}%'
+          OR clientes.calle LIKE '%${palabra}%'
+          OR clientes.telefono = '${palabra}'
+          OR clientes.calle_numero = '${palabra}'
+          OR clientes.dpto = '${palabra}'
+        )`;
+      });
+
+      condicionesSQL = condiciones.join(' AND ');
+    }
   
-    const condiciones = palabrasClave.map(palabra => {
-      return `(
-        clientes.primernombre LIKE '%${palabra}%'
-        OR clientes.nombrepila LIKE '%${palabra}%'
-        OR clientes.apellido LIKE '%${palabra}%'
-        OR clientes.calle LIKE '%${palabra}%'
-        OR clientes.id_cliente = '${palabra}'
-        OR clientes.calle_numero = '${palabra}'
-        OR clientes.dpto = '${palabra}'
-        OR clientes.telefono = '${palabra}'
-      )`;
-    });
-  
-    const condicionesSQL = condiciones.join(' AND ');
-  
-    const sql = `
+    if (condicionesSQL) {
+      sql = `
       SELECT clientes.*
       FROM clientes
       WHERE (${condicionesSQL}) AND validoCliente = true
       LIMIT ?, 20
     `;
+    }else{
+      sql = `
+      SELECT clientes.*
+      FROM clientes
+      WHERE (${condiciones}) AND validoCliente = true
+      LIMIT ?, 20
+    `;
+    }
+
+
+    console.log(sql);
   
     const results = await conn.query(sql, [salto]);
 

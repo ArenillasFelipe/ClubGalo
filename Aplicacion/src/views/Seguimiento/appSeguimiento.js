@@ -36,6 +36,10 @@ function renderVentasPorVencer(ventasConClienteMascotas) {
 
   ventasConClienteMascotas.forEach(element => {
 
+    if(element.cliente.calle_numero == null){
+      element.cliente.calle_numero = 0;
+  }
+
     if (element.cliente.dpto) {
       direccion = element.cliente.calle + ` ` + element.cliente.calle_numero + ` (Dpto: ${element.cliente.dpto})`;
     }else{

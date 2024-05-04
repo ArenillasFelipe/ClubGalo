@@ -103,11 +103,17 @@ function renderClientes(clientesConMascotas) {
   for (let index = 0; index < clientesConMascotas.length; index++) {
     const element = clientesConMascotas[index];
     console.log(element);
+
+    let numero_calle = element.cliente.calle_numero;
+
+    if (numero_calle == null) {
+      numero_calle = 0
+    }
     
     if (element.cliente.dpto) {
-      direccion = element.cliente.calle + ` ` + element.cliente.calle_numero + ` (Dpto: ${element.cliente.dpto})`;
+      direccion = element.cliente.calle + ` ` + numero_calle + ` (Dpto: ${element.cliente.dpto})`;
     }else{
-      direccion = element.cliente.calle + ` ` + element.cliente.calle_numero;
+      direccion = element.cliente.calle + ` ` + numero_calle;
     }
 
     divClientes.innerHTML += `<div class="container-cliente">

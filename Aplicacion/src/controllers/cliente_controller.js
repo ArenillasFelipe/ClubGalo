@@ -20,6 +20,7 @@ async function getClienteSegunBusqueda(busqueda, busquedaPorMascotas) {
     if (cliente.length > 1) {
         throw new Error("variosClientes");
     }
+    
     return cliente[0]
 }
 
@@ -94,12 +95,31 @@ async function borrarClienteById(id_cliente) {
 
 
 async function updateClienteById(newCliente) {
+    let numero_calle = newCliente.calle_numero;
+    let telefono = newCliente.telefono;
+    if (numero_calle == 0) {
+        newCliente.calle_numero = 1;
+    }
+
+    if (telefono == 0) {
+        newCliente.telefono = 1;
+    }
     await clienteModel.updateClienteById(newCliente);
 }
 
 
 
 async function insertCliente(newCliente) {
+    let numero_calle = newCliente.calle_numero;
+    let telefono = newCliente.telefono;
+    if (numero_calle == 0) {
+        newCliente.calle_numero = 1;
+    }
+
+    if (telefono == 0) {
+        newCliente.telefono = 1;
+    }
+
     let resultado = await clienteModel.insertCliente(newCliente);
     return resultado.insertId;
 }

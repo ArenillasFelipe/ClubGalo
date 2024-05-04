@@ -132,6 +132,11 @@ getClienteAEditar();
 
 
 function llenarInputsCliente() {
+
+    if (cliente.calle_numero == null) {
+        cliente.calle_numero = 0
+    }
+
     input_primernombre.value = cliente.primernombre
     input_nombrepila.value = cliente.nombrepila
     input_apellido.value = cliente.apellido

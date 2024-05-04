@@ -361,6 +361,10 @@ function innerCliente(mascotas, historialVentasConBolsas) {
     agregado = document.getElementById("agregado");
     ingreso = document.getElementById("mascota");
 
+    if(cliente.calle_numero == null){
+        cliente.calle_numero = 0;
+    }
+
     let direccion;
     if (cliente.dpto) {
         direccion = cliente.calle + ` ` + cliente.calle_numero + ` (Dpto: ${cliente.dpto})`;
